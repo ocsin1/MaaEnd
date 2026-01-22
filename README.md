@@ -18,6 +18,10 @@ Powered by [MaaFramework](https://github.com/MaaXYZ/MaaFramework) & [MXU](https:
 
 </div>
 
+## 说明
+
+正在开发中，暂无实际功能，敬请期待！（新版本会自动更新）
+
 ## 沟通交流
 
 - 用户 QQ 群: 1078075580
