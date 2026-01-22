@@ -12,19 +12,26 @@
     "mirrorchyan_multiplatform": true,
     "controller": [
         {
-            "name": "安卓端",
+            "name": "ADB",
+            "label": "模拟器",
             "type": "Adb"
         },
         {
-            "name": "桌面端",
+            "name": "Win32",
+            "label": "PC",
             "type": "Win32",
             "win32": {
-                "class_regex": ".*",
-                "window_regex": "终末地",
+                "class_regex": "UnityWndClass",
+                "window_regex": "Endfield",
                 "screencap": "FramePool",
-                "mouse": "PostMessageWithCursorPos",
-                "keyboard": "PostMessageWithCursorPos"
-            }
+                "mouse": "SendMessageWithCursorPos",
+                "keyboard": "SendMessageWithCursorPos"
+            },
+            "permission_required": true
+        },
+        {
+            "name": "PlayCover",
+            "type": "PlayCover"
         }
     ],
     "resource": [
