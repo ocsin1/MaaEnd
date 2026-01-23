@@ -247,8 +247,12 @@ def main():
     link_or_copy_dir = copy_directory if use_copy else create_directory_link
     link_or_copy_file = copy_file if use_copy else create_file_link
 
-    # 1. 链接/复制 assets 目录内容（排除 MaaCommonAssets）
-    print("[1/5] 处理 assets 目录...")
+    # 1. 配置 OCR 模型
+    print("[1/5] 配置 OCR 模型...")
+    configure_ocr_model(assets_dir)
+
+    # 2. 链接/复制 assets 目录内容（排除 MaaCommonAssets）
+    print("[2/5] 处理 assets 目录...")
     for item in assets_dir.iterdir():
         if item.name == "MaaCommonAssets":
             continue
@@ -259,10 +263,6 @@ def main():
         elif item.is_file():
             if link_or_copy_file(item, dst):
                 print(f"  -> {dst}")
-
-    # 2. 配置 OCR 模型
-    print("[2/5] 配置 OCR 模型...")
-    configure_ocr_model(assets_dir)
 
     # 3. 构建 Go Agent
     print("[3/5] 构建 Go Agent...")
