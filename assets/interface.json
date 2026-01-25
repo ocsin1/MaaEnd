@@ -359,12 +359,14 @@
         "AutoPick": {
             "label": "自动拾取",
             "type": "switch",
-            "description": "仅采集物，掉落物游戏自带收集",
             "cases": [
                 {
                     "name": "No",
                     "pipeline_override": {
-                        "RealTimeAutoPick": {
+                        "AutoPickFalls": {
+                            "enabled": false
+                        },
+                        "AutoPickInteractive": {
                             "enabled": false
                         }
                     }
@@ -372,7 +374,10 @@
                 {
                     "name": "Yes",
                     "pipeline_override": {
-                        "RealTimeAutoPick": {
+                        "AutoPickFalls": {
+                            "enabled": true
+                        },
+                        "AutoPickInteractive": {
                             "enabled": true
                         }
                     }
