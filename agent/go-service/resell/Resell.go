@@ -23,12 +23,6 @@ type ProfitRecord struct {
 	Profit    int
 }
 
-// Register registers all custom action components for resell package
-func Register() {
-	maa.AgentServerRegisterCustomAction("ResellInitAction", &ResellInitAction{})
-	maa.AgentServerRegisterCustomAction("ResellFinishAction", &ResellFinishAction{})
-}
-
 // ResellInitAction - Initialize Resell task custom action
 type ResellInitAction struct{}
 

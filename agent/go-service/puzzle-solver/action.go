@@ -10,12 +10,6 @@ import (
 
 type Action struct{}
 
-// Register registers all custom recognition and action components for puzzle-solver package
-func Register() {
-	maa.AgentServerRegisterCustomRecognition("PuzzleRecognition", &Recognition{})
-	maa.AgentServerRegisterCustomAction("PuzzleAction", &Action{})
-}
-
 // doPlace performs the interaction to place a single puzzle piece
 func doPlace(ctx *maa.Context, bd *BoardDesc, p Placement, isDryRun bool) {
 	log.Debug().

@@ -11,13 +11,6 @@ import (
 // blueprintCodes 蓝图码队列
 var blueprintCodes []string
 
-// Register registers all custom action components for importtask package
-func Register() {
-	maa.AgentServerRegisterCustomAction("ImportBluePrintsInitTextAction", &ImportBluePrintsInitTextAction{})
-	maa.AgentServerRegisterCustomAction("ImportBluePrintsFinishAction", &ImportBluePrintsFinishAction{})
-	maa.AgentServerRegisterCustomAction("ImportBluePrintsEnterCodeAction", &ImportBluePrintsEnterCodeAction{})
-}
-
 func parseBlueprintCodes(text string) []string {
 	re := regexp.MustCompile(`EF[a-zA-Z0-9]+`)
 	return re.FindAllString(text, -1)

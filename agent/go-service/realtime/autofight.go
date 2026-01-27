@@ -15,16 +15,6 @@ var (
 	autoFightEndSkillLastTime time.Time // EndSkillAction 最后触发时间，用于冷却判断
 )
 
-// Register registers all custom recognition and action components for realtime package
-func Register() {
-	maa.AgentServerRegisterCustomRecognition("RealTimeAutoFightEntryRecognition", &RealTimeAutoFightEntryRecognition{})
-	maa.AgentServerRegisterCustomRecognition("RealTimeAutoFightExitRecognition", &RealTimeAutoFightExitRecognition{})
-	maa.AgentServerRegisterCustomRecognition("RealTimeAutoFightSkillRecognition", &RealTimeAutoFightSkillRecognition{})
-	maa.AgentServerRegisterCustomAction("RealTimeAutoFightSkillAction", &RealTimeAutoFightSkillAction{})
-	maa.AgentServerRegisterCustomRecognition("RealTimeAutoFightEndSkillRecognition", &RealTimeAutoFightEndSkillRecognition{})
-	maa.AgentServerRegisterCustomAction("RealTimeAutoFightEndSkillAction", &RealTimeAutoFightEndSkillAction{})
-}
-
 type RealTimeAutoFightEntryRecognition struct{}
 
 func (r *RealTimeAutoFightEntryRecognition) Run(ctx *maa.Context, arg *maa.CustomRecognitionArg) (*maa.CustomRecognitionResult, bool) {
