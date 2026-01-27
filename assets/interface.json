@@ -11,11 +11,11 @@
     "mirrorchyan_rid": "MaaEnd",
     "mirrorchyan_multiplatform": true,
     "languages": {
-        "zh_cn": "resource/translations/zh_cn.json",
-        "zh_tw": "resource/translations/zh_tw.json",
-        "en_us": "resource/translations/en_us.json",
-        "ja_jp": "resource/translations/ja_jp.json",
-        "ko_kr": "resource/translations/ko_kr.json"
+        "zh_cn": "misc/locales/zh_cn.json",
+        "zh_tw": "misc/locales/zh_tw.json",
+        "en_us": "misc/locales/en_us.json",
+        "ja_jp": "misc/locales/ja_jp.json",
+        "ko_kr": "misc/locales/ko_kr.json"
     },
     "controller": [
         {
