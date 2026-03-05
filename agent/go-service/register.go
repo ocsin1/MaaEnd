@@ -8,7 +8,7 @@ import (
 	"github.com/MaaXYZ/MaaEnd/agent/go-service/dailyrewards"
 	"github.com/MaaXYZ/MaaEnd/agent/go-service/essencefilter"
 	"github.com/MaaXYZ/MaaEnd/agent/go-service/hdrcheck"
-	"github.com/MaaXYZ/MaaEnd/agent/go-service/importtask"
+	"github.com/MaaXYZ/MaaEnd/agent/go-service/blueprintimport"
 	maptracker "github.com/MaaXYZ/MaaEnd/agent/go-service/map-tracker"
 	puzzle "github.com/MaaXYZ/MaaEnd/agent/go-service/puzzle-solver"
 	"github.com/MaaXYZ/MaaEnd/agent/go-service/resell"
@@ -17,7 +17,7 @@ import (
 
 func registerAll() {
 	// Register all custom components from each package
-	importtask.Register()
+	blueprintimport.Register()
 	charactercontroller.Register()
 	resell.Register()
 	puzzle.Register()
