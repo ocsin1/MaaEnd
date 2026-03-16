@@ -52,7 +52,18 @@ description: 分析 MaaEnd 上游仓库公开 Issue（`https://github.com/MaaEnd
 6. 回溯到代码和文档。
     - 任务入口、节点名、控制器限制先看 MaaEnd 仓库。
     - Pipeline 运行语义不确定时查 MaaFramework 文档。
-    - MXU 行为或日志分层不确定时查 MXU README / 文档 / 源码。
+    - MXU 行为或日志分层不确定时，先查 MXU README / 文档；只有文档不足或证据已指向实现层时才看源码。
+
+7. 只有在满足条件时才下钻第三方仓库。
+
+    - 先用 issue、日志、MaaEnd 仓库和 MaaFramework 文档做初步归因。
+    - 如果怀疑问题在 MXU、MaaFramework 或 binding 实现层，且现有证据不足以确认，再按需查看对应上游仓库源码。
+    - 常见对应关系：
+        - `MXU`：`https://github.com/MistEO/MXU`，前端配置、Tauri 后端编排、实例/任务/agent 生命周期、`mxu-tauri.log` / `mxu-web-*`
+        - `MaaFramework`：`https://github.com/MaaXYZ/MaaFramework`，Pipeline 运行时、控制器、资源加载、任务调度、`maa.log`
+        - `maa-framework-rs`：`https://github.com/MaaXYZ/maa-framework-rs`，Rust binding / FFI / `maa_ffi` 回调桥接
+        - `maa-framework-go`：`https://github.com/MaaXYZ/maa-framework-go`，Go binding / Go 与 MaaFramework 的桥接
+    - 只看真正相关的仓库；本地没有时再 clone 到临时目录，例如 `.cache/upstream-src/<repo>/`。
 
 ## Log Map
 
