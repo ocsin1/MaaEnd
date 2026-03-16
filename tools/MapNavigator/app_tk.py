@@ -68,18 +68,23 @@ class RouteEditorApp:
 
         # 编辑态
         self.selected_idx: int | None = None
+        self.selected_indices: set[int] = set()
         self.zone_point_global_indices: list[int] = []
 
         # 画布对象池
         self.path_line_id: int | None = None
         self.ui_nodes: list[int] = []
         self.ui_texts: list[int] = []
+        self.selection_rect_id: int | None = None
 
         # 交互状态
         self.drag_start_x = 0
         self.drag_start_y = 0
         self.is_panning = False
         self.is_dragging = False
+        self.is_box_selecting = False
+        self.box_select_start_x = 0
+        self.box_select_start_y = 0
         self._redraw_pending = False
 
         self._build_layout()
@@ -256,8 +261,7 @@ class RouteEditorApp:
         self.points = normalize_path_points(self.points)
         self.zone_state.rebuild(self.points)
         current_zone_indices = self.zone_state.point_indices(self.points)
-        if self.selected_idx is not None and self.selected_idx >= len(current_zone_indices):
-            self.selected_idx = None
+        self._normalize_selection_state(current_zone_indices)
         self._sync_action_controls(current_zone_indices)
         self._refresh_zone_label()
         self.schedule_redraw(fast=redraw_fast)
@@ -290,11 +294,86 @@ class RouteEditorApp:
     def _selected_point(self, zone_indices: list[int] | None = None) -> PathPoint | None:
         if zone_indices is None:
             zone_indices = self.zone_point_global_indices
+        self._normalize_selection_state(zone_indices)
         if self.selected_idx is None or self.selected_idx >= len(zone_indices):
             return None
         return self.points[zone_indices[self.selected_idx]]
 
+    def _normalize_selection_state(self, zone_indices: list[int] | None = None) -> None:
+        if zone_indices is None:
+            zone_indices = self.zone_point_global_indices
+
+        valid_count = len(zone_indices)
+        self.selected_indices = {idx for idx in self.selected_indices if 0 <= idx < valid_count}
+        if not self.selected_indices:
+            self.selected_idx = None
+        elif self.selected_idx not in self.selected_indices:
+            self.selected_idx = min(self.selected_indices)
+
+    def _clear_selection(self) -> None:
+        self.selected_idx = None
+        self.selected_indices.clear()
+
+    def _set_selection(self, indices_in_zone: list[int], primary_idx: int | None = None) -> None:
+        self.selected_indices = set(indices_in_zone)
+        if not self.selected_indices:
+            self._clear_selection()
+            return
+        self.selected_idx = primary_idx if primary_idx in self.selected_indices else min(self.selected_indices)
+
+    def _show_selection_rect(self, x0: int, y0: int, x1: int, y1: int) -> None:
+        if self.selection_rect_id is None:
+            self.selection_rect_id = self.canvas.create_rectangle(
+                x0,
+                y0,
+                x1,
+                y1,
+                outline="#38bdf8",
+                width=2,
+                dash=(4, 2),
+            )
+        else:
+            self.canvas.coords(self.selection_rect_id, x0, y0, x1, y1)
+            self.canvas.itemconfig(self.selection_rect_id, state="normal")
+        self.canvas.tag_raise(self.selection_rect_id)
+
+    def _hide_selection_rect(self) -> None:
+        if self.selection_rect_id is not None:
+            self.canvas.itemconfig(self.selection_rect_id, state="hidden")
+
+    def _collect_indices_in_rect(self, x0: float, y0: float, x1: float, y1: float) -> list[int]:
+        left, right = sorted((x0, x1))
+        top, bottom = sorted((y0, y1))
+        selected: list[int] = []
+        for idx_in_zone, global_idx in enumerate(self.zone_point_global_indices):
+            point = self.points[global_idx]
+            cx, cy = self.renderer.world_to_canvas(point["x"], point["y"])
+            if left <= cx <= right and top <= cy <= bottom:
+                selected.append(idx_in_zone)
+        return selected
+
     def _sync_action_controls(self, zone_indices: list[int] | None = None) -> None:
+        if zone_indices is None:
+            zone_indices = self.zone_point_global_indices
+        self._normalize_selection_state(zone_indices)
+
+        selected_indices = sorted(self.selected_indices)
+        if not selected_indices:
+            self._reset_point_property_controls()
+            return
+
+        if len(selected_indices) > 1:
+            selected_points = [self.points[zone_indices[idx]] for idx in selected_indices]
+            action_chains = {tuple(get_point_actions(point)) for point in selected_points}
+            strict_values = {bool(point.get("strict", False)) for point in selected_points}
+            if len(action_chains) == 1:
+                unified_actions = list(next(iter(action_chains)))
+                self.action_menu.set(ACTION_NAMES.get(unified_actions[-1], "Run"))
+            if len(strict_values) == 1:
+                self.strict_var.set(next(iter(strict_values)))
+            self.action_chain_var.set(f"多选 {len(selected_indices)} 点")
+            return
+
         point = self._selected_point(zone_indices)
         if point is None:
             self._reset_point_property_controls()
@@ -418,9 +497,17 @@ class RouteEditorApp:
             is_strict = bool(point.get("strict", False))
             action_count = len(get_point_actions(point))
 
-            is_selected = self.selected_idx == idx
-            outline_color = "#ef4444" if is_selected else ("#facc15" if is_strict else "white")
-            outline_width = 3 if is_selected else 1
+            is_selected = idx in self.selected_indices
+            is_primary_selected = self.selected_idx == idx
+            if is_primary_selected:
+                outline_color = "#ef4444"
+                outline_width = 3
+            elif is_selected:
+                outline_color = "#f59e0b"
+                outline_width = 2
+            else:
+                outline_color = "#facc15" if is_strict else "white"
+                outline_width = 1
             label_core = f"{idx}x{action_count}" if action_count > 1 else str(idx)
             label_text = f"{label_core}!" if is_strict else label_core
 
@@ -458,15 +545,21 @@ class RouteEditorApp:
             self.canvas.itemconfig(self.ui_texts[idx], text=label_text)
 
         self.canvas.tag_raise("node")
+        if self.selection_rect_id is not None:
+            self.canvas.tag_raise(self.selection_rect_id)
 
     # ---- 区域导航 ----
     def prev_zone(self) -> None:
         self.zone_state.prev_zone()
+        self._clear_selection()
+        self._reset_point_property_controls()
         self._refresh_zone_label()
         self.fit_view()
 
     def next_zone(self) -> None:
         self.zone_state.next_zone()
+        self._clear_selection()
+        self._reset_point_property_controls()
         self._refresh_zone_label()
         self.fit_view()
 
@@ -509,14 +602,14 @@ class RouteEditorApp:
             return
         self.points = simplify_path(self.raw_points, self.density_val.get())
         self.history.clear()
-        self.selected_idx = None
+        self._clear_selection()
         self._reset_point_property_controls()
         self._on_points_structure_changed(redraw_fast=False)
 
     def _reset_ui(self) -> None:
         self.btn_start.config(state=tk.NORMAL)
         self.btn_stop.config(state=tk.DISABLED)
-        self._set_status("录制结束。鼠标滚轮缩放，右键平移，左键拖拽点微调。", "#10b981")
+        self._set_status("录制结束。鼠标滚轮缩放，右键平移，左键拖拽点微调，Ctrl+点击增减选，Ctrl+左键框选批量操作。", "#10b981")
 
     # ---- 撤销与重做 ----
     def push_undo(self) -> None:
@@ -527,7 +620,7 @@ class RouteEditorApp:
         if restored is None:
             return
         self.points = restored
-        self.selected_idx = None
+        self._clear_selection()
         self._reset_point_property_controls()
         self._on_points_structure_changed(redraw_fast=False)
 
@@ -536,7 +629,7 @@ class RouteEditorApp:
         if restored is None:
             return
         self.points = restored
-        self.selected_idx = None
+        self._clear_selection()
         self._reset_point_property_controls()
         self._on_points_structure_changed(redraw_fast=False)
 
@@ -551,11 +644,19 @@ class RouteEditorApp:
         )
 
     def on_click(self, event) -> None:
+        if event.state & 0x0004:
+            self.is_box_selecting = True
+            self.is_dragging = False
+            self.box_select_start_x = event.x
+            self.box_select_start_y = event.y
+            self._show_selection_rect(event.x, event.y, event.x, event.y)
+            return
+
         idx_in_zone = self.get_node_at(event.x, event.y)
         if idx_in_zone is None:
             self.push_undo()
             self.is_dragging = False
-            self.selected_idx = None
+            self._clear_selection()
             world_x, world_y = self.renderer.canvas_to_world(event.x, event.y)
             self.point_editor.insert_point(
                 points=self.points,
@@ -570,75 +671,83 @@ class RouteEditorApp:
             return
 
         self.push_undo()
-        self.selected_idx = idx_in_zone
+        self._set_selection([idx_in_zone], primary_idx=idx_in_zone)
         self.is_dragging = True
 
-        global_idx = self.zone_point_global_indices[self.selected_idx]
-        point = self.points[global_idx]
         self._sync_action_controls()
         self.schedule_redraw(fast=True)
 
     def apply_action_to_selected(self) -> None:
-        if self.selected_idx is None or self.selected_idx >= len(self.zone_point_global_indices):
+        self._normalize_selection_state()
+        if not self.selected_indices:
             messagebox.showinfo("提示", "请先点击选中一个点")
             return
 
         self.push_undo()
-        changed = self.point_editor.apply_attributes(
-            points=self.points,
-            zone_indices=self.zone_point_global_indices,
-            selected_idx=self.selected_idx,
-            action_name=self.action_menu.get(),
-            strict_arrival=self.strict_var.get(),
-        )
+        changed = False
+        for selected_idx in sorted(self.selected_indices):
+            changed = self.point_editor.apply_attributes(
+                points=self.points,
+                zone_indices=self.zone_point_global_indices,
+                selected_idx=selected_idx,
+                action_name=self.action_menu.get(),
+                strict_arrival=self.strict_var.get(),
+            ) or changed
         if changed:
             self._sync_action_controls()
             self._on_points_structure_changed(redraw_fast=False)
 
     def append_action_to_selected(self) -> None:
-        point = self._selected_point()
-        if point is None:
+        self._normalize_selection_state()
+        if not self.selected_indices:
             messagebox.showinfo("提示", "请先点击选中一个点")
             return
 
         self.push_undo()
         action_type = self.point_editor.action_name_to_type(self.action_menu.get())
-        set_manual_point_actions(point, get_point_actions(point) + [action_type])
+        for selected_idx in sorted(self.selected_indices):
+            point = self.points[self.zone_point_global_indices[selected_idx]]
+            set_manual_point_actions(point, get_point_actions(point) + [action_type])
         self._sync_action_controls()
         self._on_points_structure_changed(redraw_fast=False)
 
     def pop_action_from_selected(self) -> None:
-        point = self._selected_point()
-        if point is None:
+        self._normalize_selection_state()
+        if not self.selected_indices:
             messagebox.showinfo("提示", "请先点击选中一个点")
             return
 
         self.push_undo()
-        actions = get_point_actions(point)
-        if len(actions) <= 1:
-            set_manual_point_actions(point, [int(ActionType.RUN)])
-        else:
-            set_manual_point_actions(point, actions[:-1])
+        for selected_idx in sorted(self.selected_indices):
+            point = self.points[self.zone_point_global_indices[selected_idx]]
+            actions = get_point_actions(point)
+            if len(actions) <= 1:
+                set_manual_point_actions(point, [int(ActionType.RUN)])
+            else:
+                set_manual_point_actions(point, actions[:-1])
         self._sync_action_controls()
         self._on_points_structure_changed(redraw_fast=False)
 
     def delete_selected_point(self) -> None:
-        if self.selected_idx is None or self.selected_idx >= len(self.zone_point_global_indices):
+        self._normalize_selection_state()
+        if not self.selected_indices:
             messagebox.showinfo("提示", "请先点击选中一个点")
             return
 
         self.push_undo()
-        deleted = self.point_editor.delete_selected(
-            points=self.points,
-            zone_indices=self.zone_point_global_indices,
-            selected_idx=self.selected_idx,
-        )
-        if deleted:
-            self.selected_idx = None
+        global_indices = sorted((self.zone_point_global_indices[idx] for idx in self.selected_indices), reverse=True)
+        for global_idx in global_indices:
+            self.points.pop(global_idx)
+        if global_indices:
+            self._clear_selection()
             self._reset_point_property_controls()
             self._on_points_structure_changed(redraw_fast=False)
 
     def on_drag(self, event) -> None:
+        if self.is_box_selecting:
+            self._show_selection_rect(self.box_select_start_x, self.box_select_start_y, event.x, event.y)
+            return
+
         if not self.is_dragging:
             return
 
@@ -653,7 +762,32 @@ class RouteEditorApp:
         if moved:
             self.schedule_redraw(fast=True)
 
-    def on_release(self, _event) -> None:
+    def on_release(self, event) -> None:
+        if self.is_box_selecting:
+            if abs(event.x - self.box_select_start_x) <= 4 and abs(event.y - self.box_select_start_y) <= 4:
+                idx_in_zone = self.get_node_at(event.x, event.y)
+                if idx_in_zone is not None:
+                    selected = set(self.selected_indices)
+                    if idx_in_zone in selected:
+                        selected.remove(idx_in_zone)
+                    else:
+                        selected.add(idx_in_zone)
+                    self._set_selection(list(selected), primary_idx=idx_in_zone)
+            else:
+                self._set_selection(
+                    self._collect_indices_in_rect(
+                        self.box_select_start_x,
+                        self.box_select_start_y,
+                        event.x,
+                        event.y,
+                    ),
+                )
+            self._sync_action_controls()
+            self._hide_selection_rect()
+            self.is_box_selecting = False
+            self.schedule_redraw(fast=True)
+            return
+
         self.is_dragging = False
 
     # ---- 导入 ----
@@ -684,7 +818,7 @@ class RouteEditorApp:
         self.raw_points = []
         self.points = imported_points
         self.history.clear()
-        self.selected_idx = None
+        self._clear_selection()
         self._reset_point_property_controls()
         self._on_points_structure_changed(redraw_fast=False)
         self.fit_view()
