@@ -21,6 +21,12 @@
         "recognition": {
             "type": "OCR",
             "param": {
+                "roi": [
+                    803,
+                    350,
+                    263,
+                    219
+                ],
                 "expected": [
                     "萤壳虫",
                     "灼壳虫",
@@ -47,12 +53,6 @@
                     "中红柱状菌",
                     "纯晶多齿叶",
                     "星门菌"
-                ],
-                "roi": [
-                    803,
-                    350,
-                    263,
-                    219
                 ]
             }
         },
@@ -67,12 +67,12 @@
         //     }
         // },
         "repeat": 3,
-        "focus": {
-            "Node.Recognition.Succeeded": "识别到采集物"
-        },
         "next": [
             "AutoCollectReleaseAlt"
-        ]
+        ],
+        "focus": {
+            "Node.Recognition.Succeeded": "识别到采集物"
+        }
     },
     "AutoCollectReleaseAlt": {
         "action": {
@@ -96,6 +96,12 @@
         "recognition": {
             "type": "OCR",
             "param": {
+                "roi": [
+                    803,
+                    350,
+                    263,
+                    219
+                ],
                 "expected": [
                     "萤壳虫",
                     "灼壳虫",
@@ -122,12 +128,6 @@
                     "中红柱状菌",
                     "纯晶多齿叶",
                     "星门菌"
-                ],
-                "roi": [
-                    803,
-                    350,
-                    263,
-                    219
                 ]
             }
         },
