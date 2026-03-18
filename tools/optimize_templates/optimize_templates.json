@@ -566,5 +566,7 @@
     "resource/image/VisitFriends/TerminalControlNexus": "205733cb805b3b47d587011ab047054c3a2fbc716af5c6a394c4e7f510e28537",
     "resource/image/VisitFriends/TerminalGrowthChamber": "71480500443962f9c74714fbfa259a54d5968b1c734ec322923c67aaee667ba0",
     "resource/image/VisitFriends/EnterButton": "c4d78df14a5092e27d612028eea582980467f70a6e8867f626b537a303983df7",
-    "resource/image/VisitFriends/ShipEscButton": "4c4bb533f29382bc591b20a90ad41bae4679b385998734e0f3c2b9d18f4b815d"
+    "resource/image/VisitFriends/ShipEscButton": "4c4bb533f29382bc591b20a90ad41bae4679b385998734e0f3c2b9d18f4b815d",
+    "resource/image/EssenceFilter/ThumbLock": "7cabefcdc366420b523f44ea133992adb8c93f2940b8b695ab1366c2dfb0124e",
+    "resource/image/EssenceFilter/ThumbDiscard": "9e8b571e9aeee53a85a2cc8d636aee0817d153880f762c38884467a2c2824cf3"
 }
