@@ -57,17 +57,22 @@ if err != nil {
 ## 规则开关怎么对应你描述的需求？
 
 1. “总数大于 x（6）”
-  - 使用 `KeepFuturePromising=true`
-  - 设置 `FuturePromisingMinTotal=x`（例如 6）
-  - `LockFuturePromising` 决定是否命中后应该锁定
+
+- 使用 `KeepFuturePromising=true`
+- 设置 `FuturePromisingMinTotal=x`（例如 6）
+- `LockFuturePromising` 决定是否命中后应该锁定
+
 2. “slot3 大于（3）”
-  - 使用 `KeepSlot3Level3Practical=true`
-  - 设置 `Slot3MinLevel=3`
-  - 注意：slot3 可能出现在 OCR 的任意位置（slot1/2/3 文本里可能混入），引擎会自动判定 slot3 池命中的那条
-  - `LockSlot3Practical` 决定是否命中后应该锁定
+
+- 使用 `KeepSlot3Level3Practical=true`
+- 设置 `Slot3MinLevel=3`
+- 注意：slot3 可能出现在 OCR 的任意位置（slot1/2/3 文本里可能混入），引擎会自动判定 slot3 池命中的那条
+- `LockSlot3Practical` 决定是否命中后应该锁定
+
 3. 未命中怎么处理
-  - `DiscardUnmatched=true` -> `res.ShouldDiscard=true`
-  - `DiscardUnmatched=false` -> 不废弃，`res.ShouldDiscard=false`
+
+- `DiscardUnmatched=true` -> `res.ShouldDiscard=true`
+- `DiscardUnmatched=false` -> 不废弃，`res.ShouldDiscard=false`
 
 ## 输出结构（MatchResult）
 
@@ -81,13 +86,11 @@ if err != nil {
 
 ### 按 `Kind` 的典型输出
 
-
-| `Kind`                      | `Weapons` | `SkillIDs` / `SkillsChinese`             | `ShouldLock`          | `ShouldDiscard`    | `Reason` 格式                                |
-| --------------------------- | --------- | ---------------------------------------- | --------------------- | ------------------ | ------------------------------------------ |
-| `MatchExact`                | 非空（可能多把）  | 长度 3，对应目标组合                              | `true`                | `false`            | `精准匹配：` + 武器中文名，多把用 `、` 连接；若无武器列表则为 `精准匹配` |
-| `MatchFuturePromising`      | 通常为空      | 三槽为 OCR 技能文本；`SkillIDs` 为 `0,0,0`        | `LockFuturePromising` | `false`            | `未来可期：总等级 … ≥ …`                           |
-| `MatchSlot3Level3Practical` | 视规则而定     | 规范槽位技能                                   | `LockSlot3Practical`  | `false`            | `实用基质：词条3(…)等级 … ≥ …`                      |
-| `MatchNone`                 | 空         | `SkillIDs` 空；`SkillsChinese` 仍为 OCR 三槽文本 | `false`               | `DiscardUnmatched` | 固定 `未匹配`                                   |
-
+| `Kind`                      | `Weapons`        | `SkillIDs` / `SkillsChinese`                     | `ShouldLock`          | `ShouldDiscard`    | `Reason` 格式                                                            |
+| --------------------------- | ---------------- | ------------------------------------------------ | --------------------- | ------------------ | ------------------------------------------------------------------------ |
+| `MatchExact`                | 非空（可能多把） | 长度 3，对应目标组合                             | `true`                | `false`            | `精准匹配：` + 武器中文名，多把用 `、` 连接；若无武器列表则为 `精准匹配` |
+| `MatchFuturePromising`      | 通常为空         | 三槽为 OCR 技能文本；`SkillIDs` 为 `0,0,0`       | `LockFuturePromising` | `false`            | `未来可期：总等级 … ≥ …`                                                 |
+| `MatchSlot3Level3Practical` | 视规则而定       | 规范槽位技能                                     | `LockSlot3Practical`  | `false`            | `实用基质：词条3(…)等级 … ≥ …`                                           |
+| `MatchNone`                 | 空               | `SkillIDs` 空；`SkillsChinese` 仍为 OCR 三槽文本 | `false`               | `DiscardUnmatched` | 固定 `未匹配`                                                            |
 
 未命中时废弃与否只看 `ShouldDiscard`（由 `DiscardUnmatched` 决定），与 `Reason` 文案无关。

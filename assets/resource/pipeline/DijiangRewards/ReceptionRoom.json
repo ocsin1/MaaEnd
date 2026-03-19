@@ -18,9 +18,7 @@
                 ]
             }
         },
-        "post_delay": 0,
         "pre_delay": 0,
-        "rate_limit": 0,
         "action": {
             "type": "Click"
         },
@@ -34,11 +32,13 @@
                 48
             ]
         },
+        "post_delay": 0,
+        "timeout": 5000,
+        "rate_limit": 0,
         "next": [
             "WaitEndExchange",
             "ReceptionRoom"
         ],
-        "timeout": 5000,
         "on_error": [
             "EntryReceptionRoom_OnError"
         ]
@@ -62,9 +62,7 @@
                 ]
             }
         },
-        "post_delay": 0,
         "pre_delay": 0,
-        "rate_limit": 0,
         "action": {
             "type": "Click"
         },
@@ -78,6 +76,8 @@
                 48
             ]
         },
+        "post_delay": 0,
+        "rate_limit": 0,
         "next": [
             "WaitEndExchange",
             "ReceptionRoom"
@@ -97,10 +97,10 @@
                 ]
             }
         },
-        "post_delay": 0,
         "pre_delay": 0,
-        "rate_limit": 0,
+        "post_delay": 0,
         "timeout": 5000,
+        "rate_limit": 0,
         "next": [
             "EndExchange"
         ]
@@ -136,14 +136,14 @@
                 "box_index": 1
             }
         },
-        "post_delay": 0,
         "pre_delay": 0,
-        "rate_limit": 0,
         "action": "Click",
+        "post_delay": 0,
+        "timeout": 5000,
+        "rate_limit": 0,
         "next": [
             "ReceptionRoom"
         ],
-        "timeout": 5000,
         "on_error": [
             "EndExchange_OnError"
         ]
@@ -177,11 +177,11 @@
                 "box_index": 1
             }
         },
-        "post_delay": 0,
         "pre_delay": 0,
-        "rate_limit": 0,
         "action": "Click",
+        "post_delay": 0,
         "timeout": 5000,
+        "rate_limit": 0,
         "on_error": [
             "EndExchangeJBC_OnError"
         ]
@@ -220,8 +220,8 @@
                 ]
             }
         },
-        "post_delay": 0,
         "pre_delay": 0,
+        "post_delay": 0,
         "rate_limit": 0,
         "next": [
             "ReceptionRoomNeedCollectClues",
@@ -248,16 +248,16 @@
                 "box_index": 1
             }
         },
-        "post_delay": 0,
         "pre_delay": 0,
-        "rate_limit": 0,
         "action": {
             "type": "Click"
         },
+        "post_delay": 0,
+        "timeout": 5000,
+        "rate_limit": 0,
         "next": [
             "CloseExchangeRewards"
         ],
-        "timeout": 5000,
         "on_error": [
             "StartExchange_OnError"
         ]
@@ -273,13 +273,13 @@
                 ]
             }
         },
-        "post_delay": 0,
         "pre_delay": 0,
-        "rate_limit": 0,
         "action": {
             "type": "Click"
         },
+        "post_delay": 0,
         "timeout": 5000,
+        "rate_limit": 0,
         "next": [
             "ReceptionRoomSetClues",
             "ExitClueLibrary",
@@ -322,9 +322,7 @@
                 "box_index": 2
             }
         },
-        "post_delay": 0,
         "pre_delay": 0,
-        "rate_limit": 0,
         "action": {
             "type": "Click"
         },
@@ -332,11 +330,13 @@
             "time": 80,
             "timeout": 1000
         },
+        "post_delay": 0,
+        "timeout": 5000,
+        "rate_limit": 0,
         "next": [
             "ReceiveAll",
             "EndExchange"
         ],
-        "timeout": 5000,
         "on_error": [
             "ReceptionRoomNeedReceiveClues_OnError"
         ]
@@ -378,13 +378,13 @@
                 "box_index": 1
             }
         },
-        "post_delay": 0,
         "pre_delay": 0,
-        "rate_limit": 0,
         "action": {
             "type": "Click"
         },
+        "post_delay": 0,
         "timeout": 5000,
+        "rate_limit": 0,
         "next": [
             "ReceptionRoomSetClues",
             "StartExchange",
@@ -430,18 +430,18 @@
                 "box_index": 2
             }
         },
-        "post_delay": 0,
         "pre_delay": 0,
-        "rate_limit": 0,
         "action": {
             "type": "Click"
         },
+        "post_delay": 0,
+        "timeout": 5000,
+        "rate_limit": 0,
         "next": [
             "SendClues",
             "Collect",
             "EndExchange"
         ],
-        "timeout": 5000,
         "on_error": [
             "ReceptionRoomNeedCollectClues_OnError"
         ]
@@ -486,16 +486,16 @@
                 ]
             }
         },
-        "post_delay": 0,
         "pre_delay": 0,
-        "rate_limit": 0,
         "action": {
             "type": "Click",
             "param": {
                 "contact": 1
             }
         },
+        "post_delay": 0,
         "timeout": 5000,
+        "rate_limit": 0,
         "next": [
             "EntrySendClues"
         ],
@@ -551,7 +551,6 @@
             }
         },
         "pre_delay": 0,
-        "rate_limit": 0,
         "action": {
             "type": "Scroll",
             "param": {
@@ -559,6 +558,7 @@
             }
         },
         "timeout": 5000,
+        "rate_limit": 0,
         "next": [
             "InSend"
         ],
@@ -607,13 +607,13 @@
                 "box_index": 1
             }
         },
-        "post_delay": 0,
         "pre_delay": 0,
-        "rate_limit": 0,
         "action": {
             "type": "Click"
         },
+        "post_delay": 0,
         "timeout": 5000,
+        "rate_limit": 0,
         "next": [
             "Send"
         ],
@@ -656,13 +656,13 @@
                 ]
             }
         },
-        "post_delay": 0,
         "pre_delay": 0,
-        "rate_limit": 0,
         "action": {
             "type": "Click"
         },
+        "post_delay": 0,
         "timeout": 5000,
+        "rate_limit": 0,
         "next": [
             "InSend"
         ],
@@ -709,16 +709,16 @@
                 ]
             }
         },
-        "post_delay": 0,
         "pre_delay": 0,
-        "rate_limit": 0,
         "action": {
             "type": "Click",
             "param": {
                 "contact": 1
             }
         },
+        "post_delay": 0,
         "timeout": 5000,
+        "rate_limit": 0,
         "next": [
             "ReceptionRoomNeedCollectClues"
         ],
@@ -772,9 +772,7 @@
                 ]
             }
         },
-        "post_delay": 0,
         "pre_delay": 0,
-        "rate_limit": 0,
         "action": {
             "type": "Click"
         },
@@ -782,7 +780,9 @@
             "time": 100,
             "timeout": 1500
         },
+        "post_delay": 0,
         "timeout": 5000,
+        "rate_limit": 0,
         "next": [
             "InSend"
         ],
@@ -865,8 +865,8 @@
                 ]
             }
         },
-        "post_delay": 0,
         "pre_delay": 0,
+        "post_delay": 0,
         "rate_limit": 0,
         "next": [
             "SendTheMostClues",
@@ -886,16 +886,16 @@
                 "box_index": 1
             }
         },
+        "pre_delay": 0,
         "action": {
             "type": "Click"
         },
+        "post_delay": 0,
         "timeout": 5000,
+        "rate_limit": 0,
         "next": [
             "ExitCollect"
         ],
-        "post_delay": 0,
-        "pre_delay": 0,
-        "rate_limit": 0,
         "on_error": [
             "Collect_OnError"
         ]
@@ -939,16 +939,16 @@
                 ]
             }
         },
-        "post_delay": 0,
         "pre_delay": 0,
-        "rate_limit": 0,
         "action": {
             "type": "Click",
             "param": {
                 "contact": 1
             }
         },
+        "post_delay": 0,
         "timeout": 5000,
+        "rate_limit": 0,
         "next": [
             "ReceptionRoomNeedReceiveClues",
             "ReceptionRoomSetClues",
@@ -1015,12 +1015,12 @@
             }
         },
         "post_delay": 0,
+        "timeout": 5000,
         "rate_limit": 0,
         "next": [
             "ReadySetClues",
             "EndExchange"
         ],
-        "timeout": 5000,
         "on_error": [
             "ReceptionRoomSetClues_OnError"
         ]
@@ -1238,6 +1238,7 @@
                 ]
             }
         },
+        "pre_delay": 0,
         "action": "Click",
         "post_wait_freezes": {
             "time": 80,
@@ -1250,12 +1251,11 @@
             ]
         },
         "post_delay": 0,
-        "pre_delay": 0,
+        "timeout": 5000,
         "rate_limit": 0,
         "next": [
             "ExitReceptionRoom"
         ],
-        "timeout": 5000,
         "on_error": [
             "ExitClueLibrary_OnError"
         ]
@@ -1306,9 +1306,7 @@
                 ]
             }
         },
-        "post_delay": 0,
         "pre_delay": 0,
-        "rate_limit": 0,
         "action": {
             "type": "Click",
             "param": {
@@ -1325,10 +1323,12 @@
                 59
             ]
         },
+        "post_delay": 0,
+        "timeout": 5000,
+        "rate_limit": 0,
         "next": [
             "InDijiangControlNexus"
         ],
-        "timeout": 5000,
         "on_error": [
             "ExitReceptionRoom_OnError"
         ]

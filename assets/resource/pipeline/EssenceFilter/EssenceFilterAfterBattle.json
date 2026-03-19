@@ -55,22 +55,6 @@
                 "custom_action": "EssenceFilterInitAction"
             }
         },
-        "attach": {
-            "rarity6_weapon": true,
-            "rarity5_weapon": true,
-            "rarity4_weapon": false,
-            "flawless_essence": true,
-            "pure_essence": false,
-            "keep_future_promising": false,
-            "future_promising_min_total": 6,
-            "lock_future_promising": false,
-            "keep_slot3_level3_practical": false,
-            "slot3_min_level": 3,
-            "lock_slot3_practical": false,
-            "discard_unmatched": true,
-            "export_calculator_script": false,
-            "skip_locked_row": false
-        },
         "post_wait_freezes": {
             "time": 50,
             "target": [
@@ -87,6 +71,22 @@
         ],
         "focus": {
             "Node.Action.Succeeded": "初始化完成"
+        },
+        "attach": {
+            "rarity6_weapon": true,
+            "rarity5_weapon": true,
+            "rarity4_weapon": false,
+            "flawless_essence": true,
+            "pure_essence": false,
+            "keep_future_promising": false,
+            "future_promising_min_total": 6,
+            "lock_future_promising": false,
+            "keep_slot3_level3_practical": false,
+            "slot3_min_level": 3,
+            "lock_slot3_practical": false,
+            "discard_unmatched": true,
+            "export_calculator_script": false,
+            "skip_locked_row": false
         }
     },
     "EssenceFullScreenDetectAll": {

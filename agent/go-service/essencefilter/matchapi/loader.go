@@ -12,11 +12,11 @@ const defaultLoadLocale = "CN"
 
 var weaponTypeToID = map[string]int{
 	"Sword":      1,
-	"Claymores": 2,
+	"Claymores":  2,
 	"Polearm":    3,
 	"Handcannon": 4,
 	"Pistol":     4,
-	"Arts Unit": 5,
+	"Arts Unit":  5,
 	"Wand":       5,
 }
 
@@ -361,4 +361,3 @@ func cleanDisplayToCanonical(display string, slot int, locale string, cfg Matche
 	}
 	return "", 0, false
 }
-

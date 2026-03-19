@@ -6,17 +6,17 @@
 
 ## 文件与职责（同一 case 放一起）
 
-| 文件               | 职责                                                                                                                                                                         |
-| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `types.go`         | 数据类型与常量（运行选项、基质颜色等）；匹配所需数据结构由 `matchapi` 提供                                                                                                |
-| `state.go`         | 单次运行状态 `RunState`、`getRunState` / `setRunState`、`Reset()`；持有 `matchapi.Engine` 与统计结果                                                                 |
-| `filter.go`        | 小工具：`skillCombinationKey`（用于 UI 统计聚合）                                                                                                                         |
-| `ui.go`            | 所有展示：MXU 日志、战利品摘要、技能池/统计日志、预刻写方案推荐（结果来自 `matchapi`）                                                                                   |
-| `actions.go`       | 所有 CustomAction：Init / OCR 库存与 Trace / CheckItem·CheckItemLevel·SkillDecision / RowCollect·RowNextItem·Finish·SwipeCalibrate                                           |
-| `options.go`       | 从节点 attach 读取 `EssenceFilterOptions`、 rarity/essence 列表格式化                                                                                                        |
-| `resource_path.go` | 监听资源加载路径，供 Init 解析数据目录                                                                                                                                       |
-| `register.go`      | 注册 ResourceSink 与各 CustomAction，供上层 `go-service` 统一加载                                                                                                            |
-| `matchapi/`        | 纯匹配 API：`OCRInput -> MatchResult`，默认加载 `assets/data/EssenceFilter/*`，可供外部 go module 复用                                                                        |
+| 文件               | 职责                                                                                                                               |
+| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------- |
+| `types.go`         | 数据类型与常量（运行选项、基质颜色等）；匹配所需数据结构由 `matchapi` 提供                                                         |
+| `state.go`         | 单次运行状态 `RunState`、`getRunState` / `setRunState`、`Reset()`；持有 `matchapi.Engine` 与统计结果                               |
+| `filter.go`        | 小工具：`skillCombinationKey`（用于 UI 统计聚合）                                                                                  |
+| `ui.go`            | 所有展示：MXU 日志、战利品摘要、技能池/统计日志、预刻写方案推荐（结果来自 `matchapi`）                                             |
+| `actions.go`       | 所有 CustomAction：Init / OCR 库存与 Trace / CheckItem·CheckItemLevel·SkillDecision / RowCollect·RowNextItem·Finish·SwipeCalibrate |
+| `options.go`       | 从节点 attach 读取 `EssenceFilterOptions`、 rarity/essence 列表格式化                                                              |
+| `resource_path.go` | 监听资源加载路径，供 Init 解析数据目录                                                                                             |
+| `register.go`      | 注册 ResourceSink 与各 CustomAction，供上层 `go-service` 统一加载                                                                  |
+| `matchapi/`        | 纯匹配 API：`OCRInput -> MatchResult`，默认加载 `assets/data/EssenceFilter/*`，可供外部 go module 复用                             |
 
 ## 数据流概要
 

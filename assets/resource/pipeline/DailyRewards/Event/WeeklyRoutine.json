@@ -4,6 +4,7 @@
         "recognition": "And",
         "all_of": [
             {
+                "sub_name": "color",
                 "recognition": "ColorMatch",
                 "roi": [
                     -200,
@@ -11,19 +12,18 @@
                     200,
                     200
                 ],
-                "upper": [
-                    255,
-                    255,
-                    13
-                ],
                 "lower": [
                     230,
                     230,
                     0
                 ],
+                "upper": [
+                    255,
+                    255,
+                    13
+                ],
                 "connected": true,
-                "count": 200,
-                "sub_name": "color"
+                "count": 200
             },
             {
                 "recognition": "OCR",
@@ -52,8 +52,6 @@
     "DailyEventUnreadWeeklyRoutinePickOne": {
         "desc": "领取积分",
         "recognition": "OCR",
-        "pre_delay": 0,
-        "post_delay": 0,
         "roi": [
             -170,
             200,
@@ -67,6 +65,7 @@
             "受取",
             "획득"
         ],
+        "pre_delay": 0,
         "action": "Click",
         "post_wait_freezes": {
             "time": 200,
@@ -77,6 +76,7 @@
                 110
             ]
         },
+        "post_delay": 0,
         "next": [
             "DailyEventUnreadWeeklyRoutinePickAll",
             "DailyEventUnreadWeeklyRoutineFinish"
@@ -85,8 +85,6 @@
     "DailyEventUnreadWeeklyRoutinePickAll": {
         "desc": "每周事务活动内一键领取",
         "recognition": "OCR",
-        "pre_delay": 0,
-        "post_delay": 0,
         "roi": [
             -160,
             -120,
@@ -100,7 +98,9 @@
             "一括受取",
             "일괄 획득"
         ],
+        "pre_delay": 0,
         "action": "Click",
+        "post_delay": 0,
         "next": [
             "SceneNoticeRewardsConfirm"
         ]

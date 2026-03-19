@@ -29,11 +29,11 @@
             "timeout": 1000
         },
         "post_delay": 0,
+        "timeout": 5000,
         "rate_limit": 0,
         "next": [
             "RecoveryEmotionAssistUseAssist"
         ],
-        "timeout": 5000,
         "on_error": [
             "RecoveryEmotion_OnError"
         ]

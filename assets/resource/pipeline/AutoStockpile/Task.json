@@ -97,12 +97,12 @@
         "pre_delay": 0,
         "post_delay": 0,
         "rate_limit": 0,
-        "focus": {
-            "Node.Recognition.Succeeded": "无合格商品，跳过本次购买"
-        },
         "next": [
             "AutoStockpileBackToRegionalConstruction"
-        ]
+        ],
+        "focus": {
+            "Node.Recognition.Succeeded": "无合格商品，跳过本次购买"
+        }
     },
     "AutoStockpileEnterStore": {
         "desc": "进入物资调度界面",
@@ -263,13 +263,13 @@
         "post_wait_freezes": 200,
         "post_delay": 0,
         "rate_limit": 0,
-        "focus": {
-            "Node.Action.Failed": "进入地区失败，该地区可能未解锁"
-        },
         "next": [
             "AutoStockpileEnterStore",
             "AutoStockpileRegionUnavailable"
-        ]
+        ],
+        "focus": {
+            "Node.Action.Failed": "进入地区失败，该地区可能未解锁"
+        }
     },
     "AutoStockpileChangeRegionTask": {
         "pre_delay": 0,
@@ -366,12 +366,12 @@
         "post_wait_freezes": 200,
         "post_delay": 0,
         "rate_limit": 0,
-        "focus": {
-            "Node.Action.Succeeded": "购买成功"
-        },
         "next": [
             "AutoStockpileBackToRegionalConstruction"
-        ]
+        ],
+        "focus": {
+            "Node.Action.Succeeded": "购买成功"
+        }
     },
     "AutoStockpileSwipeToBottom": {
         "desc": "将所有可购买物品展示在窗口中（更稳定）",
@@ -471,12 +471,12 @@
         "pre_delay": 0,
         "post_delay": 0,
         "rate_limit": 0,
-        "focus": {
-            "Node.Recognition.Succeeded": "可购买数量不足，取消购买"
-        },
         "next": [
             "AutoStockpileCancelBuy"
-        ]
+        ],
+        "focus": {
+            "Node.Recognition.Succeeded": "可购买数量不足，取消购买"
+        }
     },
     "AutoStockpileSwipeSpecificQuantity": {
         "desc": "滑动到指定数值",
@@ -516,12 +516,12 @@
         "post_wait_freezes": 200,
         "post_delay": 0,
         "rate_limit": 0,
-        "focus": {
-            "Node.Action.Failed": "定量滑动失败，取消购买"
-        },
         "next": [
             "AutoStockpileRelayNode"
-        ]
+        ],
+        "focus": {
+            "Node.Action.Failed": "定量滑动失败，取消购买"
+        }
     },
     "AutoStockpileCheckBuy": {
         "desc": "确认可以进行购买操作",

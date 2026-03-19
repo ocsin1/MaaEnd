@@ -22,11 +22,11 @@
         },
         "pre_delay": 0,
         "post_delay": 0,
+        "timeout": 5000,
         "rate_limit": 0,
         "next": [
             "EntryMFGCarbinSuccess"
         ],
-        "timeout": 5000,
         "on_error": [
             "MFG_ReceiveRewards_OnError"
         ]
@@ -128,11 +128,11 @@
             "type": "Click"
         },
         "post_delay": 0,
+        "timeout": 5000,
         "rate_limit": 0,
         "next": [
             "MFGCarbinNeedReStockClose"
         ],
-        "timeout": 5000,
         "on_error": [
             "MFGCarbinNeedReStock_OnError"
         ]
@@ -343,11 +343,11 @@
             "type": "Click"
         },
         "post_delay": 0,
+        "timeout": 5000,
         "rate_limit": 0,
         "next": [
             "MFGCarbinNeedAssistUseAssist"
         ],
-        "timeout": 5000,
         "on_error": [
             "MFGCarbinNeedAssist_OnError"
         ]
@@ -498,11 +498,11 @@
             "type": "Click"
         },
         "post_delay": 0,
+        "timeout": 5000,
         "rate_limit": 0,
         "next": [
             "MFGCarbinNeedAssistClose"
         ],
-        "timeout": 5000,
         "on_error": [
             "MFGCarbinNeedAssistConfirm_OnError"
         ]
@@ -594,9 +594,7 @@
                 ]
             }
         },
-        "post_delay": 0,
         "pre_delay": 0,
-        "rate_limit": 0,
         "action": {
             "type": "Click",
             "param": {
@@ -607,10 +605,12 @@
             "time": 80,
             "timeout": 2000
         },
+        "post_delay": 0,
+        "timeout": 5000,
+        "rate_limit": 0,
         "next": [
             "InDijiangControlNexus"
         ],
-        "timeout": 5000,
         "on_error": [
             "Exit_MFG_Cabin_OnError"
         ]

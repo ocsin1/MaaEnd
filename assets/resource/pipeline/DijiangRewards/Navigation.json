@@ -60,8 +60,8 @@
                 ]
             }
         },
-        "post_delay": 0,
         "pre_delay": 0,
+        "post_delay": 0,
         "rate_limit": 0
     }
 }

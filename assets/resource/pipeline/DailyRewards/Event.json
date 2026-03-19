@@ -41,9 +41,9 @@
         "recognition": "Custom",
         "custom_recognition": "DailyEventUnreadItemInitRecognition",
         "pre_delay": 0,
-        "post_delay": 0,
         "action": "Custom",
-        "custom_action": "DailyEventUnreadItemInitAction"
+        "custom_action": "DailyEventUnreadItemInitAction",
+        "post_delay": 0
     },
     "DailyEventUnreadItemSwitch": {
         "desc": "切换未处理的活动列表",
