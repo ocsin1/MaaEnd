@@ -186,6 +186,7 @@
         "action": "Custom",
         "custom_action": "VisitFriendsMenuClueExchangeAction",
         "post_delay": 0,
+        "post_wait_freezes": 200,
         "focus": {
             "Node.Recognition.Succeeded": "进行线索交换"
         }
@@ -314,6 +315,7 @@
         "action": "Custom",
         "custom_action": "VisitFriendsMenuClueAssistAction",
         "post_delay": 0,
+        "post_wait_freezes": 200,
         "focus": {
             "Node.Recognition.Succeeded": "助力控制中枢"
         }
@@ -352,6 +354,7 @@
         "action": "Custom",
         "custom_action": "VisitFriendsMenuClueAssistAction",
         "post_delay": 0,
+        "post_wait_freezes": 200,
         "focus": {
             "Node.Recognition.Succeeded": "助力制造舱1"
         }
@@ -390,6 +393,7 @@
         "action": "Custom",
         "custom_action": "VisitFriendsMenuClueAssistAction",
         "post_delay": 0,
+        "post_wait_freezes": 200,
         "focus": {
             "Node.Recognition.Succeeded": "助力制造舱2"
         }
@@ -456,6 +460,7 @@
         "action": "Custom",
         "custom_action": "VisitFriendsMenuClueAssistAction",
         "post_delay": 0,
+        "post_wait_freezes": 200,
         "next": [
             "SceneNoticeRewardsConfirm"
         ],
