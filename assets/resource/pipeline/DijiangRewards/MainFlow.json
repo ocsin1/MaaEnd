@@ -18,10 +18,11 @@
         },
         "next": [
             "[JumpBack]RecoveryEmotion",
-            "[JumpBack]ReceptionRoomMain",
-            "[JumpBack]MFGCarbinMain",
+            "[JumpBack]EntryReceptionRoom",
+            "[JumpBack]EntryCarbin",
             "[JumpBack]EntryGrowthChamber",
-            "FinishDijiangRewards"
+            "FinishDijiangRewards",
+            "[JumpBack]EndExchangeJBC"
         ],
         "focus": {
             "Node.PipelineNode.Failed": "$task.DijiangRewards.focus.control_nexus_target_unrecognized"
