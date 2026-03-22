@@ -219,7 +219,7 @@ func hoverAndOCR(ctx *maa.Context, tasker *maa.Tasker, ctrl *maa.Controller, x, 
 	}
 
 	ctrl.PostTouchMove(0, int32(x), int32(y), 0).Wait()
-	time.Sleep(1 * time.Second)
+	time.Sleep(2 * time.Second)
 
 	if tasker.Stopping() {
 		return ""
