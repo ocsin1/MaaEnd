@@ -103,22 +103,22 @@ func (a *ItemTransferOCRAction) Run(ctx *maa.Context, arg *maa.CustomActionArg) 
 	}
 
 	items := detectAllItems(ctx, img, nndNode)
-	if len(items) == 0 {
-		log.Warn().Str("component", componentName).Msg("no items detected on current page")
-		return false
-	}
 
 	cols := repoCols
 	if side == "bag" {
 		cols = bagCols
 	}
-	items = buildFullGrid(items, cols)
 
-	log.Info().
-		Str("component", componentName).
-		Int("grid_count", len(items)).
-		Int("cols", cols).
-		Msg("full grid built from NND detections")
+	if len(items) > 0 {
+		items = buildFullGrid(items, cols)
+		log.Info().
+			Str("component", componentName).
+			Int("grid_count", len(items)).
+			Int("cols", cols).
+			Msg("full grid built from NND detections")
+	} else {
+		items = buildSyntheticGrid(side, cols)
+	}
 
 	result := binarySearchOnPage(ctx, tasker, ctrl, items, categoryOrder, targetIdx, params.ItemName)
 	if result != nil {
@@ -138,6 +138,13 @@ const (
 	gridCellSpacing = 69
 	repoCols        = 8
 	bagCols         = 5
+
+	repoGridStartX = 191
+	repoGridStartY = 246
+	repoMaxRows    = 4
+	bagGridStartX  = 871
+	bagGridStartY  = 247
+	bagMaxRows     = 4
 )
 
 // buildFullGrid reconstructs a complete grid from NND detections.
@@ -204,6 +211,38 @@ func buildFullGrid(items []gridItem, cols int) []gridItem {
 		Int("min_x", minX).
 		Ints("row_ys", rowYs).
 		Msg("grid reconstructed from NND detections")
+
+	return grid
+}
+
+// buildSyntheticGrid generates a grid from known layout constants when NND
+// returns no detections (e.g. bag items not in the NND model).
+// Coordinates are in the standard 1280x720 space.
+func buildSyntheticGrid(side string, cols int) []gridItem {
+	startX, startY, maxRows := repoGridStartX, repoGridStartY, repoMaxRows
+	if side == "bag" {
+		startX, startY, maxRows = bagGridStartX, bagGridStartY, bagMaxRows
+	}
+
+	grid := make([]gridItem, 0, cols*maxRows)
+	for r := 0; r < maxRows; r++ {
+		for c := 0; c < cols; c++ {
+			grid = append(grid, gridItem{
+				CenterX: startX + c*gridCellSpacing,
+				CenterY: startY + r*gridCellSpacing,
+				ClassID: ^uint64(0),
+			})
+		}
+	}
+
+	log.Info().
+		Str("component", componentName).
+		Str("side", side).
+		Int("rows", maxRows).
+		Int("cols", cols).
+		Int("start_x", startX).
+		Int("start_y", startY).
+		Msg("synthetic grid generated (NND returned no detections)")
 
 	return grid
 }
