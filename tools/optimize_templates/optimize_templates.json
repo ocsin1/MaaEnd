@@ -577,5 +577,6 @@
     "resource/image/ItemTransfer/Product": "1bfd9d0cecc27a6708c69fd1c519808bf87342a71698038a73c0d8d7e8b7f856",
     "resource/image/ItemTransfer/Usable": "8a6f577db396dc41ce3cdb3afbcac68b92a71af5de68a1b3c5797c1237c16922",
     "resource/image/ItemTransfer/Plant": "bc56efd556e241cc559a82bd6856957e3606e0776d5d0be8b0b1f7cdab83911c",
-    "resource/image/ItemTransfer/Ore": "80fa6aacc4a47936e6d2f54eca4f7155f88b3fff678560f48125a639e47e799e"
+    "resource/image/ItemTransfer/Ore": "80fa6aacc4a47936e6d2f54eca4f7155f88b3fff678560f48125a639e47e799e",
+    "resource/image/ReadWiki/WikiUnreadBadgeWithDarkBG": "5c44b6a8be86d1bbc6115e7a4b25d733795d46ad44ebac1d812ea175d8cc96de"
 }
