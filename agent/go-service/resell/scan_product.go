@@ -3,6 +3,7 @@ package resell
 import (
 	"encoding/json"
 	"fmt"
+	"time"
 
 	"github.com/MaaXYZ/maa-framework-go/v4"
 	"github.com/rs/zerolog/log"
@@ -10,6 +11,8 @@ import (
 
 // ResellScanAction 入口：解析 row/col，OverrideNext 到 Step1
 type ResellScanAction struct{}
+
+var _ maa.CustomActionRunner = &ResellScanAction{}
 
 func (a *ResellScanAction) Run(ctx *maa.Context, arg *maa.CustomActionArg) bool {
 	rowIdx, col := 1, 1
@@ -43,10 +46,12 @@ func (a *ResellScanAction) Run(ctx *maa.Context, arg *maa.CustomActionArg) bool 
 // ResellScanCostAction Step2 确认成本价：从 RecognitionDetail 提取并存储详情页成本
 type ResellScanCostAction struct{}
 
+var _ maa.CustomActionRunner = &ResellScanCostAction{}
+
 func (a *ResellScanCostAction) Run(ctx *maa.Context, arg *maa.CustomActionArg) bool {
 	text := extractOCRText(arg.RecognitionDetail)
 	if text != "" {
-		if num, ok := extractNumbersFromText(text); ok {
+		if num, ok := extractIntegerFromText(text); ok {
 			setScanCostPrice(num)
 			log.Info().Int("costPrice", num).Msg("[Resell]详情页成本价已更新")
 		}
@@ -60,6 +65,8 @@ func (a *ResellScanCostAction) Run(ctx *maa.Context, arg *maa.CustomActionArg) b
 // ResellScanFriendPriceAction Step3：从 RecognitionDetail 提取好友出售价、追加利润记录（识别由 Pipeline Or ResellROIFriendSalePrice 完成）
 type ResellScanFriendPriceAction struct{}
 
+var _ maa.CustomActionRunner = &ResellScanFriendPriceAction{}
+
 func (a *ResellScanFriendPriceAction) Run(ctx *maa.Context, arg *maa.CustomActionArg) bool {
 	rowIdx, col := getScanPos()
 	costPrice := getScanCostPrice()
@@ -70,7 +77,7 @@ func (a *ResellScanFriendPriceAction) Run(ctx *maa.Context, arg *maa.CustomActio
 		resellScanOverrideNext(ctx, arg.CurrentTaskName, rowIdx, col, false)
 		return true
 	}
-	salePrice, ok := extractNumbersFromText(text)
+	salePrice, ok := extractIntegerFromText(text)
 	if !ok {
 		log.Info().Str("text", text).Msg("[Resell]好友出售价区域无有效数字")
 		resellScanOverrideNext(ctx, arg.CurrentTaskName, rowIdx, col, false)
@@ -88,6 +95,8 @@ func (a *ResellScanFriendPriceAction) Run(ctx *maa.Context, arg *maa.CustomActio
 // ResellScanSkipEmptyAction Step1 识别失败（无商品）时跳过当前格
 type ResellScanSkipEmptyAction struct{}
 
+var _ maa.CustomActionRunner = &ResellScanSkipEmptyAction{}
+
 func (a *ResellScanSkipEmptyAction) Run(ctx *maa.Context, arg *maa.CustomActionArg) bool {
 	rowIdx, col := getScanPos()
 	log.Info().Int("行", rowIdx).Int("列", col).Msg("[Resell]位置无数字，无商品，跳下一格")
@@ -97,6 +106,8 @@ func (a *ResellScanSkipEmptyAction) Run(ctx *maa.Context, arg *maa.CustomActionA
 
 // ResellScanNextAction 跳下一格或进入决策（OverrideNext）
 type ResellScanNextAction struct{}
+
+var _ maa.CustomActionRunner = &ResellScanNextAction{}
 
 func (a *ResellScanNextAction) Run(ctx *maa.Context, arg *maa.CustomActionArg) bool {
 	rowIdx, col := getScanPos()
@@ -136,4 +147,13 @@ func computeNextScanPos(row, col int, breakRow bool) (nextRow, nextCol int, done
 		return row + 1, 1, false
 	}
 	return 0, 0, true
+}
+
+// MoveMouseSafe moves the mouse to a safe location (10, 10) to avoid blocking OCR
+func MoveMouseSafe(controller *maa.Controller) {
+	// Use MoveMouseSafe to move mouse to a safe corner
+	// We use (10, 10) to avoid title bar buttons or window borders
+	controller.PostTouchMove(0, 10, 10, 0)
+	// Small delay to ensure mouse move completes
+	time.Sleep(50 * time.Millisecond)
 }

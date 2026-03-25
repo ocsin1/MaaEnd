@@ -12,6 +12,8 @@ import (
 // ResellDecideAction 根据记录、溢出、最低利润决策下一步
 type ResellDecideAction struct{}
 
+var _ maa.CustomActionRunner = &ResellDecideAction{}
+
 func (a *ResellDecideAction) Run(ctx *maa.Context, arg *maa.CustomActionArg) bool {
 	records, overflowAmount, MinimumProfit := getState()
 
@@ -64,4 +66,12 @@ func (a *ResellDecideAction) Run(ctx *maa.Context, arg *maa.CustomActionArg) boo
 	maafocus.Print(ctx, message)
 	ctx.OverrideNext(arg.CurrentTaskName, []maa.NextItem{{Name: "ChangeNextRegionPrepare"}})
 	return true
+}
+
+func processMaxRecord(record ProfitRecord) ProfitRecord {
+	result := record
+	if result.Row >= 2 {
+		result.Row = result.Row - 1
+	}
+	return result
 }
