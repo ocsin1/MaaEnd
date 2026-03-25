@@ -40,6 +40,7 @@ export default {
         {
             files: [
                 "*.mts",
+                "**/*.ts",
             ],
             options: {
                 tabWidth: 2,
@@ -47,6 +48,7 @@ export default {
                 trailingComma: "all",
                 bracketSpacing: true,
                 singleQuote: true,
+                multilineArraysWrapThreshold: -1,
             },
         },
     ],

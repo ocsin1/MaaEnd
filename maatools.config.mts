@@ -1,6 +1,7 @@
 import type { FullConfig } from '@nekosu/maa-tools'
 
 import { fetchCases } from './tests/scripts/loader.mts'
+import parserConfig from './tools/parser'
 
 const config: FullConfig = {
   cwd: import.meta.dirname,
@@ -10,6 +11,8 @@ const config: FullConfig = {
   maaLogDir: 'tests/maatools',
 
   interfacePath: 'assets/interface.json',
+
+  parser: parserConfig,
 
   check: {
     override: {
