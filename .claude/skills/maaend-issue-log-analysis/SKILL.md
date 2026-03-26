@@ -320,7 +320,7 @@ description: 分析 MaaEnd 上游仓库公开 Issue（`https://github.com/MaaEnd
 
 最终回答用这个结构：
 
-```markdown
+````markdown
 ## Issue 概要
 
 - issue：`#1234`
@@ -373,6 +373,7 @@ description: 分析 MaaEnd 上游仓库公开 Issue（`https://github.com/MaaEnd
 可能相关线索（待验证）：
 [根据日志/现象推测的可能方向，不保证准确，供参考]
 ```
+````
 
 </details>
 

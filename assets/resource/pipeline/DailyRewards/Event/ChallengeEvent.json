@@ -69,9 +69,9 @@
         "template": "DailyRewards/Event/ChallengeEventClaim.png",
         "threshold": 0.9,
         "pre_delay": 0,
+        "action": "Click",
         "post_delay": 0,
         "rate_limit": 0,
-        "action": "Click",
         "next": [
             "SceneNoticeRewardsConfirm"
         ]

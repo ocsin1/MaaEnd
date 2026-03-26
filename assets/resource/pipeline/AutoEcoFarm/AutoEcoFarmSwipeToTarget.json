@@ -51,8 +51,8 @@
                     563
                 ],
                 "template": "AutoEcoFarm/AutoEcoFarmFarmlandGAI.png",
-                "method": 5,
                 "green_mask": true,
+                "method": 5,
                 "threshold": 0.4
             }
         },
@@ -74,8 +74,8 @@
                     563
                 ],
                 "template": "AutoEcoFarm/AutoEcoFarmFarmlandGAI.png",
-                "method": 5,
                 "green_mask": true,
+                "method": 5,
                 "threshold": 0.4
             }
         },
@@ -97,8 +97,8 @@
                     563
                 ],
                 "template": "AutoEcoFarm/AutoEcoFarmFarmlandG2.png",
-                "method": 5,
                 "green_mask": true,
+                "method": 5,
                 "threshold": 0.4
             }
         },

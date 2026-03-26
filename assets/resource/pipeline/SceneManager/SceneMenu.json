@@ -68,8 +68,8 @@
                 "template": [
                     "SceneManager/MenuExpandLeft.png"
                 ],
-                "threshold": 0.7,
-                "green_mask": true
+                "green_mask": true,
+                "threshold": 0.7
             }
         },
         "pre_delay": 0,
@@ -96,8 +96,8 @@
                 "template": [
                     "SceneManager/MenuExpandRight.png"
                 ],
-                "threshold": 0.7,
-                "green_mask": true
+                "green_mask": true,
+                "threshold": 0.7
             }
         },
         "pre_delay": 0,

@@ -255,12 +255,12 @@
         "pre_delay": 0,
         "post_delay": 0,
         "rate_limit": 0,
-        "focus": {
-            "Node.Recognition.Starting": "Dev: 跳过滑动"
-        },
         "next": [
             "AutoStockpileRelayNodeSwipe"
-        ]
+        ],
+        "focus": {
+            "Node.Recognition.Starting": "Dev: 跳过滑动"
+        }
     },
     "AutoStockpileCheckBuyResult": {
         "desc": "确认购买是否成功",
@@ -280,12 +280,12 @@
         "post_wait_freezes": 80,
         "post_delay": 0,
         "rate_limit": 0,
-        "focus": {
-            "Node.Action.Succeeded": "购买成功"
-        },
         "next": [
             "AutoStockpileBackToRegionalConstruction"
-        ]
+        ],
+        "focus": {
+            "Node.Action.Succeeded": "购买成功"
+        }
     },
     "AutoStockpileSwipeToBottom": {
         "desc": "将所有可购买物品展示在窗口中（更稳定）",
@@ -384,12 +384,12 @@
         "pre_delay": 0,
         "post_delay": 0,
         "rate_limit": 0,
-        "focus": {
-            "Node.Recognition.Succeeded": "可购买数量不足，取消购买"
-        },
         "next": [
             "AutoStockpileCancelBuy"
-        ]
+        ],
+        "focus": {
+            "Node.Recognition.Succeeded": "可购买数量不足，取消购买"
+        }
     },
     "AutoStockpileSwipeSpecificQuantity": {
         "desc": "滑动到指定数值",
@@ -430,12 +430,12 @@
         "post_wait_freezes": 80,
         "post_delay": 0,
         "rate_limit": 0,
-        "focus": {
-            "Node.Action.Failed": "定量滑动失败，取消购买"
-        },
         "next": [
             "AutoStockpileRelayNodeSwipe"
-        ]
+        ],
+        "focus": {
+            "Node.Action.Failed": "定量滑动失败，取消购买"
+        }
     },
     "AutoStockpileCheckBuy": {
         "desc": "确认可以进行购买操作",
@@ -551,24 +551,24 @@
         "pre_delay": 0,
         "post_delay": 0,
         "rate_limit": 0,
-        "focus": {
-            "Node.Recognition.Starting": "Dev: 跳过购买"
-        },
         "next": [
             "AutoStockpileCancelBuy"
-        ]
+        ],
+        "focus": {
+            "Node.Recognition.Starting": "Dev: 跳过购买"
+        }
     },
     "AutoStockpileSkip": {
         "desc": "决策未找到合格商品或提前结束",
         "pre_delay": 0,
         "post_delay": 0,
         "rate_limit": 0,
-        "focus": {
-            "Node.Recognition.Succeeded": "跳过本次购买"
-        },
         "next": [
             "AutoStockpileBackToRegionalConstruction"
-        ]
+        ],
+        "focus": {
+            "Node.Recognition.Succeeded": "跳过本次购买"
+        }
     },
     "AutoStockpileRelayNodeDecision": {
         "desc": "限制复核重试次数",
@@ -605,12 +605,12 @@
         "pre_delay": 0,
         "post_delay": 0,
         "rate_limit": 0,
-        "focus": {
-            "Node.Recognition.Starting": "<span style=\"color: orange\">⚠️超过最大复核重试次数，已跳过地区</span>"
-        },
         "next": [
             "AutoStockpileBackToRegionalConstruction"
-        ]
+        ],
+        "focus": {
+            "Node.Recognition.Starting": "<span style=\"color: orange\">⚠️超过最大复核重试次数，已跳过地区</span>"
+        }
     },
     "AutoStockpileReconcileDecision": {
         "desc": "根据详情页价格校正并重算决策",
