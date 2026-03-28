@@ -37,12 +37,12 @@ python tools/essence_filter/build_locations.py
 
 ### 参数
 
-| 参数              | 默认值                                             | 说明                                      |
-| ----------------- | -------------------------------------------------- | ----------------------------------------- |
-| `--energy-points` | `assets/data/EssenceFilter/energy_point_gems.json` | 输入的能量淤积点数据                      |
-| `--skill-pools`   | `assets/data/EssenceFilter/skill_pools.json`       | 当前技能池                                |
-| `--output` / `-o` | `assets/data/EssenceFilter/locations.json`         | 输出 locations                            |
-| `--debug`         | 关闭                                               | 打印未匹配项以便排查                      |
+| 参数              | 默认值                                             | 说明                 |
+| ----------------- | -------------------------------------------------- | -------------------- |
+| `--energy-points` | `assets/data/EssenceFilter/energy_point_gems.json` | 输入的能量淤积点数据 |
+| `--skill-pools`   | `assets/data/EssenceFilter/skill_pools.json`       | 当前技能池           |
+| `--output` / `-o` | `assets/data/EssenceFilter/locations.json`         | 输出 locations       |
+| `--debug`         | 关闭                                               | 打印未匹配项以便排查 |
 
 ### 解析规则
 
