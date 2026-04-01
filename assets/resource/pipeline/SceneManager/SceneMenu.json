@@ -289,7 +289,8 @@
                     80
                 ],
                 "template": [
-                    "SceneManager/ValuableEntry.png"
+                    "SceneManager/ValuableEntry.png",
+                    "SceneManager/ValuableEntry2.png"
                 ]
             }
         },
@@ -1233,7 +1234,10 @@
                     425,
                     80
                 ],
-                "template": "SceneManager/ShoppingEntry.png"
+                "template": [
+                    "SceneManager/ShoppingEntry.png",
+                    "SceneManager/ShoppingEntry2.png"
+                ]
             }
         },
         "pre_delay": 0,
