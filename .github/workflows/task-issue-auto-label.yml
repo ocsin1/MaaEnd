@@ -1,4 +1,4 @@
-name: task issue auto label
+1name: task issue auto label
 
 on:
   issues:
