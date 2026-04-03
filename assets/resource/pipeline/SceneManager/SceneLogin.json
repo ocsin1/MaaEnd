@@ -92,10 +92,7 @@
             }
         ],
         "action": {
-            "type": "ClickKey",
-            "param": {
-                "key": 27 // ESC
-            }
+            "type": "Click"
         }
     },
     "__ScenePrivateLoginMonthlyPassConfirm": {
