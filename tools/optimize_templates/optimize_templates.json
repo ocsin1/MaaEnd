@@ -333,7 +333,7 @@
     "resource/image/SceneManager/MapWuling/JingyuValley6Top": "d867262845ca5bf125cc04c8f0be01e675cf7a37d1f4c6c8a4d100eb29dcdc66",
     "resource/image/SceneManager/MapWuling/JingyuValley3Top": "21813bd3347cb5359e989b27f87dfc8363d29b328d151c4ba97989f6b2465237",
     "resource/image/SceneManager/MapWuling/WulingCity0Center": "ee83b4665ff1097f788d3199b6acbd5f8fb5a1c49fb4afbd96e3f63bc27fe45c",
-    "resource/image/SceneManager/MapWuling/JingyuValley4Center": "8f7d864d1e8911370a94a70e2edc49cc1d7903332e44460733c35e120755ca13",
+    "resource/image/SceneManager/MapWuling/JingyuValley4Center": "9f7843f729ec461248de029d1bd00963c27077128847e166f9a19ab78d217d1e",
     "resource/image/SceneManager/MapWuling/JingyuValley2Top": "29d764b7c7ffb45201172e0061f7f35764906568150c39961732a74163a84c9d",
     "resource/image/SceneManager/MapWuling/JingyuValley10Right": "cadd55a8ec17b9c59452b9abe45effa0786aad75d5b5d28912ed44434d417afd",
     "resource/image/SceneManager/MapWuling/WulingCity3Right": "557d77526ab02caef85107f26a641c00ec422ce7320acdec11ab8763902be3e2",
@@ -360,7 +360,7 @@
     "resource/image/SceneManager/MapWuling/WulingCity5Top": "d6f68faafcfddd9dd66f6e39c1233fe1bc6c825faa79b8c0e3f6a8203a1913a6",
     "resource/image/SceneManager/MapWuling/JingyuValley6Center": "a22cc2e072f905a3cdfb71b624fd16a37239f2ae2b265e71147c8fbfbd02cae7",
     "resource/image/SceneManager/MapWuling/JingyuValley9Top": "325b6ce3f76c31a6fca71e90cccebeb80eac7454a297f84d0c534c84d6b93187",
-    "resource/image/SceneManager/MapWuling/JingyuValley4Top": "6582a78f753cfce9fe13683c6205fbace6abbaf8a06dac0cdca7e4218c7449cb",
+    "resource/image/SceneManager/MapWuling/JingyuValley4Top": "5b39f7ee75aa94c0a5394fe0995ccb1ae07ff603df8c531ce4cf11be038a679c",
     "resource/image/SceneManager/MapWuling/WulingCity7Left": "731b98c5916425eb762d09b723a5e4ec4d1f29d904f431988acef54f2aa7846a",
     "resource/image/SceneManager/MapWuling/JingyuValley3Center": "9b117dadcc4305adb52b93658a54ea264b09f44400fdfb41a335043e4ca75da5",
     "resource/image/SceneManager/MapWuling/JingyuValley2Center": "acbfe7847581dc17ad7e59b655766a9d09864ada8e153cc8570d30227149c3e7",
@@ -618,5 +618,11 @@
     "resource/image/ProtocolSpace/SkillUpLow": "23f78f30e3c637ebcdcc7bbf089f8170c6f58e0e4cbabe45a2b175a609e9d9c3",
     "resource/image/SceneManager/ValuableEntry2": "3042bb1dcad48c788e3dd0067c69b402a9ef46c015f20c806f09753db7463633",
     "resource/image/SceneManager/ShoppingEntry2": "d43bb36e4adbb6cb206efcb6e7ba9108acad4fc94448f794526f217ff9138d86",
-    "resource/image/SceneManager/LoginAnnouncementClose": "6bb3d185824d1996e1f518932e2cad0cdd11d3f5cd993e1f1d270fb11ae9d954"
+    "resource/image/SceneManager/LoginAnnouncementClose": "6bb3d185824d1996e1f518932e2cad0cdd11d3f5cd993e1f1d270fb11ae9d954",
+    "resource/image/AutoStockpile/OOS": "70e0e73d514543b95e265e9f17c141ac10f77264660aa89c0836962fb9daec2a",
+    "resource/image/AutoStockpile/OOSSelected": "3152d9abdf8d5bea69cacf62e0e5793031d8f7dafc42194865a67003b281b218",
+    "resource/image/SceneManager/MapWuling/JingyuValley4Top1": "05475a2c6a38098b3333579890a481591faac0c8abf369a712c314463e852f32",
+    "resource/image/SceneManager/MapWuling/JingyuValley4Left1": "7253aa4bf88f4b891ab6c93e7b237a4885ace3180040e5590be1131c6d777f9d",
+    "resource/image/SceneManager/MapWuling/JingyuValley4Left": "11d7a9846caa97b9992cf9693b09e55353f158aed598f113f21a22cf425f5d82",
+    "resource/image/SceneManager/MapWuling/JingyuValley4Center1": "f37ddca7381a3b7faa1640372c2881c9fd5c7b1979afdd9fc141b8c0eae19868"
 }
