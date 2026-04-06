@@ -426,6 +426,9 @@ FodyWeavers.xsd
 # Local History for Visual Studio Code
 .history/
 
+# Claude Code
+.claude/
+
 # Windows Installer files from build outputs
 *.cab
 *.msi
