@@ -69,13 +69,13 @@
     "ItemTransferPreClearBag": {
         "enabled": false,
         "recognition": "TemplateMatch",
-        "template": "AutoEcoFarm/autoecofarmQuickStash.png",
         "roi": [
             896,
             497,
             57,
             41
         ],
+        "template": "AutoEcoFarm/autoecofarmQuickStash.png",
         "action": "Click",
         "next": [
             "ItemTransferSwitchRepoToOrigin"

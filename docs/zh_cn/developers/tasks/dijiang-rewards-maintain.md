@@ -7,19 +7,19 @@
 
 当前实现主要分布在以下文件中：
 
-| 模块           | 路径                                                                 | 作用                                                      |
-| -------------- | -------------------------------------------------------------------- | --------------------------------------------------------- |
-| 项目接口挂载   | `assets/interface.json`                                              | 将 `tasks/DijiangRewards.json` 挂到 `daily` 任务组        |
-| 任务与选项定义 | `assets/tasks/DijiangRewards.json`                                   | 定义任务入口、界面选项、子选项和 `pipeline_override`      |
-| 任务入口       | `assets/resource/pipeline/DijiangRewards/Entry.json`                 | 从任务入口进入帝江号总控中枢                              |
-| 主流程分发     | `assets/resource/pipeline/DijiangRewards/MainFlow.json`              | 从总控中枢依次分发到四个子阶段                            |
-| 恢复心情       | `assets/resource/pipeline/DijiangRewards/RecoveryEmotion.json`       | 处理总控中枢的好友助力恢复心情                            |
-| 会客室         | `assets/resource/pipeline/DijiangRewards/ReceptionRoom.json`         | 处理线索收集、接收、放置、赠予、线索交流                  |
-| 制造舱         | `assets/resource/pipeline/DijiangRewards/Manufacturing.json`         | 处理收菜、补货、助力                                      |
-| 培养舱         | `assets/resource/pipeline/DijiangRewards/GrowthChamber.json`         | 处理领取、领奖后的再次种植分支、普通培养，以及提取基核    |
-| 公共状态模板   | `assets/resource/pipeline/DijiangRewards/Template/Location.json`     | 维护各舱室界面定位节点                                    |
-| 公共文本模板   | `assets/resource/pipeline/DijiangRewards/Template/TextTemplate.json` | 维护按钮/状态文本 OCR 模板                                |
-| 补充状态模板   | `assets/resource/pipeline/DijiangRewards/Template/Status.json`       | 维护红点、数量、培养库存等辅助识别                        |
+| 模块           | 路径                                                                 | 作用                                                   |
+| -------------- | -------------------------------------------------------------------- | ------------------------------------------------------ |
+| 项目接口挂载   | `assets/interface.json`                                              | 将 `tasks/DijiangRewards.json` 挂到 `daily` 任务组     |
+| 任务与选项定义 | `assets/tasks/DijiangRewards.json`                                   | 定义任务入口、界面选项、子选项和 `pipeline_override`   |
+| 任务入口       | `assets/resource/pipeline/DijiangRewards/Entry.json`                 | 从任务入口进入帝江号总控中枢                           |
+| 主流程分发     | `assets/resource/pipeline/DijiangRewards/MainFlow.json`              | 从总控中枢依次分发到四个子阶段                         |
+| 恢复心情       | `assets/resource/pipeline/DijiangRewards/RecoveryEmotion.json`       | 处理总控中枢的好友助力恢复心情                         |
+| 会客室         | `assets/resource/pipeline/DijiangRewards/ReceptionRoom.json`         | 处理线索收集、接收、放置、赠予、线索交流               |
+| 制造舱         | `assets/resource/pipeline/DijiangRewards/Manufacturing.json`         | 处理收菜、补货、助力                                   |
+| 培养舱         | `assets/resource/pipeline/DijiangRewards/GrowthChamber.json`         | 处理领取、领奖后的再次种植分支、普通培养，以及提取基核 |
+| 公共状态模板   | `assets/resource/pipeline/DijiangRewards/Template/Location.json`     | 维护各舱室界面定位节点                                 |
+| 公共文本模板   | `assets/resource/pipeline/DijiangRewards/Template/TextTemplate.json` | 维护按钮/状态文本 OCR 模板                             |
+| 补充状态模板   | `assets/resource/pipeline/DijiangRewards/Template/Status.json`       | 维护红点、数量、培养库存等辅助识别                     |
 
 ## 总体执行逻辑
 
@@ -391,10 +391,10 @@
 
 #### 2. `GrowAgain`
 
-| 覆盖节点                 | 覆盖内容        | 原因                             |
-| ------------------------ | --------------- | -------------------------------- |
-| `GrowthChamberGrow`      | `enabled=false` | 避免与普通培养入口冲突           |
-| `GrowthChamberGrowAgain` | `enabled=true`  | 在领奖关闭后启用“再次种植”分支   |
+| 覆盖节点                 | 覆盖内容        | 原因                           |
+| ------------------------ | --------------- | ------------------------------ |
+| `GrowthChamberGrow`      | `enabled=false` | 避免与普通培养入口冲突         |
+| `GrowthChamberGrowAgain` | `enabled=true`  | 在领奖关闭后启用“再次种植”分支 |
 
 设计原因：
 

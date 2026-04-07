@@ -13,12 +13,8 @@
     },
     "VisitFriendsRemark": {
         "desc": "拜访带备注的好友",
-        "pre_delay": 0,
-        "post_delay": 0,
         "max_hit": 1,
-        "anchor": {
-            "VisitFriendsMenuScanTargetFriendAnchorOpen": "VisitFriendsMenuScanTargetFriendRemarkOpen"
-        },
+        "pre_delay": 0,
         "action": "Custom",
         "custom_action": "SubTask",
         "custom_action_param": {
@@ -27,6 +23,10 @@
                 "SceneEnterMenuFriends"
             ]
         },
+        "anchor": {
+            "VisitFriendsMenuScanTargetFriendAnchorOpen": "VisitFriendsMenuScanTargetFriendRemarkOpen"
+        },
+        "post_delay": 0,
         "next": [
             "VisitFriendsMenu"
         ],
@@ -36,12 +36,8 @@
     },
     "VisitFriendsNormal": {
         "desc": "拜访普通好友",
-        "pre_delay": 0,
-        "post_delay": 0,
         "max_hit": 1,
-        "anchor": {
-            "VisitFriendsMenuScanTargetFriendAnchorOpen": "VisitFriendsMenuScanTargetFriendNormalOpen"
-        },
+        "pre_delay": 0,
         "action": "Custom",
         "custom_action": "SubTask",
         "custom_action_param": {
@@ -50,6 +46,10 @@
                 "SceneEnterMenuFriends"
             ]
         },
+        "anchor": {
+            "VisitFriendsMenuScanTargetFriendAnchorOpen": "VisitFriendsMenuScanTargetFriendNormalOpen"
+        },
+        "post_delay": 0,
         "next": [
             "VisitFriendsMenu"
         ],
