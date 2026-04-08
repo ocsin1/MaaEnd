@@ -291,9 +291,9 @@ func (a *AutoSellStockRedistributionOpenItemTextAction) Run(ctx *maa.Context, ar
 		},
 	}
 
-	_, err := ctx.RunTask("AutoSellStockRedistributionItemOpenPrepare", override)
-	if err != nil {
-		log.Error().Err(err).Str("component", "autosell").Str("step", "open_item_text").Msg("run task")
+	detail, err := ctx.RunTask("AutoSellStockRedistributionItemOpenPrepare", override)
+	if detail == nil || err != nil {
+		log.Error().Err(err).Str("component", "autosell").Str("step", "open_item_text").Msg("run prepare task")
 		return false
 	}
 	return true
