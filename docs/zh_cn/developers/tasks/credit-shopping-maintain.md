@@ -57,9 +57,9 @@
 
 1. `assets/interface.json` 只负责把 `tasks/CreditShopping.json` 导入到 `daily` 分组。
 2. `assets/tasks/CreditShopping.json` 才是真正的 interface task 定义，它声明了：
-     1. 任务名是 `CreditShoppingN2`
-     2. 入口节点是 `CreditShoppingMain`
-     3. 顶层选项包含 `CreditShoppingReserve`、`CreditShoppingClueSend`、`CreditShoppingClueStockLimit`、`CreditShoppingPriority1`、`CreditShoppingPriority2`、`CreditShoppingPriority3`、`CreditShoppingForce`
+    1. 任务名是 `CreditShoppingN2`
+    2. 入口节点是 `CreditShoppingMain`
+    3. 顶层选项包含 `CreditShoppingReserve`、`CreditShoppingClueSend`、`CreditShoppingClueStockLimit`、`CreditShoppingPriority1`、`CreditShoppingPriority2`、`CreditShoppingPriority3`、`CreditShoppingForce`
 
 这些顶层选项并不是“描述性配置”，而是会直接改写具体 Pipeline 节点：
 

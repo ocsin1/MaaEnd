@@ -280,10 +280,10 @@ After recording starts, go back to the game and simply **walk the route the way 
 
 During recording, the following hotkeys are available:
 
-| Hotkey | Function |
-|--------|----------|
-| `G` | 📋 **Copy the current coordinates** to the clipboard as `[x, y]` (does not affect recorded data, can be pressed any time) |
-| `X` | 📌 **Force-insert a strict-arrival waypoint** at the current exact position into the recorded data |
+| Hotkey | Function                                                                                                                  |
+| ------ | ------------------------------------------------------------------------------------------------------------------------- |
+| `G`    | 📋 **Copy the current coordinates** to the clipboard as `[x, y]` (does not affect recorded data, can be pressed any time) |
+| `X`    | 📌 **Force-insert a strict-arrival waypoint** at the current exact position into the recorded data                        |
 
 > [!TIP]
 >
