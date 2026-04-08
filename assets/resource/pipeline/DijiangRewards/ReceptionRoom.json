@@ -463,7 +463,16 @@
         "action": {
             "type": "Click"
         },
-        "post_wait_freezes": 100,
+        "post_wait_freezes": {
+            "time": 150,
+            "target": [
+                731,
+                137,
+                549,
+                235
+            ],
+            "timeout": 2000
+        },
         "post_delay": 0,
         "rate_limit": 0,
         "next": [
