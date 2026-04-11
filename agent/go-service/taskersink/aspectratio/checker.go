@@ -3,9 +3,12 @@ package aspectratio
 import (
 	"fmt"
 	"math"
+	"strings"
 	"time"
 
+	"github.com/MaaXYZ/MaaEnd/agent/go-service/pkg/control"
 	"github.com/MaaXYZ/MaaEnd/agent/go-service/pkg/i18n"
+	"github.com/MaaXYZ/MaaEnd/agent/go-service/pkg/pienv"
 	"github.com/MaaXYZ/maa-framework-go/v4"
 	"github.com/rs/zerolog/log"
 )
@@ -14,7 +17,9 @@ const (
 	// Target aspect ratio: 16:9
 	targetRatio = 16.0 / 9.0
 	// Tolerance for aspect ratio comparison (±2%)
-	tolerance = 0.02
+	tolerance    = 0.02
+	targetWidth  = 1280
+	targetHeight = 720
 )
 
 // AspectRatioChecker checks if the device resolution is 16:9 before task execution
@@ -79,25 +84,152 @@ func (c *AspectRatioChecker) OnTaskerTask(tasker *maa.Tasker, event maa.EventSta
 		Int32("height", height).
 		Msg("Got resolution")
 
-	// Check aspect ratio
+	isADBController := false
+	controlType, controllerTypeSource, controlErr := resolveControllerType(controller)
+	controllerDisplay := displayController(pienv.ControllerName(), controlType)
+	if controlErr != nil {
+		log.Warn().
+			Err(controlErr).
+			Uint64("task_id", detail.TaskID).
+			Str("entry", detail.Entry).
+			Str("controller_name", pienv.ControllerName()).
+			Str("controller_type_from_pi", pienv.ControllerType()).
+			Int32("width", width).
+			Int32("height", height).
+			Msg("Failed to detect controller type, falling back to aspect ratio check")
+	} else {
+		isADBController = controlType == control.CONTROL_TYPE_ADB
+		log.Debug().
+			Uint64("task_id", detail.TaskID).
+			Str("entry", detail.Entry).
+			Str("controller_name", pienv.ControllerName()).
+			Str("controller_type", controlType).
+			Str("controller_type_source", controllerTypeSource).
+			Bool("is_adb_controller", isADBController).
+			Int32("width", width).
+			Int32("height", height).
+			Msg("Detected controller type for aspect ratio check")
+	}
+
+	if isADBController {
+		requirement := exactResolutionRequirement()
+		log.Debug().
+			Uint64("task_id", detail.TaskID).
+			Str("entry", detail.Entry).
+			Str("controller_name", pienv.ControllerName()).
+			Str("controller_type", controlType).
+			Str("requirement", "exact_resolution").
+			Str("target_resolution", requirement).
+			Str("mode", "adb_exact_resolution").
+			Int32("width", width).
+			Int32("height", height).
+			Int("target_width", targetWidth).
+			Int("target_height", targetHeight).
+			Msg("Using exact resolution check for ADB controller")
+
+		if int(width) == targetWidth && int(height) == targetHeight {
+			log.Debug().
+				Uint64("task_id", detail.TaskID).
+				Str("entry", detail.Entry).
+				Str("controller_name", pienv.ControllerName()).
+				Str("controller_type", controlType).
+				Str("requirement", "exact_resolution").
+				Str("target_resolution", requirement).
+				Int32("width", width).
+				Int32("height", height).
+				Str("mode", "adb_exact_resolution").
+				Msg("resolution check passed")
+			return
+		}
+
+		log.Error().
+			Uint64("task_id", detail.TaskID).
+			Str("entry", detail.Entry).
+			Str("controller_name", pienv.ControllerName()).
+			Str("controller_type", controlType).
+			Str("requirement", "exact_resolution").
+			Str("target_resolution", requirement).
+			Bool("stop_task", true).
+			Int32("width", width).
+			Int32("height", height).
+			Int("target_width", targetWidth).
+			Int("target_height", targetHeight).
+			Str("mode", "adb_exact_resolution").
+			Msg("resolution check failed")
+		c.stopWithWarning(tasker, controllerDisplay, int(width), int(height), requirement)
+		return
+	}
+
+	requirement := aspectRatioRequirement()
+	log.Debug().
+		Uint64("task_id", detail.TaskID).
+		Str("entry", detail.Entry).
+		Str("controller_name", pienv.ControllerName()).
+		Str("controller_type", controlType).
+		Str("requirement", "aspect_ratio").
+		Str("target_resolution", requirement).
+		Str("mode", "aspect_ratio_only").
+		Int32("width", width).
+		Int32("height", height).
+		Float64("target_ratio", targetRatio).
+		Msg("Using aspect ratio check for non-ADB controller")
+
 	if !isAspectRatio16x9(int(width), int(height)) {
 		actualRatio := calculateAspectRatio(int(width), int(height))
 		log.Error().
+			Uint64("task_id", detail.TaskID).
+			Str("entry", detail.Entry).
+			Str("controller_name", pienv.ControllerName()).
+			Str("controller_type", controlType).
+			Str("requirement", "aspect_ratio").
+			Str("target_resolution", requirement).
+			Bool("stop_task", true).
 			Int32("width", width).
 			Int32("height", height).
 			Float64("actual_ratio", actualRatio).
 			Float64("target_ratio", targetRatio).
-			Msg("Resolution is not 16:9! Task will be stopped.")
-		fmt.Println(i18n.RenderHTML("tasker.aspect_ratio_warning", nil))
-
-		// Stop the task
-		tasker.PostStop()
-	} else {
-		log.Debug().
-			Int32("width", width).
-			Int32("height", height).
-			Msg("Resolution check passed: 16:9")
+			Str("mode", "aspect_ratio_only").
+			Msg("resolution check failed")
+		c.stopWithWarning(tasker, controllerDisplay, int(width), int(height), requirement)
+		return
 	}
+
+	log.Debug().
+		Uint64("task_id", detail.TaskID).
+		Str("entry", detail.Entry).
+		Str("controller_name", pienv.ControllerName()).
+		Str("controller_type", controlType).
+		Str("requirement", "aspect_ratio").
+		Str("target_resolution", requirement).
+		Int32("width", width).
+		Int32("height", height).
+		Str("mode", "aspect_ratio_only").
+		Msg("resolution check passed")
+}
+
+func (c *AspectRatioChecker) stopWithWarning(tasker *maa.Tasker, controllerDisplay string, width, height int, requirement string) {
+	content := i18n.RenderHTML("tasker.aspect_ratio_warning", buildWarningData(controllerDisplay, width, height, requirement))
+	fmt.Println(content)
+	tasker.PostStop()
+}
+
+func resolveControllerType(controller *maa.Controller) (string, string, error) {
+	if controlType := normalizeControllerType(pienv.ControllerType()); controlType != "" {
+		return controlType, "pi_env", nil
+	}
+	if controlType := normalizeControllerType(control.CachedControlType); controlType != "" {
+		return controlType, "cache", nil
+	}
+
+	controlType, err := control.GetControlType(controller)
+	if err != nil {
+		return "unknown", "controller_info", err
+	}
+
+	if normalized := normalizeControllerType(controlType); normalized != "" {
+		return normalized, "controller_info", nil
+	}
+	return "unknown", "controller_info", nil
 }
 
 // isAspectRatio16x9 checks if the given dimensions are approximately 16:9
@@ -124,4 +256,56 @@ func calculateAspectRatio(width, height int) float64 {
 		return w / h
 	}
 	return h / w
+}
+
+func buildWarningData(controllerDisplay string, width, height int, requirement string) map[string]any {
+	return map[string]any{
+		"ControllerType":    controllerDisplay,
+		"CurrentResolution": fmt.Sprintf("%dx%d", width, height),
+		"Requirement":       requirement,
+	}
+}
+
+func displayController(name, controllerType string) string {
+	typeLabel := displayControllerType(controllerType)
+	if name == "" {
+		if typeLabel == "" {
+			return "unknown"
+		}
+		return typeLabel
+	}
+	if typeLabel == "" || strings.EqualFold(name, typeLabel) {
+		return name
+	}
+	return fmt.Sprintf("%s (%s)", name, typeLabel)
+}
+
+func displayControllerType(controllerType string) string {
+	switch controllerType {
+	case control.CONTROL_TYPE_ADB:
+		return "ADB"
+	case control.CONTROL_TYPE_WIN32:
+		return "Win32"
+	default:
+		return controllerType
+	}
+}
+
+func normalizeControllerType(controllerType string) string {
+	switch strings.ToLower(strings.TrimSpace(controllerType)) {
+	case "adb":
+		return control.CONTROL_TYPE_ADB
+	case "win32":
+		return control.CONTROL_TYPE_WIN32
+	default:
+		return ""
+	}
+}
+
+func exactResolutionRequirement() string {
+	return i18n.T("tasker.aspect_ratio_warning.requirement_exact", targetWidth, targetHeight)
+}
+
+func aspectRatioRequirement() string {
+	return i18n.T("tasker.aspect_ratio_warning.requirement_ratio")
 }
