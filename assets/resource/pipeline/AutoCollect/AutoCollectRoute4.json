@@ -1,18 +1,18 @@
 {
-    "AutoCollectRoute2Start": {
+    "AutoCollectRoute4Start": {
         "next": [
-            "AutoCollectRoute2AssertLocation",
-            "[JumpBack]SceneEnterWorldWulingWulingCity2"
+            "AutoCollectRoute4AssertLocation",
+            "[JumpBack]SceneEnterWorldValleyIVPowerPlateau3"
         ],
         "focus": {
-            "Node.Recognition.Succeeded": "开始路线2"
+            "Node.Recognition.Succeeded": "开始路线4"
         }
     },
-    "AutoCollectRoute2End": {
+    "AutoCollectRoute4End": {
         "pre_delay": 0,
         "post_delay": 0
     },
-    "AutoCollectRoute2AssertLocation": {
+    "AutoCollectRoute4AssertLocation": {
         "desc": "传送到采集点",
         "recognition": {
             "type": "Custom",
@@ -21,10 +21,10 @@
                 "custom_recognition_param": {
                     "expected": [
                         {
-                            "map_name": "map02_lv002",
+                            "map_name": "map01_lv007",
                             "target": [
-                                632,
-                                535,
+                                404,
+                                398,
                                 20,
                                 20
                             ]
@@ -34,274 +34,305 @@
             }
         },
         "next": [
-            "AutoCollectRoute2GotoFind1"
+            "AutoCollectRoute4GotoFind1"
         ]
     },
-    "AutoCollectRoute2GotoFind1": {
-        "desc": "前往采集点1",
+    "AutoCollectRoute4GotoFind1": {
+        "desc": "前往采集点",
         "action": {
             "type": "Custom",
             "param": {
                 "custom_action": "MapTrackerMove",
                 "custom_action_param": {
-                    "map_name": "map02_lv002",
+                    "map_name": "map01_lv007",
                     "fine_approach": "AllTargets",
                     "path": [
                         [
-                            635.0,
-                            537.0
+                            413.6,
+                            408.0
                         ],
                         [
-                            630.0,
-                            533.3
+                            417.1,
+                            408.1
                         ],
                         [
-                            586.3,
-                            533.2
+                            419.7,
+                            411.8
                         ],
                         [
-                            586.3,
-                            530.8
+                            431.0,
+                            425.5
                         ],
                         [
-                            588.7,
-                            527.0
+                            437.2,
+                            425.6
                         ],
                         [
-                            591.3,
-                            519.6
+                            442.3,
+                            428.0
                         ],
                         [
-                            597.4,
-                            510.7
+                            448.5,
+                            426.8
                         ],
                         [
-                            595.0,
-                            503.3
+                            458.5,
+                            428.0
                         ],
                         [
-                            587.5,
-                            494.5
+                            463.5,
+                            431.8
                         ],
                         [
-                            582.5,
-                            489.5
+                            462.2,
+                            435.5
                         ],
                         [
-                            577.5,
-                            484.4
+                            467.2,
+                            436.7
                         ],
                         [
-                            572.5,
-                            479.5
+                            474.8,
+                            430.5
                         ],
                         [
-                            565.0,
-                            477.1
+                            477.2,
+                            430.5
                         ],
                         [
-                            532.5,
-                            472.0
+                            483.5,
+                            425.5
+                        ],
+                        [
+                            486.0,
+                            425.5
+                        ],
+                        [
+                            497.2,
+                            418.0
+                        ],
+                        [
+                            502.2,
+                            415.5
+                        ],
+                        [
+                            508.5,
+                            410.4
+                        ],
+                        [
+                            511.0,
+                            406.8
+                        ],
+                        [
+                            509.8,
+                            403.0
+                        ],
+                        [
+                            503.5,
+                            401.8
+                        ],
+                        [
+                            496.0,
+                            408.0
+                        ],
+                        [
+                            493.5,
+                            408.0
+                        ],
+                        [
+                            492.2,
+                            409.2
+                        ],
+                        [
+                            488.5,
+                            408.0
+                        ],
+                        [
+                            488.5,
+                            405.6
+                        ],
+                        [
+                            487.3,
+                            405.5
+                        ],
+                        [
+                            482.3,
+                            406.8
                         ]
                     ]
                 }
             }
         },
         "anchor": {
-            "AutoCollectClickAfter": "AutoCollectRoute2GotoFind2"
+            "AutoCollectClickAfter": "AutoCollectRoute4GotoFind2"
         },
         "next": [
             "AutoCollectClickStart"
         ]
     },
-    "AutoCollectRoute2GotoFind2": {
-        "desc": "前往采集点2",
+    "AutoCollectRoute4GotoFind2": {
+        "desc": "前往采集点",
         "action": {
             "type": "Custom",
             "param": {
                 "custom_action": "MapTrackerMove",
                 "custom_action_param": {
-                    "map_name": "map02_lv002",
+                    "map_name": "map01_lv007",
                     "fine_approach": "AllTargets",
                     "path": [
                         [
-                            530.1,
-                            465.7
+                            482.2,
+                            409.3
                         ]
                     ]
                 }
             }
         },
         "anchor": {
-            "AutoCollectClickAfter": "AutoCollectRoute2GotoFind3"
+            "AutoCollectClickAfter": "AutoCollectRoute4GotoFind3"
         },
         "next": [
             "AutoCollectClickStart"
         ]
     },
-    "AutoCollectRoute2GotoFind3": {
-        "desc": "前往采集点3",
+    "AutoCollectRoute4GotoFind3": {
+        "desc": "前往采集点",
         "action": {
             "type": "Custom",
             "param": {
                 "custom_action": "MapTrackerMove",
                 "custom_action_param": {
-                    "map_name": "map02_lv002",
+                    "map_name": "map01_lv007",
                     "fine_approach": "AllTargets",
                     "path": [
                         [
-                            528.8,
-                            469.6
+                            481.0,
+                            411.8
                         ]
                     ]
                 }
             }
         },
         "anchor": {
-            "AutoCollectClickAfter": "AutoCollectRoute2GotoFind4"
+            "AutoCollectClickAfter": "AutoCollectRoute4GotoFind4"
         },
         "next": [
             "AutoCollectClickStart"
         ]
     },
-    "AutoCollectRoute2GotoFind4": {
-        "desc": "前往采集点4",
+    "AutoCollectRoute4GotoFind4": {
+        "desc": "前往采集点",
         "action": {
             "type": "Custom",
             "param": {
                 "custom_action": "MapTrackerMove",
                 "custom_action_param": {
-                    "map_name": "map02_lv002",
+                    "map_name": "map01_lv007",
                     "fine_approach": "AllTargets",
                     "path": [
                         [
-                            531.2,
-                            472.0
+                            477.2,
+                            414.3
                         ]
                     ]
                 }
             }
         },
         "anchor": {
-            "AutoCollectClickAfter": "AutoCollectRoute2GotoFind5"
+            "AutoCollectClickAfter": "AutoCollectRoute4GotoFind5"
         },
         "next": [
             "AutoCollectClickStart"
         ]
     },
-    "AutoCollectRoute2GotoFind5": {
-        "desc": "前往采集点5",
+    "AutoCollectRoute4GotoFind5": {
+        "desc": "前往采集点",
         "action": {
             "type": "Custom",
             "param": {
                 "custom_action": "MapTrackerMove",
                 "custom_action_param": {
-                    "map_name": "map02_lv002",
+                    "map_name": "map01_lv007",
                     "fine_approach": "AllTargets",
                     "path": [
                         [
-                            531.3,
-                            475.8
+                            476.0,
+                            411.8
                         ]
                     ]
                 }
             }
         },
         "anchor": {
-            "AutoCollectClickAfter": "AutoCollectRoute2GotoFind6"
+            "AutoCollectClickAfter": "AutoCollectRoute4GotoFind6"
         },
         "next": [
             "AutoCollectClickStart"
         ]
     },
-    "AutoCollectRoute2GotoFind6": {
-        "desc": "前往采集点6",
+    "AutoCollectRoute4GotoFind6": {
+        "desc": "前往采集点",
         "action": {
             "type": "Custom",
             "param": {
                 "custom_action": "MapTrackerMove",
                 "custom_action_param": {
-                    "map_name": "map02_lv002",
+                    "map_name": "map01_lv007",
                     "fine_approach": "AllTargets",
                     "path": [
                         [
-                            532.5,
-                            478.2
+                            473.5,
+                            410.4
                         ]
                     ]
                 }
             }
         },
         "anchor": {
-            "AutoCollectClickAfter": "AutoCollectRoute2GotoFind7"
+            "AutoCollectClickAfter": "AutoCollectRoute4GotoFind7"
         },
         "next": [
             "AutoCollectClickStart"
         ]
     },
-    "AutoCollectRoute2GotoFind7": {
-        "desc": "前往采集点7",
+    "AutoCollectRoute4GotoFind7": {
+        "desc": "前往采集点",
         "action": {
             "type": "Custom",
             "param": {
                 "custom_action": "MapTrackerMove",
                 "custom_action_param": {
-                    "map_name": "map02_lv002",
+                    "map_name": "map01_lv007",
                     "fine_approach": "AllTargets",
                     "path": [
                         [
-                            530.1,
-                            476.9
+                            476.0,
+                            406.8
                         ]
                     ]
                 }
             }
         },
         "anchor": {
-            "AutoCollectClickAfter": "AutoCollectRoute2GotoFind8"
+            "AutoCollectClickAfter": "AutoCollectRoute4GotoFind8"
         },
         "next": [
             "AutoCollectClickStart"
         ]
     },
-    "AutoCollectRoute2GotoFind8": {
-        "desc": "前往采集点8",
+    "AutoCollectRoute4GotoFind8": {
+        "desc": "前往采集点",
         "action": {
             "type": "Custom",
             "param": {
                 "custom_action": "MapTrackerMove",
                 "custom_action_param": {
-                    "map_name": "map02_lv002",
+                    "map_name": "map01_lv007",
                     "fine_approach": "AllTargets",
                     "path": [
                         [
-                            525.1,
-                            475.8
-                        ]
-                    ]
-                }
-            }
-        },
-        "anchor": {
-            "AutoCollectClickAfter": "AutoCollectRoute2GotoFind9"
-        },
-        "next": [
-            "AutoCollectClickStart"
-        ]
-    },
-    "AutoCollectRoute2GotoFind9": {
-        "desc": "前往采集点9",
-        "action": {
-            "type": "Custom",
-            "param": {
-                "custom_action": "MapTrackerMove",
-                "custom_action_param": {
-                    "map_name": "map02_lv002",
-                    "fine_approach": "AllTargets",
-                    "path": [
-                        [
-                            523.8,
-                            473.1
+                            478.5,
+                            404.3
                         ]
                     ]
                 }
@@ -312,18 +343,6 @@
         },
         "next": [
             "AutoCollectClickStart"
-        ]
-    },
-    "AutoCollectRoute2RestoreWalkMode": {
-        "desc": "复原为跑步模式",
-        "action": {
-            "type": "ClickKey",
-            "param": {
-                "key": 160
-            }
-        },
-        "next": [
-            "AutoCollectRoute2End"
         ]
     }
 }
