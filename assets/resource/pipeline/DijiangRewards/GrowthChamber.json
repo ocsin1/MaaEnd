@@ -462,7 +462,15 @@
             }
         },
         "action": {
-            "type": "Click"
+            "type": "Click",
+            "param": {
+                "target_offset": [
+                    0,
+                    -20,
+                    0,
+                    0
+                ]
+            }
         },
         "next": [
             "GrowthChamberGrowViewIn"
