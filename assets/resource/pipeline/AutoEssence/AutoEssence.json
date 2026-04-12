@@ -8,7 +8,7 @@
         "post_delay": 0,
         "next": [
             "AutoEssenceClickEssenceStartButton",
-            "[JumpBack]AutoEssenceLocationSetup",
+            "[JumpBack]AutoEssenceLocationSetupMaybeAutoMove",
             "[Anchor]AutoEssenceMoveToTriggerPoint"
         ],
         "focus": {
@@ -16,7 +16,33 @@
         }
     },
     "AutoEssenceLocationSetup": {
-        "desc": "识别和确定附近的淤积点所属的地区，如果附近没有淤积点，则自动导航到指定的某个淤积点",
+        "desc": "识别和确定附近的淤积点所属的地区，如果附近没有淤积点，则无事发生（此节点仅会执行一次）",
+        "max_hit": 1,
+        "rate_limit": 2000,
+        "next": [
+            "VFTheHubLocationAssertion",
+            "VFOriginiumScienceParkLocationAssertion",
+            "VFOriginLodespringLocationAssertion",
+            "VFPowerPlateauLocationAssertion",
+            "WLWulingCityLocationAssertion",
+            "WLQingboStockadeLocationAssertion",
+            // 如果上述所有地区都没有命中，则无事发生
+            "AutoEssenceLocationSetupFailed"
+        ],
+        "focus": {
+            "Node.Action.Starting": "🔍正在寻找附近的淤积点"
+        }
+    },
+    "AutoEssenceLocationSetupFailed": {
+        "desc": "附近没有淤积点时的守卫节点",
+        "pre_delay": 0,
+        "post_delay": 0,
+        "focus": {
+            "Node.Action.Starting": "⚠️未能识别到附近的淤积点"
+        }
+    },
+    "AutoEssenceLocationSetupMaybeAutoMove": {
+        "desc": "识别和确定附近的淤积点所属的地区，如果附近没有淤积点，则自动导航到指定的某个淤积点（此节点仅会执行一次）",
         "max_hit": 1,
         "rate_limit": 2000,
         "next": [
@@ -306,6 +332,7 @@
         },
         "post_delay": 0,
         "next": [
+            "[JumpBack]AutoEssenceLocationSetup",
             "[Anchor]AutoEssenceMoveToTriggerPoint"
         ],
         "focus": {
