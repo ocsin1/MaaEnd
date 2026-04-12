@@ -11,22 +11,22 @@
             }
         },
         "post_delay": 2000,
-        "focus": {
-            "Node.Action.Starting": "正在归位"
-        },
         "next": [
             "__BS-T-1"
-        ]
+        ],
+        "focus": {
+            "Node.Action.Starting": "正在归位"
+        }
     },
     "BetterSlidingTest": {
         "desc": "BetterSliding测试任务，修改该模块后应至少测试一次。请在据点管理处进行任务，要求可交易数量在1k~3k",
         "post_delay": 2000,
-        "focus": {
-            "Node.Recognition.Starting": "开始BetterSliding测试"
-        },
         "next": [
             "__BS-T-2"
-        ]
+        ],
+        "focus": {
+            "Node.Recognition.Starting": "开始BetterSliding测试"
+        }
     },
     "__BS-1": {
         "enabled": true,
@@ -62,17 +62,14 @@
             }
         },
         "post_delay": 2000,
-        "focus": {
-            "Node.Action.Starting": "-325-"
-        },
         "next": [
             "__BS-T-2"
-        ]
+        ],
+        "focus": {
+            "Node.Action.Starting": "-325-"
+        }
     },
     "__BS-T-1": {
-        "on_error": [
-            "__BS-T-3"
-        ],
         "next": [
             "__BS-1",
             "__BS-2",
@@ -80,6 +77,9 @@
             "__BS-4",
             "__BS-5",
             "__BS-6"
+        ],
+        "on_error": [
+            "__BS-T-3"
         ]
     },
     "__BS-T-3": {
@@ -123,12 +123,12 @@
             }
         },
         "post_delay": 2000,
-        "focus": {
-            "Node.Action.Starting": "保留325"
-        },
         "next": [
             "__BS-T-2"
-        ]
+        ],
+        "focus": {
+            "Node.Action.Starting": "保留325"
+        }
     },
     "__BS-3": {
         "enabled": true,
@@ -165,12 +165,12 @@
             }
         },
         "post_delay": 2000,
-        "focus": {
-            "Node.Action.Starting": "滑动10%"
-        },
         "next": [
             "__BS-T-2"
-        ]
+        ],
+        "focus": {
+            "Node.Action.Starting": "滑动10%"
+        }
     },
     "__BS-4": {
         "enabled": true,
@@ -208,12 +208,12 @@
             }
         },
         "post_delay": 2000,
-        "focus": {
-            "Node.Action.Starting": "保留10%"
-        },
         "next": [
             "__BS-T-2"
-        ]
+        ],
+        "focus": {
+            "Node.Action.Starting": "保留10%"
+        }
     },
     "__BS-6": {
         "enabled": true,
@@ -251,13 +251,13 @@
             }
         },
         "post_delay": 2000,
-        "focus": {
-            "Node.Action.Starting": "保留10000（不可实现）"
-        },
         "next": [
             "__BS-T-4",
             "__BS-T-5"
-        ]
+        ],
+        "focus": {
+            "Node.Action.Starting": "保留10000（不可实现）"
+        }
     },
     "__BS-T-4": {
         "enabled": false,
@@ -300,12 +300,12 @@
             }
         },
         "post_delay": 2000,
-        "focus": {
-            "Node.Action.Starting": "325（非精确模式）"
-        },
         "next": [
             "__BS-T-2"
-        ]
+        ],
+        "focus": {
+            "Node.Action.Starting": "325（非精确模式）"
+        }
     },
     "__BS-T-5": {
         "focus": {
