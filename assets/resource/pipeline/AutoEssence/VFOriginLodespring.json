@@ -1,13 +1,13 @@
 {
     "VFOriginLodespringMoveToTriggerPointAuto": {
-        "next": [
-            "[JumpBack]VFOriginLodespringMaybeTeleport",
-            "VFOriginLodespringMoveToTriggerPoint"
-        ],
         "anchor": {
             "AutoEssenceMoveToTriggerPoint": "VFOriginLodespringMoveToTriggerPoint",
             "AutoEssenceWalkAround": "VFOriginLodespringWalkAround1"
-        }
+        },
+        "next": [
+            "[JumpBack]VFOriginLodespringMaybeTeleport",
+            "VFOriginLodespringMoveToTriggerPoint"
+        ]
     },
     "VFOriginLodespringLocationAssertion": {
         "recognition": {
@@ -16,7 +16,8 @@
                 "custom_recognition": "MapTrackerAssertLocation",
                 "custom_recognition_param": {
                     "expected": [
-                        { // 淤积点附近
+                        {
+                            // 淤积点附近
                             "map_name": "map01_lv006_tier_109",
                             "target": [
                                 243.0,
@@ -44,7 +45,8 @@
                 "custom_recognition": "MapTrackerAssertLocation",
                 "custom_recognition_param": {
                     "expected": [
-                        { // 距离淤积点最近的锚点附近
+                        {
+                            // 距离淤积点最近的锚点附近
                             "map_name": "map01_lv006",
                             "target": [
                                 402.0,
@@ -53,7 +55,8 @@
                                 21.2
                             ]
                         },
-                        { // 淤积点附近
+                        {
+                            // 淤积点附近
                             "map_name": "map01_lv006_tier_109",
                             "target": [
                                 243.0,

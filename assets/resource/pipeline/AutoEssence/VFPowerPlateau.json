@@ -1,13 +1,13 @@
 {
     "VFPowerPlateauMoveToTriggerPointAuto": {
-        "next": [
-            "[JumpBack]VFPowerPlateauMaybeTeleport",
-            "VFPowerPlateauMoveToTriggerPoint"
-        ],
         "anchor": {
             "AutoEssenceMoveToTriggerPoint": "VFPowerPlateauMoveToTriggerPoint",
             "AutoEssenceWalkAround": "VFPowerPlateauWalkAround1"
-        }
+        },
+        "next": [
+            "[JumpBack]VFPowerPlateauMaybeTeleport",
+            "VFPowerPlateauMoveToTriggerPoint"
+        ]
     },
     "VFPowerPlateauLocationAssertion": {
         "recognition": {
@@ -44,7 +44,8 @@
                 "custom_recognition": "MapTrackerAssertLocation",
                 "custom_recognition_param": {
                     "expected": [
-                        { // 距离淤积点最近的锚点附近
+                        {
+                            // 距离淤积点最近的锚点附近
                             "map_name": "map01_lv007",
                             "target": [
                                 429.2,
@@ -53,7 +54,8 @@
                                 23.6
                             ]
                         },
-                        { // 距离淤积点最近的锚点附近（另一尝试）
+                        {
+                            // 距离淤积点最近的锚点附近（另一尝试）
                             "map_name": "map01_lv007_tier_133",
                             "target": [
                                 429.2,
@@ -62,7 +64,8 @@
                                 23.6
                             ]
                         },
-                        { // 淤积点附近
+                        {
+                            // 淤积点附近
                             "map_name": "map01_lv007",
                             "target": [
                                 341.0,

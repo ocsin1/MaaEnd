@@ -1,13 +1,13 @@
 {
     "WLWulingCityMoveToTriggerPointAuto": {
-        "next": [
-            "[JumpBack]WLWulingCityMaybeTeleport",
-            "WLWulingCityMoveToTriggerPoint"
-        ],
         "anchor": {
             "AutoEssenceMoveToTriggerPoint": "WLWulingCityMoveToTriggerPoint",
             "AutoEssenceWalkAround": "WLWulingCityWalkAround1"
-        }
+        },
+        "next": [
+            "[JumpBack]WLWulingCityMaybeTeleport",
+            "WLWulingCityMoveToTriggerPoint"
+        ]
     },
     "WLWulingCityLocationAssertion": {
         "recognition": {
@@ -16,7 +16,8 @@
                 "custom_recognition": "MapTrackerAssertLocation",
                 "custom_recognition_param": {
                     "expected": [
-                        { // 淤积点附近
+                        {
+                            // 淤积点附近
                             "map_name": "map02_lv002",
                             "target": [
                                 659.0,
@@ -44,7 +45,8 @@
                 "custom_recognition": "MapTrackerAssertLocation",
                 "custom_recognition_param": {
                     "expected": [
-                        { // 距离淤积点最近的锚点附近
+                        {
+                            // 距离淤积点最近的锚点附近
                             "map_name": "map02_lv002",
                             "target": [
                                 620.0,
@@ -53,7 +55,8 @@
                                 37.3
                             ]
                         },
-                        { // 淤积点附近
+                        {
+                            // 淤积点附近
                             "map_name": "map02_lv002",
                             "target": [
                                 659.0,
@@ -85,7 +88,6 @@
                         [
                             637.3,
                             265.7
-
                         ],
                         [
                             638.4,

@@ -1,10 +1,10 @@
 {
     "AutoEssenceMain": {
         "desc": "自动基质刷取的主入口",
+        "pre_delay": 0,
         "anchor": {
             "AutoEssenceAfterMoveToTriggerPoint": "AutoEssenceClickTriggerButtonPre"
         },
-        "pre_delay": 0,
         "post_delay": 0,
         "next": [
             "AutoEssenceClickEssenceStartButton",
