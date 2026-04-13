@@ -18,7 +18,7 @@ constexpr double kCrossTrackGain = 3.2;
 constexpr double kCrossTrackMaxBias = 28.0;
 constexpr double kMovingMaxCmd = 28.0;
 constexpr double kTurningMaxCmd = 70.0;
-constexpr double kKp = 0.68;
+constexpr double kKp = 0.3;
 
 } // namespace
 
