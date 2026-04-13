@@ -434,6 +434,18 @@
                 ]
             }
         },
+        "pre_delay": 0,
+        "post_delay": 0,
+        "rate_limit": 0,
+        "pre_wait_freezes": {
+            "time": 150,
+            "target": [
+                583,
+                141,
+                458,
+                247
+            ]
+        },
         "action": {
             "type": "Click"
         },
