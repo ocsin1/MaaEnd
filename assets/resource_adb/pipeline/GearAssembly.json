@@ -43,5 +43,17 @@
                 ]
             }
         }
+    },
+    "GearAssemblyCheckIfReachedScrollEnd": {
+        "recognition": {
+            "param": {
+                "roi": [
+                    430,
+                    590,
+                    15,
+                    15
+                ]
+            }
+        }
     }
 }
