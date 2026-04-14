@@ -342,7 +342,25 @@ bool NavigationStateMachine::TickNavigate()
     }
     const int64_t stalled_ms = session_->StalledMs(now);
     if (stalled_ms < kTargetTickMs * 10 && runtime_state_.recovery.armed) {
-        runtime_state_.ResetRecoveryState();
+        runtime_state_.recovery.Disarm();
+    }
+
+    if (runtime_state_.recovery.stuck_start_time.time_since_epoch().count() > 0) {
+        if (route.progress_distance < runtime_state_.recovery.stuck_anchor_distance - 2.0) {
+            runtime_state_.recovery.stuck_start_time = {};
+        } else {
+            const int64_t stuck_duration_ms = std::chrono::duration_cast<std::chrono::milliseconds>(
+                now - runtime_state_.recovery.stuck_start_time).count();
+            
+            if (stuck_duration_ms >= 60000) {
+                return FailNavigation(
+                    "recovery_timeout",
+                    "Obstacle recovery failed to make progress after 60 seconds.",
+                    route.progress_distance,
+                    NaviMath::NormalizeAngle(route.route_heading - pose.estimated_heading),
+                    stuck_duration_ms);
+            }
+        }
     }
 
     if (stalled_ms >= kObstacleRecoveryMinTriggerMs && session_->phase() == NaviPhase::Navigate) {

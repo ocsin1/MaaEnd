@@ -87,8 +87,18 @@ struct SemanticState
 struct RecoveryState
 {
     bool armed = false;
+    std::chrono::steady_clock::time_point stuck_start_time {};
+    double stuck_anchor_distance = 0.0;
 
-    void Reset() { armed = false; }
+    void Reset() { 
+        armed = false; 
+        stuck_start_time = {};
+        stuck_anchor_distance = 0.0;
+    }
+
+    void Disarm() {
+        armed = false;
+    }
 };
 
 struct NavigationRuntimeState

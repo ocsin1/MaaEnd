@@ -12,7 +12,6 @@ bool RecoveryManager::Step(
     const RouteTrackingState& route,
     int64_t stalled_ms)
 {
-    (void)route;
     if (motion_controller == nullptr || session == nullptr || runtime_state == nullptr) {
         return false;
     }
@@ -23,6 +22,11 @@ bool RecoveryManager::Step(
 
     if (runtime_state->recovery.armed) {
         return false;
+    }
+
+    if (runtime_state->recovery.stuck_start_time.time_since_epoch().count() == 0) {
+        runtime_state->recovery.stuck_start_time = std::chrono::steady_clock::now();
+        runtime_state->recovery.stuck_anchor_distance = route.progress_distance;
     }
 
     motion_controller->SetForwardState(false);
