@@ -198,7 +198,7 @@ YoloCoarseResult YoloPredictor::predictCoarseByYOLO(const cv::Mat& minimap)
 
     std::string predictedName = "Unknown";
     // 保护性越界判断：即便模型输出的 maxIdx 超出实际 classes 的范围，也能优雅 fallback
-    if (maxIdx >= 0 && maxIdx < (int)yoloClassNames.size()) {
+    if (maxIdx >= 0 && static_cast<size_t>(maxIdx) < yoloClassNames.size()) {
         predictedName = yoloClassNames[maxIdx];
     }
 
@@ -206,7 +206,7 @@ YoloCoarseResult YoloPredictor::predictCoarseByYOLO(const cv::Mat& minimap)
         std::string all_results;
         for (size_t i = 0; i < outputCount; i++) {
             if (outputData[i] > 0.01f) {
-                std::string name = (i < (int)yoloClassNames.size()) ? yoloClassNames[i] : std::to_string(i);
+                std::string name = (i < yoloClassNames.size()) ? yoloClassNames[i] : std::to_string(i);
                 all_results += "[" + name + "=" + std::to_string(outputData[i]) + "] ";
             }
         }
@@ -224,7 +224,7 @@ YoloCoarseResult YoloPredictor::predictCoarseByYOLO(const cv::Mat& minimap)
         return result;
     }
 
-    if (maxIdx >= 0 && maxIdx < (int)yoloClassNames.size()) {
+    if (maxIdx >= 0 && static_cast<size_t>(maxIdx) < yoloClassNames.size()) {
         result.valid = true;
         result.zone_id = convertYoloNameToZoneId(predictedName);
 
