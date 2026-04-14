@@ -203,11 +203,10 @@ YoloCoarseResult YoloPredictor::predictCoarseByYOLO(const cv::Mat& minimap)
     }
 
     {
-        auto log = LogInfo << "YOLO Raw All: ";
         for (size_t i = 0; i < outputCount; i++) {
             if (outputData[i] > 0.01f) {
                 const std::string& name = (i < yoloClassNames.size()) ? yoloClassNames[i] : std::to_string(i);
-                log << MAA_LOG_NS::separator::none << "[" << name << "=" << outputData[i] << "]" << MAA_LOG_NS::separator::space;
+                LogInfo << "YOLO Raw All: " << "[" << name << "=" << outputData[i] << "]";
             }
         }
     }
