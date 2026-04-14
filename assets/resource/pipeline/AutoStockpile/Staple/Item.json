@@ -1,0 +1,199 @@
+{
+    "AutoStockpileInStapleItem": {
+        "desc": "识别商品基准点(剩余刷新时间框)，用于后续识别",
+        "recognition": {
+            "type": "ColorMatch",
+            "param": {
+                "method": 40,
+                "lower": [
+                    76,
+                    200,
+                    200
+                ],
+                "upper": [
+                    76,
+                    255,
+                    215
+                ],
+                "count": 300,
+                "connected": true,
+                "order_by": "Vertical"
+            }
+        }
+    },
+    "AutoStockpileInStapleItemDiscounts": {
+        "desc": "识别商品折扣信息框，用于后续识别",
+        "recognition": {
+            "type": "ColorMatch",
+            "param": {
+                "roi": "AutoStockpileInStapleItem",
+                "roi_offset": [
+                    79,
+                    -17,
+                    10,
+                    29
+                ],
+                "method": 40,
+                "lower": [
+                    26,
+                    255,
+                    255
+                ],
+                "upper": [
+                    26,
+                    255,
+                    255
+                ],
+                "count": 300,
+                "connected": true,
+                "order_by": "Vertical"
+            }
+        }
+    },
+    "AutoStockpileInStapleItemName": {
+        "desc": "识别商品名称",
+        "recognition": {
+            "type": "OCR",
+            "param": {
+                "roi": "AutoStockpileInStapleItemDiscounts",
+                "roi_offset": [
+                    -91,
+                    165,
+                    95,
+                    22
+                ],
+                "expected": [],
+                "order_by": "Vertical"
+            }
+        }
+    },
+    "AutoStockpileTargetStockBillColor": {
+        "desc": "识别目标调度券颜色(这是子节点,后续会被OCR节点引用)",
+        "recognition": {
+            "type": "ColorMatch",
+            "param": {
+                "roi": "AutoStockpileInStapleItemName",
+                "roi_offset": [
+                    -27,
+                    -48,
+                    55,
+                    20
+                ],
+                "lower": [
+                    80
+                ],
+                "upper": [
+                    122
+                ],
+                "method": 6
+            }
+        }
+    },
+    "AutoStockpileTargetStockBillText": {
+        "desc": "识别目标调度券数量",
+        "recognition": {
+            "type": "OCR",
+            "param": {
+                "roi": "AutoStockpileTargetStockBillColor",
+                "roi_offset": [
+                    -2,
+                    -2,
+                    4,
+                    4
+                ],
+                "expected": [
+                    "\\d+"
+                ],
+                "only_rec": true,
+                "color_filter": "AutoStockpileTargetStockBillColor"
+            }
+        }
+    },
+    "AutoStockpileTargetStockBill": {
+        "desc": "识别目标调度券数量",
+        "recognition": {
+            "type": "And",
+            "param": {
+                "all_of": [
+                    "AutoStockpileTargetStockBillColor",
+                    "AutoStockpileTargetStockBillText"
+                ],
+                "box_index": 1
+            }
+        }
+    },
+    "AutoStockpileTargetCanBuy": {
+        "desc": "识别目标调度券是否可购买",
+        "recognition": {
+            "type": "Custom",
+            "param": {
+                "custom_recognition": "ExpressionRecognition",
+                "custom_recognition_param": {
+                    //"expression": "{AutoStockpileTargetStockBill} < {AutoStockpileCurrentStockBill}",暂时硬链接对比24万
+                    "expression": "240000< {AutoStockpileCurrentStockBill}"
+                }
+            }
+        }
+    },
+    "AutoStockpileSwipeToMax": {
+        "desc": "识别滑动按钮，用于滑动到最大库存",
+        "recognition": {
+            "type": "TemplateMatch",
+            "param": {
+                "template": [
+                    "BetterSliding/SwipeButton.png"
+                ],
+                "green_mask": true,
+                "order_by": "Score"
+            }
+        },
+        "pre_delay": 0,
+        "action": {
+            "type": "Swipe",
+            "param": {
+                "end_offset": [
+                    200,
+                    0,
+                    0,
+                    0
+                ]
+            }
+        },
+        "post_delay": 0,
+        "rate_limit": 0,
+        "next": [
+            "AutoStockpileSwipeBuy"
+        ]
+    },
+    "AutoStockpileSwipeBuy": {
+        "desc": "识别确认购买按钮，用于确认购买",
+        "recognition": {
+            "type": "And",
+            "param": {
+                "all_of": [
+                    "YellowConfirmButtonType1",
+                    "ConfirmBuyText"
+                ]
+            }
+        },
+        "action": {
+            "type": "Click"
+        },
+        "next": [
+            "AutoStockpileCheckBuyResult"
+        ]
+    },
+    "AutoStockpileCurrentStockBill": {
+        "desc": "识别当前库存票据，用于获取当前库存",
+        "recognition": {
+            "type": "And",
+            "param": {
+                "all_of": [
+                    "CurrentStockBillColor",
+                    "CurrentStockBillText"
+                ],
+                "box_index": 1
+            }
+        }
+    }
+}

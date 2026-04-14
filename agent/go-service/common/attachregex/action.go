@@ -1,4 +1,4 @@
-package creditshopping
+package attachregex
 
 import (
 	"encoding/json"
@@ -11,17 +11,39 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-// CreditShoppingParseParams reads shopping configuration from node attach data and applies
-// pipeline overrides for OCR matching.
-type CreditShoppingParseParams struct{}
+type attachToExpectedRegexParam struct {
+	Target string `json:"target"`
+}
 
-var _ maa.CustomActionRunner = &CreditShoppingParseParams{}
+// AttachToExpectedRegexAction merges attach keywords from the target node itself
+// and writes generated regex into the target node's expected field.
+type AttachToExpectedRegexAction struct{}
 
-func (a *CreditShoppingParseParams) Run(ctx *maa.Context, arg *maa.CustomActionArg) bool {
-	if arg.CustomActionParam != "" {
-		log.Info().Str("component", "CreditShopping").Str("custom_action_param", arg.CustomActionParam).Msg("input received")
+var _ maa.CustomActionRunner = &AttachToExpectedRegexAction{}
+
+func (a *AttachToExpectedRegexAction) Run(ctx *maa.Context, arg *maa.CustomActionArg) bool {
+	var param attachToExpectedRegexParam
+	if err := json.Unmarshal([]byte(arg.CustomActionParam), &param); err != nil {
+		log.Error().
+			Err(err).
+			Str("component", "AttachToExpectedRegexAction").
+			Str("custom_action_param", arg.CustomActionParam).
+			Msg("failed to parse custom action param")
+		return false
 	}
 
+	if strings.TrimSpace(param.Target) == "" {
+		log.Error().
+			Str("component", "AttachToExpectedRegexAction").
+			Interface("param", param).
+			Msg("target is required")
+		return false
+	}
+
+	return applyAttachRegexOverride(ctx, param.Target, "AttachToExpectedRegexAction")
+}
+
+func applyAttachRegexOverride(ctx *maa.Context, targetNodeName string, component string) bool {
 	nodeAttachCache := make(map[string]map[string]interface{})
 	getNodeAttach := func(nodeName string) map[string]interface{} {
 		if attach, ok := nodeAttachCache[nodeName]; ok {
@@ -30,17 +52,17 @@ func (a *CreditShoppingParseParams) Run(ctx *maa.Context, arg *maa.CustomActionA
 
 		raw, err := ctx.GetNodeJSON(nodeName)
 		if err != nil {
-			log.Error().Err(err).Str("component", "CreditShopping").Str("node", nodeName).Msg("failed to get node json for attach")
+			log.Error().Err(err).Str("component", component).Str("node", nodeName).Msg("failed to get node json for attach")
 			return nil
 		}
 		if raw == "" {
-			log.Error().Str("component", "CreditShopping").Str("node", nodeName).Msg("node json is empty for attach")
+			log.Error().Str("component", component).Str("node", nodeName).Msg("node json is empty for attach")
 			return nil
 		}
 
 		var nodeData map[string]interface{}
 		if err := json.Unmarshal([]byte(raw), &nodeData); err != nil {
-			log.Error().Err(err).Str("component", "CreditShopping").Str("node", nodeName).Msg("failed to unmarshal node json for attach")
+			log.Error().Err(err).Str("component", component).Str("node", nodeName).Msg("failed to unmarshal node json for attach")
 			return nil
 		}
 
@@ -87,7 +109,7 @@ func (a *CreditShoppingParseParams) Run(ctx *maa.Context, arg *maa.CustomActionA
 					}
 				}
 			default:
-				log.Warn().Str("component", "CreditShopping").Str("key", key).Interface("value", value).Msg("unsupported attach keyword value type, expect string or string list")
+				log.Warn().Str("component", component).Str("key", key).Interface("value", value).Msg("unsupported attach keyword value type, expect string or string list")
 			}
 		}
 		return result
@@ -123,55 +145,27 @@ func (a *CreditShoppingParseParams) Run(ctx *maa.Context, arg *maa.CustomActionA
 		return fmt.Sprintf("^(%s)$", strings.Join(escaped, "|"))
 	}
 
-	buyFirstKeywords := mergeKeywordLists(
-		collectKeywords(getNodeAttach("BuyFirstOCR")),
-		collectKeywords(getNodeAttach("BuyFirstOCR_CanNotAfford")),
-	)
-	priority2Keywords := collectKeywords(getNodeAttach("Priority2OCR"))
-	priority3Keywords := collectKeywords(getNodeAttach("Priority3OCR"))
-
-	buyFirstExpected := buildWhitelistRegex(buyFirstKeywords)
-	priority2Expected := buildWhitelistRegex(priority2Keywords)
-	priority3Expected := buildWhitelistRegex(priority3Keywords)
-
-	log.Debug().
-		Str("component", "CreditShopping").
-		Interface("buy_first_keywords", buyFirstKeywords).
-		Interface("priority2_keywords", priority2Keywords).
-		Interface("priority3_keywords", priority3Keywords).
-		Str("buy_first_expected", buyFirstExpected).
-		Str("priority2_expected", priority2Expected).
-		Str("priority3_expected", priority3Expected).
-		Msg("merged keywords from attach")
-
+	keywords := collectKeywords(getNodeAttach(targetNodeName))
+	expected := buildWhitelistRegex(mergeKeywordLists(keywords))
 	overrideMap := map[string]interface{}{
-		"BuyFirstOCR": map[string]interface{}{
-			"expected": buyFirstExpected,
-		},
-		"BuyFirstOCR_CanNotAfford": map[string]interface{}{
-			"expected": buyFirstExpected,
-		},
-		"Priority2OCR": map[string]interface{}{
-			"expected": priority2Expected,
-		},
-		"Priority2OCR_CanNotAfford": map[string]interface{}{
-			"expected": priority2Expected,
-		},
-		"Priority3OCR": map[string]interface{}{
-			"expected": priority3Expected,
-		},
-		"Priority3OCR_CanNotAfford": map[string]interface{}{
-			"expected": priority3Expected,
+		targetNodeName: map[string]interface{}{
+			"expected": expected,
 		},
 	}
 
 	log.Debug().
-		Str("component", "CreditShopping").
+		Str("component", component).
+		Str("target", targetNodeName).
+		Str("expected", expected).
+		Msg("merged keywords from attach")
+
+	log.Debug().
+		Str("component", component).
 		Interface("override", overrideMap).
 		Msg("applying pipeline override")
 
 	if err := ctx.OverridePipeline(overrideMap); err != nil {
-		log.Error().Err(err).Str("component", "CreditShopping").Interface("override", overrideMap).Msg("OverridePipeline failed")
+		log.Error().Err(err).Str("component", component).Interface("override", overrideMap).Msg("OverridePipeline failed")
 		return false
 	}
 

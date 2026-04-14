@@ -6,6 +6,7 @@ import (
 	"go/ast"
 	"go/parser"
 	"go/token"
+	"math"
 	"regexp"
 	"strconv"
 	"strings"
@@ -20,9 +21,31 @@ type Recognition struct{}
 
 type Params struct {
 	Expression string `json:"expression"`
+	BoxNode    string `json:"box_node"`
 }
 
-var expressionNodePattern = regexp.MustCompile(`\{([^{}]+)\}`)
+type nodeDefinition struct {
+	Recognition recognitionDefinition `json:"recognition"`
+}
+
+type recognitionDefinition struct {
+	Type        string            `json:"type"`
+	Recognition string            `json:"recognition"`
+	Param       json.RawMessage   `json:"param"`
+	AllOf       []json.RawMessage `json:"all_of"`
+	BoxIndex    *int              `json:"box_index"`
+}
+
+type andRecognitionParam struct {
+	AllOf    []json.RawMessage `json:"all_of"`
+	BoxIndex *int              `json:"box_index"`
+}
+
+var (
+	expressionNodePattern = regexp.MustCompile(`\{([^{}]+)\}`)
+	ocrNumericPattern     = regexp.MustCompile(`(?i)[+-]?(?:\d+(?:[.,]\d+)?|[.,]\d+)\s*(?:[a-z]+|万|亿)?`)
+	asciiLetterPattern    = regexp.MustCompile(`[A-Za-z]+$`)
+)
 
 // Run evaluates a boolean expression composed of numeric recognition nodes.
 func (r *Recognition) Run(ctx *maa.Context, arg *maa.CustomRecognitionArg) (*maa.CustomRecognitionResult, bool) {
@@ -74,6 +97,17 @@ func (r *Recognition) Run(ctx *maa.Context, arg *maa.CustomRecognitionArg) (*maa
 		return nil, false
 	}
 
+	resultBox, err := resolveResultBox(ctx, arg, params)
+	if err != nil {
+		log.Error().
+			Err(err).
+			Str("component", "ExpressionRecognition").
+			Str("expression", params.Expression).
+			Str("box_node", params.BoxNode).
+			Msg("failed to resolve result box")
+		return nil, false
+	}
+
 	detailJSON, _ := json.Marshal(map[string]any{
 		"expression":          params.Expression,
 		"resolved_expression": resolvedExpression,
@@ -82,7 +116,7 @@ func (r *Recognition) Run(ctx *maa.Context, arg *maa.CustomRecognitionArg) (*maa
 	})
 
 	return &maa.CustomRecognitionResult{
-		Box:    arg.Roi,
+		Box:    resultBox,
 		Detail: string(detailJSON),
 	}, true
 }
@@ -111,6 +145,7 @@ func parseParams(raw string) (*Params, error) {
 	if params.Expression == "" {
 		return nil, fmt.Errorf("expression is required")
 	}
+	params.BoxNode = strings.TrimSpace(params.BoxNode)
 
 	return &params, nil
 }
@@ -159,12 +194,137 @@ func runNumericRecognition(ctx *maa.Context, arg *maa.CustomRecognitionArg, node
 		return 0, err
 	}
 
-	value, err := extractRecognitionNumber(detail)
+	value, err := extractRecognitionNumberFromNode(ctx, nodeName, detail)
 	if err != nil {
-		return 0, fmt.Errorf("failed to parse node result: %w", err)
+		return 0, fmt.Errorf("failed to parse node result from %s: %w", nodeName, err)
 	}
 
 	return value, nil
+}
+
+func resolveResultBox(ctx *maa.Context, arg *maa.CustomRecognitionArg, params *Params) (maa.Rect, error) {
+	if params == nil || params.BoxNode == "" {
+		return arg.Roi, nil
+	}
+
+	detail, err := ctx.RunRecognition(params.BoxNode, arg.Img)
+	if err != nil {
+		return maa.Rect{}, err
+	}
+
+	return extractRecognitionBoxFromNode(ctx, params.BoxNode, detail)
+}
+
+func extractRecognitionNumberFromNode(ctx *maa.Context, nodeName string, detail *maa.RecognitionDetail) (int, error) {
+	if detail == nil {
+		return 0, fmt.Errorf("recognition detail is empty")
+	}
+
+	raw, err := ctx.GetNodeJSON(nodeName)
+	if err != nil {
+		return 0, fmt.Errorf("get node %s json: %w", nodeName, err)
+	}
+	if strings.TrimSpace(raw) == "" {
+		return 0, fmt.Errorf("node %s json is empty", nodeName)
+	}
+
+	boxIndex, isAndNode, err := resolveAndNodeBoxIndex(raw)
+	if err != nil {
+		return 0, fmt.Errorf("resolve %s numeric source: %w", nodeName, err)
+	}
+	if !isAndNode {
+		return extractRecognitionNumber(detail)
+	}
+
+	selectedDetail, err := extractAndSelectedDetail(detail, boxIndex)
+	if err != nil {
+		return 0, err
+	}
+
+	return extractRecognitionNumber(selectedDetail)
+}
+
+func extractRecognitionBoxFromNode(ctx *maa.Context, nodeName string, detail *maa.RecognitionDetail) (maa.Rect, error) {
+	if detail == nil {
+		return maa.Rect{}, fmt.Errorf("recognition detail is empty")
+	}
+
+	raw, err := ctx.GetNodeJSON(nodeName)
+	if err != nil {
+		return maa.Rect{}, fmt.Errorf("get node %s json: %w", nodeName, err)
+	}
+	if strings.TrimSpace(raw) == "" {
+		return maa.Rect{}, fmt.Errorf("node %s json is empty", nodeName)
+	}
+
+	boxIndex, isAndNode, err := resolveAndNodeBoxIndex(raw)
+	if err != nil {
+		return maa.Rect{}, fmt.Errorf("resolve %s box source: %w", nodeName, err)
+	}
+	if !isAndNode {
+		return detail.Box, nil
+	}
+
+	selectedDetail, err := extractAndSelectedDetail(detail, boxIndex)
+	if err != nil {
+		return maa.Rect{}, err
+	}
+	return selectedDetail.Box, nil
+}
+
+func extractAndSelectedDetail(detail *maa.RecognitionDetail, boxIndex int) (*maa.RecognitionDetail, error) {
+	if len(detail.CombinedResult) == 0 {
+		return nil, fmt.Errorf("and node combined result is empty")
+	}
+	if boxIndex < 0 || boxIndex >= len(detail.CombinedResult) {
+		return nil, fmt.Errorf("and node box_index %d out of range, combined result size=%d", boxIndex, len(detail.CombinedResult))
+	}
+
+	selectedDetail := detail.CombinedResult[boxIndex]
+	if selectedDetail == nil {
+		return nil, fmt.Errorf("and node box_index %d result is empty", boxIndex)
+	}
+	return selectedDetail, nil
+}
+
+func resolveAndNodeBoxIndex(raw string) (int, bool, error) {
+	var node nodeDefinition
+	if err := json.Unmarshal([]byte(raw), &node); err != nil {
+		return 0, false, fmt.Errorf("unmarshal node json: %w", err)
+	}
+
+	recognitionType := strings.TrimSpace(node.Recognition.Type)
+	if recognitionType == "" {
+		recognitionType = strings.TrimSpace(node.Recognition.Recognition)
+	}
+	if recognitionType != "And" {
+		return 0, false, nil
+	}
+
+	allOf := node.Recognition.AllOf
+	boxIndex := 0
+
+	if len(node.Recognition.Param) > 0 {
+		var param andRecognitionParam
+		if err := json.Unmarshal(node.Recognition.Param, &param); err != nil {
+			return 0, true, fmt.Errorf("unmarshal and param: %w", err)
+		}
+		allOf = param.AllOf
+		if param.BoxIndex != nil {
+			boxIndex = *param.BoxIndex
+		}
+	} else if node.Recognition.BoxIndex != nil {
+		boxIndex = *node.Recognition.BoxIndex
+	}
+
+	if len(allOf) == 0 {
+		return 0, true, fmt.Errorf("and node all_of is empty")
+	}
+	if boxIndex < 0 || boxIndex >= len(allOf) {
+		return 0, true, fmt.Errorf("and node box_index %d out of range, all_of size=%d", boxIndex, len(allOf))
+	}
+
+	return boxIndex, true, nil
 }
 
 func extractRecognitionNumber(detail *maa.RecognitionDetail) (int, error) {
@@ -348,21 +508,80 @@ func parseOCRNumericValue(text string) (int, error) {
 		return 0, fmt.Errorf("ocr text is empty")
 	}
 
-	var digits strings.Builder
-	for _, ch := range cleaned {
-		if ch >= '0' && ch <= '9' {
-			digits.WriteRune(ch)
-		}
+	matchIndex := ocrNumericPattern.FindStringIndex(cleaned)
+	if matchIndex == nil {
+		return 0, fmt.Errorf("ocr text %q contains no numeric value", cleaned)
 	}
+	match := cleaned[matchIndex[0]:matchIndex[1]]
 
-	if digits.Len() == 0 {
-		return 0, fmt.Errorf("ocr text %q contains no digits", cleaned)
-	}
-
-	value, err := strconv.Atoi(digits.String())
+	numberText, multiplier, err := normalizeOCRNumericToken(match)
 	if err != nil {
 		return 0, err
 	}
 
-	return value, nil
+	value, err := strconv.ParseFloat(numberText, 64)
+	if err != nil {
+		return 0, err
+	}
+
+	scaled := math.Round(value * multiplier)
+	maxInt := int(^uint(0) >> 1)
+	minInt := -maxInt - 1
+	if scaled > float64(maxInt) || scaled < float64(minInt) {
+		return 0, fmt.Errorf("ocr text %q is out of int range", cleaned)
+	}
+
+	return int(scaled), nil
+}
+
+func normalizeOCRNumericToken(token string) (string, float64, error) {
+	normalized := strings.TrimSpace(token)
+	if normalized == "" {
+		return "", 0, fmt.Errorf("ocr numeric token is empty")
+	}
+
+	multiplier := 1.0
+	for _, suffix := range []struct {
+		unit       string
+		multiplier float64
+	}{
+		{unit: "亿", multiplier: 100000000},
+		{unit: "万", multiplier: 10000},
+		{unit: "K", multiplier: 1000},
+		{unit: "k", multiplier: 1000},
+		{unit: "M", multiplier: 1000000},
+		{unit: "m", multiplier: 1000000},
+		{unit: "B", multiplier: 1000000000},
+		{unit: "b", multiplier: 1000000000},
+	} {
+		if strings.HasSuffix(normalized, suffix.unit) {
+			normalized = strings.TrimSpace(strings.TrimSuffix(normalized, suffix.unit))
+			multiplier = suffix.multiplier
+			break
+		}
+	}
+
+	if unsupportedSuffix := asciiLetterPattern.FindString(normalized); unsupportedSuffix != "" {
+		return "", 0, fmt.Errorf("unsupported ocr numeric suffix %q in %q", unsupportedSuffix, token)
+	}
+
+	if normalized == "" {
+		return "", 0, fmt.Errorf("ocr numeric token %q has no numeric part", token)
+	}
+
+	normalized = strings.ReplaceAll(normalized, " ", "")
+	if strings.Contains(normalized, ".") {
+		normalized = strings.ReplaceAll(normalized, ",", "")
+	} else if strings.Count(normalized, ",") == 1 {
+		parts := strings.Split(normalized, ",")
+		if len(parts) == 2 && len(parts[1]) != 3 {
+			normalized = parts[0] + "." + parts[1]
+		} else {
+			normalized = strings.ReplaceAll(normalized, ",", "")
+		}
+	} else {
+		normalized = strings.ReplaceAll(normalized, ",", "")
+	}
+
+	return normalized, multiplier, nil
 }
