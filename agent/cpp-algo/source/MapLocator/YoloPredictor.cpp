@@ -202,6 +202,16 @@ YoloCoarseResult YoloPredictor::predictCoarseByYOLO(const cv::Mat& minimap)
         predictedName = yoloClassNames[maxIdx];
     }
 
+    {
+        std::string all_results;
+        for (size_t i = 0; i < outputCount; i++) {
+            if (outputData[i] > 0.01f) {
+                std::string name = (i < (int)yoloClassNames.size()) ? yoloClassNames[i] : std::to_string(i);
+                all_results += "[" + name + "=" + std::to_string(outputData[i]) + "] ";
+            }
+        }
+        LogInfo << "YOLO Raw All: " << all_results;
+    }
     LogInfo << "YOLO Raw:" << VAR(predictedName) << VAR(maxIdx) << VAR(maxConf);
     result.raw_class = predictedName;
     result.confidence = maxConf;
@@ -214,7 +224,7 @@ YoloCoarseResult YoloPredictor::predictCoarseByYOLO(const cv::Mat& minimap)
         return result;
     }
 
-    if (maxConf > yoloConfThreshold && maxIdx < (int)yoloClassNames.size()) {
+    if (maxIdx >= 0 && maxIdx < (int)yoloClassNames.size()) {
         result.valid = true;
         result.zone_id = convertYoloNameToZoneId(predictedName);
 
@@ -240,12 +250,8 @@ YoloCoarseResult YoloPredictor::predictCoarseByYOLO(const cv::Mat& minimap)
         }
         return result;
     }
-    if (maxConf <= yoloConfThreshold) {
-        LogInfo << "YOLO Fail: Low Confidence" << VAR(maxConf) << VAR(yoloConfThreshold);
-    }
-    else {
-        LogInfo << "YOLO Fail: Index Out of Bounds" << VAR(maxIdx) << VAR(yoloClassNames.size());
-    }
+
+    LogInfo << "YOLO Fail: Index Out of Bounds" << VAR(maxIdx) << VAR(yoloClassNames.size());
 
     return result;
 }
