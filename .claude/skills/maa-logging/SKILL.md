@@ -28,7 +28,7 @@ LogInfo << "OK " << VAR(result.position->zoneId) << VAR(result.position->x)
 
 LogError << "MapLocateAction: Locator init failed";
 
-// Bad - 不要手动拼接
+// Bad - 日志中不要手动拼接（std::format 用于一般字符串构建是好的，但日志应直接用 << 和 VAR）
 LogInfo << "OK " + std::to_string(x) + ", " + std::to_string(y);
 LogInfo << std::format("position: ({}, {})", x, y);
 ```

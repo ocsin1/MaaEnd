@@ -31,18 +31,30 @@ auto opt = json::open("/path/to/file.json");
 auto opt = json::parsec(str);
 ```
 
-**cpp-algo 常见模式** — 解析自定义识别参数：
+**cpp-algo 推荐模式** — 安全解析自定义识别参数：
 
 ```cpp
 template <typename T>
 T ParseCustomRecognitionParam(const char* custom_recognition_param)
 {
-    if (custom_recognition_param && std::strlen(custom_recognition_param) > 0) {
-        return json::parse(custom_recognition_param).value_or(json::object {}).as<T>();
+    if (!custom_recognition_param || std::strlen(custom_recognition_param) == 0) {
+        return T {};
     }
-    return T {};
+    auto opt = json::parse(custom_recognition_param);
+    if (!opt) {
+        LogError << "failed to parse custom_recognition_param" << VAR(custom_recognition_param);
+        return T {};
+    }
+    T result {};
+    if (!result.from_json(*opt)) {
+        LogError << "failed to deserialize param" << VAR(custom_recognition_param);
+        return T {};
+    }
+    return result;
 }
 ```
+
+> **反模式**：`json::parse(str).value_or(json::object {}).as<T>()` —— `value_or` 静默吞掉 parse 失败；空 object 调 `as<T>()` 当 `T` 有 required 字段时会抛异常。
 
 ## Constructing Values
 
@@ -159,8 +171,14 @@ struct LocateOutput {
 // Serialize
 json::value j = data;               // implicit via to_json()
 
-// Deserialize
-MyData data = j.as<MyData>();
+// Deserialize — 安全方式：用 from_json() 检查返回值
+MyData data {};
+if (!data.from_json(j)) {
+    LogError << "failed to deserialize" << VAR(j);
+}
+
+// as<T>() 在类型不匹配 / required 字段缺失时会抛异常，仅在确定数据合法时使用
+MyData data2 = j.as<MyData>();
 ```
 
 ### MEO_OPT — Optional Fields
@@ -255,12 +273,13 @@ MyEnum e = j.as<MyEnum>();    // → MyEnum::B
 
 ## Common Pitfalls
 
-1. **`json::parse` returns `std::optional`** — always check before use
-2. **`as_*()` throws on type mismatch** — use `find()` or check `is_*()` first
-3. **`char` is deleted** — use `std::string` or `int`
-4. **`ext::jsonization` lives in `json::ext` namespace**
-5. **`MEO_OPT` applies to the next field only** — each optional field needs its own `MEO_OPT`
-6. **`MEO_KEY` goes after `MEO_OPT`** — order is `MEO_OPT MEO_KEY("key") field`
+1. **`json::parse` returns `std::optional`** — always check before use,失败路径必须 `LogError` + 早期 `return`
+2. **`as_*()` / `as<T>()` throws on type mismatch** — 用 `find()` 或 `is_*()` 前置检查；对 struct 用 `from_json()` 检查返回值
+3. **禁止 `.value_or(...).as<T>()`** — 静默吞错误 + 可能抛异常，应拆开检查（见上方推荐模式）
+4. **`char` is deleted** — use `std::string` or `int`
+5. **`ext::jsonization` lives in `json::ext` namespace**
+6. **`MEO_OPT` applies to the next field only** — each optional field needs its own `MEO_OPT`
+7. **`MEO_KEY` goes after `MEO_OPT`** — order is `MEO_OPT MEO_KEY("key") field`
 
 ## Quick Reference
 
