@@ -40,7 +40,7 @@
             "win32": {
                 "class_regex": "UnityWndClass",
                 "window_regex": "Endfield",
-                "screencap": "FramePool",
+                "screencap": "PrintWindow",
                 "mouse": "SendMessageWithWindowPos",
                 "keyboard": "PostMessage"
             },
