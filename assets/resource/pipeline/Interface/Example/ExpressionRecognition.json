@@ -6,8 +6,8 @@
             "param": {
                 "custom_recognition": "ExpressionRecognition",
                 "custom_recognition_param": {
-                    "expression": "{ExpressionRecognitionCurrentCredit}-{ExpressionRecognitionRefreshCost}>=300",//假如当前余额-刷新消耗>=300，则命中
-                    "box_node": "ExpressionRecognitionCurrentCredit"//命中后返回当前余额的box
+                    "expression": "{ExpressionRecognitionCurrentCredit}-{ExpressionRecognitionRefreshCost}>=300", //假如当前余额-刷新消耗>=300，则命中
+                    "box_node": "ExpressionRecognitionCurrentCredit" //命中后返回当前余额的box
                 }
             }
         },
@@ -25,7 +25,7 @@
             200,
             70
         ],
-        "expected": "^(\\d+[.,]?\\d*[KkMm万]?)$",//预期识别结果为10或者,1.7K或者2.2M或者3.3万
+        "expected": "^(\\d+[.,]?\\d*[KkMm万]?)$", //预期识别结果为10或者,1.7K或者2.2M或者3.3万
         "next": []
     },
     "ExpressionRecognitionRefreshCost": {

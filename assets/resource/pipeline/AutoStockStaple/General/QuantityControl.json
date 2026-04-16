@@ -17,10 +17,11 @@
                 ]
             }
         },
-        "post_delay": 0,
         "pre_delay": 0,
+        "post_delay": 0,
         "rate_limit": 0,
-        "next": [ //注意最后一个节点是正常购买
+        "next": [
+            //注意最后一个节点是正常购买
             "AutoStockStapleQuantityControlValleyEngravingPermit",
             "AutoStockStapleQuantityControlKunstTube",
             "AutoStockStapleQuantityControlJakubsLegacy",
@@ -62,9 +63,7 @@
                 ]
             }
         },
-        "post_delay": 0,
         "pre_delay": 0,
-        "rate_limit": 0,
         "action": {
             "type": "Custom",
             "param": {
@@ -80,6 +79,8 @@
                 }
             }
         },
+        "post_delay": 0,
+        "rate_limit": 0,
         "next": [
             "AutoStockStapleQuantityControlResetRecognitionParams"
         ]
@@ -95,9 +96,7 @@
                 ]
             }
         },
-        "post_delay": 0,
         "pre_delay": 0,
-        "rate_limit": 0,
         "action": {
             "type": "Custom",
             "param": {
@@ -113,6 +112,8 @@
                 }
             }
         },
+        "post_delay": 0,
+        "rate_limit": 0,
         "next": [
             "AutoStockStapleQuantityControlResetRecognitionParams"
         ]
@@ -128,9 +129,7 @@
                 ]
             }
         },
-        "post_delay": 0,
         "pre_delay": 0,
-        "rate_limit": 0,
         "action": {
             "type": "Custom",
             "param": {
@@ -146,6 +145,8 @@
                 }
             }
         },
+        "post_delay": 0,
+        "rate_limit": 0,
         "next": [
             "AutoStockStapleQuantityControlResetRecognitionParams"
         ]
@@ -161,9 +162,7 @@
                 ]
             }
         },
-        "post_delay": 0,
         "pre_delay": 0,
-        "rate_limit": 0,
         "action": {
             "type": "Custom",
             "param": {
@@ -179,6 +178,8 @@
                 }
             }
         },
+        "post_delay": 0,
+        "rate_limit": 0,
         "next": [
             "AutoStockStapleQuantityControlResetRecognitionParams"
         ]
@@ -194,9 +195,7 @@
                 ]
             }
         },
-        "post_delay": 0,
         "pre_delay": 0,
-        "rate_limit": 0,
         "action": {
             "type": "Custom",
             "param": {
@@ -212,6 +211,8 @@
                 }
             }
         },
+        "post_delay": 0,
+        "rate_limit": 0,
         "next": [
             "AutoStockStapleQuantityControlResetRecognitionParams"
         ]
@@ -227,9 +228,7 @@
                 ]
             }
         },
-        "post_delay": 0,
         "pre_delay": 0,
-        "rate_limit": 0,
         "action": {
             "type": "Custom",
             "param": {
@@ -245,6 +244,8 @@
                 }
             }
         },
+        "post_delay": 0,
+        "rate_limit": 0,
         "next": [
             "AutoStockStapleQuantityControlResetRecognitionParams"
         ]
@@ -260,9 +261,7 @@
                 ]
             }
         },
-        "post_delay": 0,
         "pre_delay": 0,
-        "rate_limit": 0,
         "action": {
             "type": "Custom",
             "param": {
@@ -278,6 +277,8 @@
                 }
             }
         },
+        "post_delay": 0,
+        "rate_limit": 0,
         "next": [
             "AutoStockStapleQuantityControlResetRecognitionParams"
         ]
@@ -293,9 +294,7 @@
                 ]
             }
         },
-        "post_delay": 0,
         "pre_delay": 0,
-        "rate_limit": 0,
         "action": {
             "type": "Custom",
             "param": {
@@ -311,6 +310,8 @@
                 }
             }
         },
+        "post_delay": 0,
+        "rate_limit": 0,
         "next": [
             "AutoStockStapleQuantityControlResetRecognitionParams"
         ]
@@ -326,9 +327,7 @@
                 ]
             }
         },
-        "post_delay": 0,
         "pre_delay": 0,
-        "rate_limit": 0,
         "action": {
             "type": "Custom",
             "param": {
@@ -344,6 +343,8 @@
                 }
             }
         },
+        "post_delay": 0,
+        "rate_limit": 0,
         "next": [
             "AutoStockStapleQuantityControlResetRecognitionParams"
         ]
@@ -359,9 +360,7 @@
                 ]
             }
         },
-        "post_delay": 0,
         "pre_delay": 0,
-        "rate_limit": 0,
         "action": {
             "type": "Custom",
             "param": {
@@ -377,6 +376,8 @@
                 }
             }
         },
+        "post_delay": 0,
+        "rate_limit": 0,
         "next": [
             "AutoStockStapleQuantityControlResetRecognitionParams"
         ]
@@ -392,9 +393,7 @@
                 ]
             }
         },
-        "post_delay": 0,
         "pre_delay": 0,
-        "rate_limit": 0,
         "action": {
             "type": "Custom",
             "param": {
@@ -410,6 +409,8 @@
                 }
             }
         },
+        "post_delay": 0,
+        "rate_limit": 0,
         "next": [
             "AutoStockStapleQuantityControlResetRecognitionParams"
         ]
@@ -425,9 +426,7 @@
                 ]
             }
         },
-        "post_delay": 0,
         "pre_delay": 0,
-        "rate_limit": 0,
         "action": {
             "type": "Custom",
             "param": {
@@ -443,6 +442,8 @@
                 }
             }
         },
+        "post_delay": 0,
+        "rate_limit": 0,
         "next": [
             "AutoStockStapleQuantityControlResetRecognitionParams"
         ]
@@ -458,9 +459,7 @@
                 ]
             }
         },
-        "post_delay": 0,
         "pre_delay": 0,
-        "rate_limit": 0,
         "action": {
             "type": "Custom",
             "param": {
@@ -476,6 +475,8 @@
                 }
             }
         },
+        "post_delay": 0,
+        "rate_limit": 0,
         "next": [
             "AutoStockStapleQuantityControlResetRecognitionParams"
         ]
@@ -491,9 +492,7 @@
                 ]
             }
         },
-        "post_delay": 0,
         "pre_delay": 0,
-        "rate_limit": 0,
         "action": {
             "type": "Custom",
             "param": {
@@ -509,6 +508,8 @@
                 }
             }
         },
+        "post_delay": 0,
+        "rate_limit": 0,
         "next": [
             "AutoStockStapleQuantityControlResetRecognitionParams"
         ]
@@ -524,9 +525,7 @@
                 ]
             }
         },
-        "post_delay": 0,
         "pre_delay": 0,
-        "rate_limit": 0,
         "action": {
             "type": "Custom",
             "param": {
@@ -542,6 +541,8 @@
                 }
             }
         },
+        "post_delay": 0,
+        "rate_limit": 0,
         "next": [
             "AutoStockStapleQuantityControlResetRecognitionParams"
         ]
@@ -557,9 +558,7 @@
                 ]
             }
         },
-        "post_delay": 0,
         "pre_delay": 0,
-        "rate_limit": 0,
         "action": {
             "type": "Custom",
             "param": {
@@ -575,6 +574,8 @@
                 }
             }
         },
+        "post_delay": 0,
+        "rate_limit": 0,
         "next": [
             "AutoStockStapleQuantityControlResetRecognitionParams"
         ]
@@ -590,9 +591,7 @@
                 ]
             }
         },
-        "post_delay": 0,
         "pre_delay": 0,
-        "rate_limit": 0,
         "action": {
             "type": "Custom",
             "param": {
@@ -608,6 +607,8 @@
                 }
             }
         },
+        "post_delay": 0,
+        "rate_limit": 0,
         "next": [
             "AutoStockStapleQuantityControlResetRecognitionParams"
         ]
@@ -623,9 +624,7 @@
                 ]
             }
         },
-        "post_delay": 0,
         "pre_delay": 0,
-        "rate_limit": 0,
         "action": {
             "type": "Custom",
             "param": {
@@ -641,6 +640,8 @@
                 }
             }
         },
+        "post_delay": 0,
+        "rate_limit": 0,
         "next": [
             "AutoStockStapleQuantityControlResetRecognitionParams"
         ]
@@ -656,9 +657,7 @@
                 ]
             }
         },
-        "post_delay": 0,
         "pre_delay": 0,
-        "rate_limit": 0,
         "action": {
             "type": "Custom",
             "param": {
@@ -674,6 +673,8 @@
                 }
             }
         },
+        "post_delay": 0,
+        "rate_limit": 0,
         "next": [
             "AutoStockStapleQuantityControlResetRecognitionParams"
         ]
@@ -689,9 +690,7 @@
                 ]
             }
         },
-        "post_delay": 0,
         "pre_delay": 0,
-        "rate_limit": 0,
         "action": {
             "type": "Custom",
             "param": {
@@ -707,6 +706,8 @@
                 }
             }
         },
+        "post_delay": 0,
+        "rate_limit": 0,
         "next": [
             "AutoStockStapleQuantityControlResetRecognitionParams"
         ]
@@ -722,9 +723,7 @@
                 ]
             }
         },
-        "post_delay": 0,
         "pre_delay": 0,
-        "rate_limit": 0,
         "action": {
             "type": "Custom",
             "param": {
@@ -740,6 +739,8 @@
                 }
             }
         },
+        "post_delay": 0,
+        "rate_limit": 0,
         "next": [
             "AutoStockStapleQuantityControlResetRecognitionParams"
         ]
@@ -755,9 +756,7 @@
                 ]
             }
         },
-        "post_delay": 0,
         "pre_delay": 0,
-        "rate_limit": 0,
         "action": {
             "type": "Custom",
             "param": {
@@ -773,6 +772,8 @@
                 }
             }
         },
+        "post_delay": 0,
+        "rate_limit": 0,
         "next": [
             "AutoStockStapleQuantityControlResetRecognitionParams"
         ]
@@ -788,9 +789,7 @@
                 ]
             }
         },
-        "post_delay": 0,
         "pre_delay": 0,
-        "rate_limit": 0,
         "action": {
             "type": "Custom",
             "param": {
@@ -806,6 +805,8 @@
                 }
             }
         },
+        "post_delay": 0,
+        "rate_limit": 0,
         "next": [
             "AutoStockStapleQuantityControlResetRecognitionParams"
         ]
@@ -821,9 +822,7 @@
                 ]
             }
         },
-        "post_delay": 0,
         "pre_delay": 0,
-        "rate_limit": 0,
         "action": {
             "type": "Custom",
             "param": {
@@ -839,6 +838,8 @@
                 }
             }
         },
+        "post_delay": 0,
+        "rate_limit": 0,
         "next": [
             "AutoStockStapleQuantityControlResetRecognitionParams"
         ]
@@ -854,9 +855,7 @@
                 ]
             }
         },
-        "post_delay": 0,
         "pre_delay": 0,
-        "rate_limit": 0,
         "action": {
             "type": "Custom",
             "param": {
@@ -872,6 +871,8 @@
                 }
             }
         },
+        "post_delay": 0,
+        "rate_limit": 0,
         "next": [
             "AutoStockStapleQuantityControlResetRecognitionParams"
         ]
@@ -887,9 +888,7 @@
                 ]
             }
         },
-        "post_delay": 0,
         "pre_delay": 0,
-        "rate_limit": 0,
         "action": {
             "type": "Custom",
             "param": {
@@ -905,6 +904,8 @@
                 }
             }
         },
+        "post_delay": 0,
+        "rate_limit": 0,
         "next": [
             "AutoStockStapleQuantityControlResetRecognitionParams"
         ]
@@ -920,9 +921,7 @@
                 ]
             }
         },
-        "post_delay": 0,
         "pre_delay": 0,
-        "rate_limit": 0,
         "action": {
             "type": "Custom",
             "param": {
@@ -938,6 +937,8 @@
                 }
             }
         },
+        "post_delay": 0,
+        "rate_limit": 0,
         "next": [
             "AutoStockStapleQuantityControlResetRecognitionParams"
         ]
@@ -947,7 +948,8 @@
         "recognition": {
             "type": "And",
             "param": {
-                "all_of": [ //这里只是确认仍然还在购买商品的界面
+                "all_of": [
+                    //这里只是确认仍然还在购买商品的界面
                     "AutoStockStapleQuantityControl"
                 ]
             }
