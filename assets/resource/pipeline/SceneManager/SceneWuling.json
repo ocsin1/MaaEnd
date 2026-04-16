@@ -85,7 +85,7 @@
         "post_wait_freezes": 400
     },
     "__ScenePrivateMapOverviewEnterMapWulingJingyuValley": {
-        "desc": "在地图地总览界面，进入武陵-景玉谷地图",
+        "desc": "在地图总览界面，进入武陵-景玉谷地图",
         "recognition": {
             "type": "TemplateMatch",
             "param": {
@@ -108,7 +108,7 @@
         ]
     },
     "__ScenePrivateMapOverviewEnterMapWulingWulingCity": {
-        "desc": "在地图地总览界面，进入武陵-武陵城地图",
+        "desc": "在地图总览界面，进入武陵-武陵城地图",
         "recognition": {
             "type": "TemplateMatch",
             "param": {
