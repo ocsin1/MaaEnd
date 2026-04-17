@@ -144,7 +144,6 @@
         "tasks/SellProduct.json",
         "tasks/AutoStockpile.json",
         "tasks/AutoStockStaple.json",
-        "tasks/AutoSell.json",
         "tasks/Crafting.json",
         "tasks/GearAssembly.json",
         "tasks/Weapon.json",
@@ -155,6 +154,7 @@
         "tasks/GiftOperator.json",
         "tasks/AutoEcoFarm.json",
         "tasks/AutoCollect.json",
+        "tasks/AutoSell.json",
         // group: realtime
         "tasks/RealTimeTask.json",
         // group: utility
