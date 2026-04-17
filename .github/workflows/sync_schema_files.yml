@@ -33,6 +33,8 @@ jobs:
     steps:
       - name: Check Out Repository
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.MAAEND_BOT_TOKEN }}
 
       - name: Download JSON schema files from MaaFramework
         run: |
@@ -98,46 +100,38 @@ jobs:
             echo "pipeline_changed=false" >> $GITHUB_OUTPUT
           fi
 
-      - name: Commit and Push Changes
-        id: commit_changes
+      - name: Build commit message
+        id: build_msg
         if: steps.check_status.outputs.changes_detected == 'true'
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
-          # 先 fetch 并 rebase，避免 commit 后冲突
-          git fetch origin $(git rev-parse --abbrev-ref HEAD) --unshallow || true
-          git rebase origin/$(git rev-parse --abbrev-ref HEAD) || true
-
-          git add tools/schema/*.schema.json
-
-          if git diff-index --quiet HEAD --; then
-            echo "No changes to commit"
-          else
-            # 创建定制的提交消息
-            changed_files=""
-            if [[ "${{ steps.check_status.outputs.interface_changed }}" == "true" ]]; then
-              changed_files+="interface "
-            fi
-            if [[ "${{ steps.check_status.outputs.interface_config_changed }}" == "true" ]]; then
-              changed_files+="interface_config "
-            fi
-            if [[ "${{ steps.check_status.outputs.interface_import_changed }}" == "true" ]]; then
-              changed_files+="interface_import "
-            fi
-            if [[ "${{ steps.check_status.outputs.pipeline_changed }}" == "true" ]]; then
-              changed_files+="pipeline "
-            fi
-
-            # 去除末尾空格
-            changed_files=$(echo "$changed_files" | xargs)
-
-            git commit -m "chore: update $changed_files schema files from MaaFramework" -m "Triggered by ${{github.sha}}" -m "[skip changelog]"
-            git push
-            echo "have_commits=True" >> $GITHUB_OUTPUT
-
-            echo "JSON schema files successfully synchronized"
+          changed_files=""
+          if [[ "${{ steps.check_status.outputs.interface_changed }}" == "true" ]]; then
+            changed_files+="interface "
           fi
+          if [[ "${{ steps.check_status.outputs.interface_config_changed }}" == "true" ]]; then
+            changed_files+="interface_config "
+          fi
+          if [[ "${{ steps.check_status.outputs.interface_import_changed }}" == "true" ]]; then
+            changed_files+="interface_import "
+          fi
+          if [[ "${{ steps.check_status.outputs.pipeline_changed }}" == "true" ]]; then
+            changed_files+="pipeline "
+          fi
+          changed_files=$(echo "$changed_files" | xargs)
+          echo "msg=chore: update $changed_files schema files from MaaFramework" >> $GITHUB_OUTPUT
+
+      - name: Commit and push changes
+        if: steps.check_status.outputs.changes_detected == 'true'
+        uses: actions-js/push@master
+        with:
+          rebase: true
+          branch: ${{ github.ref }}
+          message: "${{ steps.build_msg.outputs.msg }}
+
+            Triggered by ${{ github.sha }}
+
+            [skip changelog]"
+          github_token: ${{ secrets.MAAEND_BOT_TOKEN }}
 
       - name: No changes detected
         if: steps.check_status.outputs.changes_detected != 'true'
