@@ -373,7 +373,7 @@
     "resource/image/MapLocator/Wuling/Lv001Tier277": "16a23e35f215435bd5a0b4589e1d7645d33fb0b722e9c532ceb964597dcfd48e",
     "resource/image/MapLocator/Wuling/Lv002Tier259": "7393b8c0ff243e724bd382c97610f91273eb9935dafb6eb0843c693ad2dfcbda",
     "resource/image/MapLocator/Wuling/Lv002Tier275": "9732e38bffcf6ca9616591763a7b4815a5c809ba5dde0ee856a46c5d607dcf33",
-    "resource/image/MapLocator/Wuling/Base": "3f8052e936e446d59d697f6ff7037c0898a8be4816b786c4808127fe0c8e1da0",
+    "resource/image/MapLocator/Wuling/Base": "d758f82746de748258589878683847f1af8a5820d970947f38b13773cbd5a60e",
     "resource/image/MapLocator/Wuling/Lv002Tier257": "70b0b103edcf33bc9ad72ea7bb6266b1ffb14b133aa592950aac47c3d25da19e",
     "resource/image/MapLocator/Wuling/Lv002Tier258": "ee8ac5a969c9d526322813301712b0e0f5dddf36ca64498aa20993b75bd78434",
     "resource/image/MapLocator/Wuling/Lv002Tier276": "9350a04fb572a599ede207194b1cd569b0e7197645646ef1c7075e5b25ff890c",
@@ -659,5 +659,7 @@
     "resource/image/BatchUseDetector/valleyiv_compass": "f851ab92fee82a17ee33835a7c14d6131065e74b0c14799da575a067a371e532",
     "resource/image/BatchUseDetector/valleyiv_detector": "26f4df80a66418ef8995cc49768fa3f46123a294240f39e1181fd117e81a6370",
     "resource/image/EnvironmentMonitoring/TargetChecked": "dde5daa0065670ae9344b2a449e4d582ca5d24e92149184c9407dce8471c05e6",
-    "resource/image/SceneManager/MenuPassNew": "2090d22529cc28d2f622c676f0f8215df8a04912a6ed9d2e07bc9f31fa16e9fe"
+    "resource/image/SceneManager/MenuPassNew": "2090d22529cc28d2f622c676f0f8215df8a04912a6ed9d2e07bc9f31fa16e9fe",
+    "resource/image/MapLocator/Wuling/Lv004Tier330": "1695949634957d96b65fc985f1be52cc3542c7b5ae19b7fb602e51395a2b02b9",
+    "resource/image/MapLocator/Wuling/Lv004Tier328": "062cba1aae39eda8df3ed3a26fb4f484ea05ea92f09056171160a7d40ce77235"
 }
