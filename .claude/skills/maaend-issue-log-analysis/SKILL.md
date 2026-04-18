@@ -214,6 +214,7 @@ description: 分析 MaaEnd 上游仓库公开 Issue（`https://github.com/MaaEnd
     - `config/*`
 
 7. 回答时只保留关键片段。
+
     - 只摘足够支撑结论的几十行，不要倾倒整份日志。
 
 8. 专项任务增强分析（Specialized Task Analysis）。

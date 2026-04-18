@@ -146,6 +146,7 @@ std::string to_string() const;    // raw (no re-formatting)
 Wraps `std::vector<json::value>`. Supports STL container interface (begin/end/size/empty/emplace_back/push_back/operator[]).
 
 Additional:
+
 ```cpp
 std::string dumps(std::optional<size_t> indent = std::nullopt) const;
 std::string format(size_t indent = 4) const;
@@ -162,6 +163,7 @@ std::optional<T> find(size_t pos) const;
 Wraps `std::map<std::string, json::value>`. Supports STL map interface (begin/end/size/empty/contains/emplace/insert/erase/operator[]).
 
 Additional:
+
 ```cpp
 std::string dumps(std::optional<size_t> indent = std::nullopt) const;
 std::string format(size_t indent = 4) const;
@@ -228,14 +230,14 @@ public:
 
 ## Macro Reference
 
-| Macro | Effect |
-|-------|--------|
-| `MEO_JSONIZATION(fields...)` | Generate `to_json()`, `check_json()`, `from_json()` |
-| `MEO_TOJSON(fields...)` | Generate `to_json()` only |
-| `MEO_FROMJSON(fields...)` | Generate `from_json()` only |
-| `MEO_CHECKJSON(fields...)` | Generate `check_json()` only |
-| `MEO_OPT` | Next field is optional in from_json (skip if missing) |
-| `MEO_KEY("key")` | Override JSON key name for next field |
+| Macro                        | Effect                                                |
+| ---------------------------- | ----------------------------------------------------- |
+| `MEO_JSONIZATION(fields...)` | Generate `to_json()`, `check_json()`, `from_json()`   |
+| `MEO_TOJSON(fields...)`      | Generate `to_json()` only                             |
+| `MEO_FROMJSON(fields...)`    | Generate `from_json()` only                           |
+| `MEO_CHECKJSON(fields...)`   | Generate `check_json()` only                          |
+| `MEO_OPT`                    | Next field is optional in from_json (skip if missing) |
+| `MEO_KEY("key")`             | Override JSON key name for next field                 |
 
 ### Macro Generated Signatures
 

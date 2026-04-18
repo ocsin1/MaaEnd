@@ -24,8 +24,8 @@ description: 仅当用户明确要求往「🐌库存转移 / ItemTransfer」任
 - **用户只需要改 `category_order`，不要动 `items` 字段。**
   `items` 里的数字 key 是识别模型的真实 class ID，由开发者在重训模型时统一维护，用户没法也不应该自己编一个。
 - 在 `category_order.<category>`（`Ore` / `Plant` / `Product` / `Usable` 四选一）数组里，把新增物品的**中文名**按第 1 步游戏里观察到的位置**插入到正确的位置**。
-  - 前一个是谁、后一个是谁必须和游戏里完全一致。
-  - 中文名要和游戏里显示的完全一致，不要加空格或改字。
+    - 前一个是谁、后一个是谁必须和游戏里完全一致。
+    - 中文名要和游戏里显示的完全一致，不要加空格或改字。
 
 > ⚠️ `category_order` 里的顺序，是后续 OCR 滚动识别和 **locales / ItemTransfer.json 插入顺序**的唯一权威来源，必须和游戏里肉眼看到的顺序一致。
 
@@ -34,10 +34,10 @@ description: 仅当用户明确要求往「🐌库存转移 / ItemTransfer」任
 请在向 AI 下达任务时，明确告诉它以下两点，否则 AI 无法选对模板：
 
 - **识别方式**：这个物品是「**可识别**」（有训练好的分类模型，用 `ItemTransferFindItemInRepo` 的 `expected` / `target_class` 匹配），还是「**纯 OCR**」（没有分类模型，只能用 `ItemTransferFindItemWithOCR` 按中文名识别）。
-  - 一般新物品、模型没来得及训的物品用「纯 OCR」。
-  - 老物品、有分类 ID 的用「可识别」。
+    - 一般新物品、模型没来得及训的物品用「纯 OCR」。
+    - 老物品、有分类 ID 的用「可识别」。
 - **排序方向**：这个物品在升序排列下靠前，就用「**升序**」；在升序下非常靠后、但在降序下靠前，就用「**降序**」。
-  - 目的是让 OCR 滚动查找从近端开始，减少滚动距离。
+    - 目的是让 OCR 滚动查找从近端开始，减少滚动距离。
 
 把这两个信息给 AI 后，AI 会按第二部分的流程自动完成剩下的写入。
 
@@ -58,6 +58,7 @@ description: 仅当用户明确要求往「🐌库存转移 / ItemTransfer」任
 如果任一信息缺失，**必须先向用户确认**，不要擅自猜测。
 
 注意：`item_order.json` 里的 `items` 字段是识别模型的真实 class ID 表，由开发者维护，**Agent 不要新增或修改 `items` 条目**。
+
 - 如果用户选「可识别」，说明该物品**已经**在 `items` 里有对应条目：Agent 需要用该中文 `name` 在 `items` 里反查出数字 key，作为下文模板里 `<Id>`（`expected` / `target_class`）的值。
 - 如果在 `items` 里查不到该物品、但用户仍坚持「可识别」，**必须停下来**提示用户：该物品当前模型没有类别，只能用「纯 OCR」，请用户改口后再继续。
 - 如果用户选「纯 OCR」，则 Agent 完全不需要读 `items`，也不需要任何数字 ID。
@@ -73,15 +74,15 @@ description: 仅当用户明确要求往「🐌库存转移 / ItemTransfer」任
 
 1. 读取 `assets/locales/interface/en_us.json` 以及 `zh_cn.json`，搜索该物品所属类别下已有的命名风格（例如 `item.CupriumOre`、`item.AmberRice`、`item.AketinePowder`）。
 2. 根据游戏内已发布的英文名 / 日文名 / 韩文名 / 繁中名，确定该物品的规范字段名 `item.<EnglishPascalCase>`。
-   - 命名参考已有条目的风格（矿 = `*Ore`、瓶 = `*Bottle`、块 = 词根本身、粉末 = `*Powder`、种子 = `*Seed`、装备原件 = `*Component`、零件 = `*Part`、电池 = `LC/SC/HC` 容量前缀 + `*Battery` 等）。
-   - 如果查不到官方翻译，优先使用语义合理的英文 PascalCase 名，并在回复里告诉用户「我这里用的名字是 xxx，如果官方译名不同请告诉我修改」。
+    - 命名参考已有条目的风格（矿 = `*Ore`、瓶 = `*Bottle`、块 = 词根本身、粉末 = `*Powder`、种子 = `*Seed`、装备原件 = `*Component`、零件 = `*Part`、电池 = `LC/SC/HC` 容量前缀 + `*Battery` 等）。
+    - 如果查不到官方翻译，优先使用语义合理的英文 PascalCase 名，并在回复里告诉用户「我这里用的名字是 xxx，如果官方译名不同请告诉我修改」。
 3. 确定好字段名后（例如 `item.LCValleyBattery`），准备五种语言的翻译：
-   - `zh_cn` — 中文简体（等于 `item_order.json` 里的 `name`）。
-   - `zh_tw` — 中文繁体。
-   - `en_us` — 英文。
-   - `ja_jp` — 日文。
-   - `ko_kr` — 韩文。
-   - 如果某种语言的官方译名暂时查不到，则直接对中文名进行翻译，并提示用户确认。
+    - `zh_cn` — 中文简体（等于 `item_order.json` 里的 `name`）。
+    - `zh_tw` — 中文繁体。
+    - `en_us` — 英文。
+    - `ja_jp` — 日文。
+    - `ko_kr` — 韩文。
+    - 如果某种语言的官方译名暂时查不到，则直接对中文名进行翻译，并提示用户确认。
 
 ### 步骤 2：按 `category_order` 的位置，写入 5 个 locale 文件
 
@@ -90,9 +91,9 @@ description: 仅当用户明确要求往「🐌库存转移 / ItemTransfer」任
 1. 读取 `assets/data/ItemTransfer/item_order.json` 的 `category_order.<category>`，找到新增物品在数组里的**前一项**与**后一项**。
 2. 在 locale 文件中搜索前一项对应的 `item.*` key（例如前一项是「赤铜瓶」→ 搜 `"item.CupriumBottle":`）。
 3. 在该行**下方**、后一项的 `item.*` key **上方**，插入新增物品的键值对：
-   ```json
-       "item.<EnglishPascalCase>": "<该语言的译名>",
-   ```
+    ```json
+        "item.<EnglishPascalCase>": "<该语言的译名>",
+    ```
 4. 保持缩进、引号、逗号与相邻行严格一致，不要破坏 JSON 结构。
 
 > 💡 locale 文件里 `item.*` 的顺序与 `category_order` 严格一致，插入时务必按这个顺序；不要随意追加到末尾。

@@ -72,7 +72,7 @@ task start:.*CreditShoppingMain
 
 在 `maafw*.log` 中搜索：
 
-``` log
+```log
 OCRer.*IsDiscountPriority2
 ```
 
@@ -105,22 +105,22 @@ OCRer.*IsDiscountPriority2
 
 常见商品节点与中文名对照：
 
-| 节点后缀 | 商品名 |
-|----------|--------|
-| `ArmsInspector` | 武器检查单元 |
-| `ArmsINSPKit` | 武器检查装置 |
-| `ArsenalTicket` | 武库配额 |
-| `Oroberyl` | 嵌晶玉 |
-| `TCreds` | 折金票 |
-| `Protoprism` | 协议棱柱 |
-| `Protohedron` | 协议棱柱组 |
-| `Protodisk` | 协议圆盘 |
-| `Protoset` | 协议圆盘组 |
-| `ElementaryCombatRecord` | 初级作战记录 |
-| `IntermediateCombatRecord` | 中级作战记录 |
+| 节点后缀                     | 商品名       |
+| ---------------------------- | ------------ |
+| `ArmsInspector`              | 武器检查单元 |
+| `ArmsINSPKit`                | 武器检查装置 |
+| `ArsenalTicket`              | 武库配额     |
+| `Oroberyl`                   | 嵌晶玉       |
+| `TCreds`                     | 折金票       |
+| `Protoprism`                 | 协议棱柱     |
+| `Protohedron`                | 协议棱柱组   |
+| `Protodisk`                  | 协议圆盘     |
+| `Protoset`                   | 协议圆盘组   |
+| `ElementaryCombatRecord`     | 初级作战记录 |
+| `IntermediateCombatRecord`   | 中级作战记录 |
 | `ElementaryCognitiveCarrier` | 初级认知载体 |
-| `CastDie` | 强固模具 |
-| `HeavyCastDie` | 重型强固模具 |
+| `CastDie`                    | 强固模具     |
+| `HeavyCastDie`               | 重型强固模具 |
 
 ### 5. 判断刷新状态
 
@@ -161,10 +161,10 @@ ExpressionRecognition.*CreditShoppingReserveCreditOCRInternal
 
 ```json
 {
-  "expression": "{CreditShoppingReserveCreditOCRInternal}>=300",
-  "resolved_expression": "850>=300",
-  "values": {"CreditShoppingReserveCreditOCRInternal": 850},
-  "matched": true
+    "expression": "{CreditShoppingReserveCreditOCRInternal}>=300",
+    "resolved_expression": "850>=300",
+    "values": {"CreditShoppingReserveCreditOCRInternal": 850},
+    "matched": true
 }
 ```
 
@@ -183,28 +183,28 @@ ExpressionRecognition.*CreditShoppingReserveCreditOCRInternal
 
 ## 前端配置
 
-| 功能 | 状态 |
-|------|------|
-| Priority 1 购买 | 启用 / 关闭 |
-| Priority 2 购买 | 启用 / 关闭 |
-| 稳健刷新 | 启用 / **关闭（主动禁用）** |
-| RefreshItem | 启用 / 关闭 |
+| 功能            | 状态                        |
+| --------------- | --------------------------- |
+| Priority 1 购买 | 启用 / 关闭                 |
+| Priority 2 购买 | 启用 / 关闭                 |
+| 稳健刷新        | 启用 / **关闭（主动禁用）** |
+| RefreshItem     | 启用 / 关闭                 |
 
 ## 实际购买
 
-| # | 时间 | 商品 | 折扣 | 购买路径 |
-|---|------|------|------|---------|
-| 1 | ... | 武器检查单元 | -75% | Priority 2 扫描命中 |
-| 2 | ... | 协议棱柱组 | -50% | RefreshCountReached 后续购买 |
+| #   | 时间 | 商品         | 折扣 | 购买路径                     |
+| --- | ---- | ------------ | ---- | ---------------------------- |
+| 1   | ...  | 武器检查单元 | -75% | Priority 2 扫描命中          |
+| 2   | ...  | 协议棱柱组   | -50% | RefreshCountReached 后续购买 |
 
 ## 折扣全览（首次扫描时商店）
 
-| 槽位 x | 折扣 | 是否购买 |
-|--------|------|---------|
-| x=156 | -75% | ✅ 已买 |
-| x=326 | -50% | ✅ 已买 |
-| x=499 | -25% | ✅ 已买 |
-| x=640 | -25% | ❌ 未买（未达阈值且刷新关闭） |
+| 槽位 x | 折扣 | 是否购买                      |
+| ------ | ---- | ----------------------------- |
+| x=156  | -75% | ✅ 已买                       |
+| x=326  | -50% | ✅ 已买                       |
+| x=499  | -25% | ✅ 已买                       |
+| x=640  | -25% | ❌ 未买（未达阈值且刷新关闭） |
 
 ## 刷新状态
 
@@ -214,11 +214,11 @@ ExpressionRecognition.*CreditShoppingReserveCreditOCRInternal
 
 ## 信用点时间线
 
-| 时间 | 信用点读数 | 事件 |
-|------|-----------|------|
-| 01:22:57 | 850 | 任务开始，储备门控 ≥300 通过 |
-| 01:23:06 | 528 | 购买①后 |
-| 01:23:16 | 758 ⚠️ | OCR 疑似误读（购买②后数值应偏低） |
+| 时间     | 信用点读数 | 事件                              |
+| -------- | ---------- | --------------------------------- |
+| 01:22:57 | 850        | 任务开始，储备门控 ≥300 通过      |
+| 01:23:06 | 528        | 购买①后                           |
+| 01:23:16 | 758 ⚠️     | OCR 疑似误读（购买②后数值应偏低） |
 ```
 
 ## 约束（Guardrails）

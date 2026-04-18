@@ -2,7 +2,7 @@
 
 本文件提供具体的重构示例，供修改代码时对照。
 
-## 成员变量命名：camelCase → snake_case_
+## 成员变量命名：camelCase → snake*case*
 
 ### MapTypes.h — `MapPosition`
 
@@ -239,6 +239,7 @@ LogDebug << VAR(score) << VAR(zone_id) << VAR(search_rect);
 ### 成员变量尾下划线一致性
 
 MaaFramework 中所有类成员变量无例外地使用 `trailing_underscore_`：
+
 - `tasker_`, `entry_`, `stdout_level_`, `trace_mutex_`
 
 cpp-algo 中 `MapLocator::Impl` 的 `motionTracker`、`currentZoneId` 等应统一改为 `motion_tracker_`、`current_zone_id_`。
