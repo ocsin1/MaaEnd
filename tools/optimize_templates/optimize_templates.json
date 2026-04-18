@@ -149,7 +149,7 @@
     "resource/image/MapTracker/pointer": "677520eb05ba681a87df470bfa62d817fd50c7d2ccab7fdf29698dfef206a4c0",
     "resource/image/MapTracker/map/map02_lv002_tier_259": "e6edfc6c3edddeb6058b96c16628a004d06c0fcb385b2d5c8a63b4e8963a1856",
     "resource/image/MapTracker/map/map02_lv001_tier_277": "b7f2bceb8ebdaa08988aefafe5d28be71552902bc346546445579379e3b7bc15",
-    "resource/image/MapTracker/map/map02_lv002": "7c09c7f555a11ffc0883092f35ce770098cfa42db63a5ab107bf1537ba3cd81f",
+    "resource/image/MapTracker/map/map02_lv002": "ac4a91353de6bd269fa8509948ad501059156d20a23d1668f77d7fa20da55c19",
     "resource/image/MapTracker/map/map01_lv001_tier_171": "07f62fdac20a767e697cfc2935c9a38b832c290cd2672d4f2470dee1d6f6f002",
     "resource/image/MapTracker/map/map01_lv001_tier_172": "add01412e327d52271c5656912299336bad0d941581e4724bd62491df5a3cca5",
     "resource/image/MapTracker/map/map01_lv007_tier_135": "509db6a4461a1cde48ab15611f6751c9012c37abd06fd8384c3ba0636546ec0b",
@@ -160,7 +160,7 @@
     "resource/image/MapTracker/map/map02_lv002_tier_257": "526e11ad597a8e0f8b079ea2473cbd815d02933535aac918ceb8660bb7574fd9",
     "resource/image/MapTracker/map/map01_lv003_tier_18": "23fcdc7ed3142f60853349909742651babf54b575e232676148f64e3b0699e34",
     "resource/image/MapTracker/map/map01_lv001_tier_173": "78d4a5fb37460890551750aea2a3ddc02f4c3dd40a12003e753af69792a72e03",
-    "resource/image/MapTracker/map/map02_lv001": "2c0fd5a7873edc00806c1e8ed798ebd679d1c2e9c623b671bc5cfd7c9aa24a68",
+    "resource/image/MapTracker/map/map02_lv001": "5d49cc139e570f817f7d7e09eb5697bba3cf498de780dc228f17d839510c870f",
     "resource/image/MapTracker/map/map01_lv006_tier_87": "80bba3bca9896bed13b311f63532c63c56c9a9ef48dfee45e2e6558d133001c3",
     "resource/image/MapTracker/map/map02_lv002_tier_276": "3a5cb86b33a9252555ef6a560afcba7bd7222ba2c2f31aa6ade34172b65a4ebd",
     "resource/image/MapTracker/map/map01_lv003_tier_19": "1b83b213ea2373afc76bcc5b71aee5bbe600051965f0a142a6d28fd025d53922",
@@ -522,7 +522,7 @@
     "resource/image/EssenceFilter/DiscardButton": "e4e303827d4068b6b01ad73bef9abef41b8b0068d15586daf670f9e14c3b655c",
     "resource/image/EssenceFilter/EssenceGeneral": "b0e1dc8e0c270eac546accc885bf2aa0e2706765ee8c83083ff125cb96ee6240",
     "resource/image/EssenceFilter/EssenceSlot": "e158492fae033dd40f745e4ec8f151a487e74b7204e08ce56e0cdb8ed8096b40",
-    "resource/image/MapTracker/map/map02_lv003": "b47e72628b812d1a8a34fa9f28cb9a27255d74405d51182a5b2395db2f226867",
+    "resource/image/MapTracker/map/map02_lv003": "c0921b1ed696f8e91be0a105a5eed87a44c954e6e4380dd35bd026bf9061c1a8",
     "resource/image/MapTracker/BigMapZoomOut": "1a895419d93c782c6ae56124b460bf6ccd40948c3156c7722b1b7d5790f5ee3b",
     "resource/image/MapTracker/BigMapZoomIn": "be8184878ba4b345abae591bbcee78273d6ea7f954eed285065b1aa5f8ded050",
     "resource/image/BetterSliding/SwipeButton": "5cb0944d3df029d6eaa7c064afc555c6bcaf43a9069cc2d57bc82769723ab143",
@@ -661,5 +661,6 @@
     "resource/image/EnvironmentMonitoring/TargetChecked": "dde5daa0065670ae9344b2a449e4d582ca5d24e92149184c9407dce8471c05e6",
     "resource/image/SceneManager/MenuPassNew": "2090d22529cc28d2f622c676f0f8215df8a04912a6ed9d2e07bc9f31fa16e9fe",
     "resource/image/MapLocator/Wuling/Lv004Tier330": "1695949634957d96b65fc985f1be52cc3542c7b5ae19b7fb602e51395a2b02b9",
-    "resource/image/MapLocator/Wuling/Lv004Tier328": "062cba1aae39eda8df3ed3a26fb4f484ea05ea92f09056171160a7d40ce77235"
+    "resource/image/MapLocator/Wuling/Lv004Tier328": "062cba1aae39eda8df3ed3a26fb4f484ea05ea92f09056171160a7d40ce77235",
+    "resource/image/MapTracker/map/map02_lv004": "6d63bd9404f6a8b480182a6dd56af3cbc544d1da9f7601af303b318db5652045"
 }
