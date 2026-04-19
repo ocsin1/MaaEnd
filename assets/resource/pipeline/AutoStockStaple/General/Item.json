@@ -239,18 +239,18 @@
                     "GreenMask": true,
                     "Quantity": {
                         "Box": [
-                            365,
-                            493,
-                            111,
-                            60
+                            367,
+                            473,
+                            102,
+                            94
                         ],
                         "OnlyRec": false
                     },
                     "QuantityFilter": {
                         "lower": [
                             28,
-                            255,
-                            255
+                            100,
+                            100
                         ],
                         "upper": [
                             28,
@@ -262,10 +262,10 @@
                 }
             }
         },
-        "post_delay": 0,
-        "rate_limit": 0,
         "attach": {
             "Target": 10 //这里会被custom程序覆盖后运行
-        }
+        },
+        "post_delay": 0,
+        "rate_limit": 0
     }
 }
