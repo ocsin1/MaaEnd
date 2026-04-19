@@ -262,10 +262,10 @@
                 }
             }
         },
+        "post_delay": 0,
+        "rate_limit": 0,
         "attach": {
             "Target": 10 //这里会被custom程序覆盖后运行
-        },
-        "post_delay": 0,
-        "rate_limit": 0
+        }
     }
 }
