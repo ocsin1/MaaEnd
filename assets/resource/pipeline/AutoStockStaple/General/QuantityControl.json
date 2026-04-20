@@ -73,8 +73,8 @@
         ]
     },
     "AutoStockStapleQuantityControlValleyEngravingPermitRemoveFilter": {
-        "max_hit": 1,
         "desc": "谷地刻写券移除筛选",
+        "max_hit": 1,
         "pre_delay": 0,
         "action": {
             "type": "Custom",
@@ -162,8 +162,8 @@
         ]
     },
     "AutoStockStapleQuantityControlKunstTubeRemoveFilter": {
-        "max_hit": 1,
         "desc": "附术铁瓶移除筛选",
+        "max_hit": 1,
         "pre_delay": 0,
         "action": {
             "type": "Custom",
@@ -251,8 +251,8 @@
         ]
     },
     "AutoStockStapleQuantityControlJakubsLegacyRemoveFilter": {
-        "max_hit": 1,
         "desc": "雅各布的遗产移除筛选",
+        "max_hit": 1,
         "pre_delay": 0,
         "action": {
             "type": "Custom",
@@ -340,8 +340,8 @@
         ]
     },
     "AutoStockStapleQuantityControlPulledSlugMeatRemoveFilter": {
-        "max_hit": 1,
         "desc": "手撕虫肉移除筛选",
+        "max_hit": 1,
         "pre_delay": 0,
         "action": {
             "type": "Custom",
@@ -429,8 +429,8 @@
         ]
     },
     "AutoStockStapleQuantityControlHazefyreBlossomRemoveFilter": {
-        "max_hit": 1,
         "desc": "雾火之花移除筛选",
+        "max_hit": 1,
         "pre_delay": 0,
         "action": {
             "type": "Custom",
@@ -518,8 +518,8 @@
         ]
     },
     "AutoStockStapleQuantityControlCartilageCookieRemoveFilter": {
-        "max_hit": 1,
         "desc": "软骨饼干移除筛选",
+        "max_hit": 1,
         "pre_delay": 0,
         "action": {
             "type": "Custom",
@@ -607,8 +607,8 @@
         ]
     },
     "AutoStockStapleQuantityControlCosmoMeltoJellyRemoveFilter": {
-        "max_hit": 1,
         "desc": "星融果冻移除筛选",
+        "max_hit": 1,
         "pre_delay": 0,
         "action": {
             "type": "Custom",
@@ -696,8 +696,8 @@
         ]
     },
     "AutoStockStapleQuantityControlKeenValleyDetectorRemoveFilter": {
-        "max_hit": 1,
         "desc": "新锐谷地探物器移除筛选",
+        "max_hit": 1,
         "pre_delay": 0,
         "action": {
             "type": "Custom",
@@ -785,8 +785,8 @@
         ]
     },
     "AutoStockStapleQuantityControlKeenValleyCompassRemoveFilter": {
-        "max_hit": 1,
         "desc": "新锐谷地罗盘移除筛选",
+        "max_hit": 1,
         "pre_delay": 0,
         "action": {
             "type": "Custom",
@@ -874,8 +874,8 @@
         ]
     },
     "AutoStockStapleQuantityControlBreezeOfKjerschRemoveFilter": {
-        "max_hit": 1,
         "desc": "耶尔什微风移除筛选",
+        "max_hit": 1,
         "pre_delay": 0,
         "action": {
             "type": "Custom",
@@ -963,8 +963,8 @@
         ]
     },
     "AutoStockStapleQuantityControlTidestoneSpecimenRemoveFilter": {
-        "max_hit": 1,
         "desc": "浪潮海石移除筛选",
+        "max_hit": 1,
         "pre_delay": 0,
         "action": {
             "type": "Custom",
@@ -1052,8 +1052,8 @@
         ]
     },
     "AutoStockStapleQuantityControlSimonchShawlRemoveFilter": {
-        "max_hit": 1,
         "desc": "塞梦珂披巾移除筛选",
+        "max_hit": 1,
         "pre_delay": 0,
         "action": {
             "type": "Custom",
@@ -1141,8 +1141,8 @@
         ]
     },
     "AutoStockStapleQuantityControlFrontiersWatchRemoveFilter": {
-        "max_hit": 1,
         "desc": "《前沿瞭望》移除筛选",
+        "max_hit": 1,
         "pre_delay": 0,
         "action": {
             "type": "Custom",
@@ -1230,8 +1230,8 @@
         ]
     },
     "AutoStockStapleQuantityControlAuryleneCameraRemoveFilter": {
-        "max_hit": 1,
         "desc": "醚质相机移除筛选",
+        "max_hit": 1,
         "pre_delay": 0,
         "action": {
             "type": "Custom",
@@ -1319,8 +1319,8 @@
         ]
     },
     "AutoStockStapleQuantityControlCosmicGatePuzzleRemoveFilter": {
-        "max_hit": 1,
         "desc": "星门锁移除筛选",
+        "max_hit": 1,
         "pre_delay": 0,
         "action": {
             "type": "Custom",
@@ -1408,8 +1408,8 @@
         ]
     },
     "AutoStockStapleQuantityControlSurfingFestivalTicketRemoveFilter": {
-        "max_hit": 1,
         "desc": "冲浪大赛门票移除筛选",
+        "max_hit": 1,
         "pre_delay": 0,
         "action": {
             "type": "Custom",
@@ -1497,8 +1497,8 @@
         ]
     },
     "AutoStockStapleQuantityControlWulingEngravingPermitRemoveFilter": {
-        "max_hit": 1,
         "desc": "武陵刻写券移除筛选",
+        "max_hit": 1,
         "pre_delay": 0,
         "action": {
             "type": "Custom",
@@ -1586,8 +1586,8 @@
         ]
     },
     "AutoStockStapleQuantityControlFortifyingInfusionRemoveFilter": {
-        "max_hit": 1,
         "desc": "正本补元汤剂移除筛选",
+        "max_hit": 1,
         "pre_delay": 0,
         "action": {
             "type": "Custom",
@@ -1675,8 +1675,8 @@
         ]
     },
     "AutoStockStapleQuantityControlGardenFriedRiceRemoveFilter": {
-        "max_hit": 1,
         "desc": "锦素炒饭移除筛选",
+        "max_hit": 1,
         "pre_delay": 0,
         "action": {
             "type": "Custom",
@@ -1764,8 +1764,8 @@
         ]
     },
     "AutoStockStapleQuantityControlMasterPansEggPuddingRemoveFilter": {
-        "max_hit": 1,
         "desc": "潘师傅蛋羹移除筛选",
+        "max_hit": 1,
         "pre_delay": 0,
         "action": {
             "type": "Custom",
@@ -1853,8 +1853,8 @@
         ]
     },
     "AutoStockStapleQuantityControlEchoingRemedyRemoveFilter": {
-        "max_hit": 1,
         "desc": "回响秘剂移除筛选",
+        "max_hit": 1,
         "pre_delay": 0,
         "action": {
             "type": "Custom",
@@ -1942,8 +1942,8 @@
         ]
     },
     "AutoStockStapleQuantityControlWulingArtificingCatalystRemoveFilter": {
-        "max_hit": 1,
         "desc": "武陵精锻助剂移除筛选",
+        "max_hit": 1,
         "pre_delay": 0,
         "action": {
             "type": "Custom",
@@ -2031,8 +2031,8 @@
         ]
     },
     "AutoStockStapleQuantityControlKeenWulingDetectorRemoveFilter": {
-        "max_hit": 1,
         "desc": "新锐武陵探物器移除筛选",
+        "max_hit": 1,
         "pre_delay": 0,
         "action": {
             "type": "Custom",
@@ -2120,8 +2120,8 @@
         ]
     },
     "AutoStockStapleQuantityControlKeenWulingCompassRemoveFilter": {
-        "max_hit": 1,
         "desc": "新锐武陵罗盘移除筛选",
+        "max_hit": 1,
         "pre_delay": 0,
         "action": {
             "type": "Custom",
@@ -2209,8 +2209,8 @@
         ]
     },
     "AutoStockStapleQuantityControlEurekaTeaboxRemoveFilter": {
-        "max_hit": 1,
         "desc": "岳研茶盒移除筛选",
+        "max_hit": 1,
         "pre_delay": 0,
         "action": {
             "type": "Custom",
@@ -2298,8 +2298,8 @@
         ]
     },
     "AutoStockStapleQuantityControlYinglungDumbbellsRemoveFilter": {
-        "max_hit": 1,
         "desc": "应龙哑铃移除筛选",
+        "max_hit": 1,
         "pre_delay": 0,
         "action": {
             "type": "Custom",
@@ -2387,8 +2387,8 @@
         ]
     },
     "AutoStockStapleQuantityControlWovenAggelosRemoveFilter": {
-        "max_hit": 1,
         "desc": "草编天使移除筛选",
+        "max_hit": 1,
         "pre_delay": 0,
         "action": {
             "type": "Custom",
@@ -2476,8 +2476,8 @@
         ]
     },
     "AutoStockStapleQuantityControlScrimshawOfThePackRemoveFilter": {
-        "max_hit": 1,
         "desc": "狼群骨雕移除筛选",
+        "max_hit": 1,
         "pre_delay": 0,
         "action": {
             "type": "Custom",
@@ -2565,8 +2565,8 @@
         ]
     },
     "AutoStockStapleQuantityControlChubbyLungFangxingMemorabiliaRemoveFilter": {
-        "max_hit": 1,
         "desc": "龙泡泡·方兴纪念移除筛选",
+        "max_hit": 1,
         "pre_delay": 0,
         "action": {
             "type": "Custom",
@@ -2655,9 +2655,6 @@
         ]
     },
     "AutoStockStapleQuantityControlResetRecognitionParams": {
-        "post_delay": 0,
-        "pre_delay": 0,
-        "rate_limit": 0,
         "desc": "重置识别参数",
         "recognition": {
             "type": "And",
@@ -2668,6 +2665,7 @@
                 ]
             }
         },
+        "pre_delay": 0,
         "action": {
             "type": "Custom",
             "param": {
@@ -2676,11 +2674,11 @@
                     "target": "AutoStockInStapleItemName"
                 }
             }
-        }
+        },
+        "post_delay": 0,
+        "rate_limit": 0
     },
     "AutoStockStapleQuantityControlCloseBuyWindow": {
-        "post_wait_freezes": 200,
-        "post_delay": 0,
         "desc": "关闭购买窗口",
         "recognition": {
             "type": "And",
@@ -2692,11 +2690,11 @@
         },
         "action": {
             "type": "Click"
-        }
+        },
+        "post_wait_freezes": 200,
+        "post_delay": 0
     },
     "AutoStockStapleQuantityControlCloseRewards": {
-        "post_wait_freezes": 200,
-        "post_delay": 0,
         "desc": "关闭奖励窗口",
         "recognition": {
             "type": "And",
@@ -2708,6 +2706,8 @@
         },
         "action": {
             "type": "Click"
-        }
+        },
+        "post_wait_freezes": 200,
+        "post_delay": 0
     }
 }
