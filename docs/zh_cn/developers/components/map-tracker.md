@@ -290,5 +290,5 @@ python tools/map_tracker/map_tracker_editor.py
 ✅**完成编辑**：在任意编辑页面的侧边栏中，点击 Finish 按钮可以选择导出方式。
 
 > [!TIP]
-> 
+>
 > 如果您是在“编辑已有节点”模式下进行编辑的，那么您也可以直接点击 Save 按钮来将更改一键保存到文件中！
