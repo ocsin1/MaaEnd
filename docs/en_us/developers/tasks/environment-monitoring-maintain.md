@@ -12,26 +12,26 @@ The core characteristic of environment monitoring is **"data-driven + template b
 
 The core maintenance points for environment monitoring are:
 
-| Module                  | Path                                                                                | Purpose                                                                                                                                          |
-| ----------------------- | ----------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Task entry              | `assets/tasks/EnvironmentMonitoring.json`                                           | Interface task definition (no configurable options; controller = Win32-Front / Wlroots / ADB)                                                    |
-| Main-flow Pipeline      | `assets/resource/pipeline/EnvironmentMonitoring.json`                               | Top-level entry node `EnvironmentMonitoringMain`, loops over the two monitoring terminals                                                        |
-| Terminal groups (gen.)  | `assets/resource/pipeline/EnvironmentMonitoring/Terminals.json`                     | Entry nodes for Outskirts / MarkerStone terminals and their observation-point `next` lists (**generated**)                                       |
-| Terminal navigation     | `assets/resource/pipeline/EnvironmentMonitoring/Locations.json`                     | `EnvironmentMonitoringGoTo*` and `Select*` nodes that navigate from the main menu into the respective terminal                                   |
-| Photo-taking flow       | `assets/resource/pipeline/EnvironmentMonitoring/TakePhoto.json`                     | Enters photo mode, adjusts camera facing, identifies the shutter button, returns to the terminal after completion                                |
-| Camera swipe            | `assets/resource/pipeline/EnvironmentMonitoring/TakePhoto.json`                     | `EnvironmentMonitoringSwipeScreen{Up/Down/Left/Right}` four-direction facing adjustment                                                          |
-| Shared buttons          | `assets/resource/pipeline/EnvironmentMonitoring/Button.json`                        | Environment-monitoring-specific shared buttons such as `TrackMissionButton`                                                                      |
-| Observation-point nodes | `assets/resource/pipeline/EnvironmentMonitoring/{Station}/{Id}.json`                | **One JSON per observation point**, rendered from the template (**generated**)                                                                   |
-| Point template          | `tools/pipeline-generate/EnvironmentMonitoring/template.jsonc`                      | Single-observation-point Pipeline template (text recognition, accept/go-to, teleport, pathfinding, photo)                                       |
-| Terminal template       | `tools/pipeline-generate/EnvironmentMonitoring/terminals-template.jsonc`            | Terminal-group node template                                                                                                                     |
-| Route / coordinate data | `tools/pipeline-generate/EnvironmentMonitoring/routes.mjs`                          | `ROUTE_CONFIG`: teleport target, map name, path, camera-swipe direction for each observation point                                               |
-| Terminal list data      | `tools/pipeline-generate/EnvironmentMonitoring/terminals-data.mjs`                  | Terminal ID list; chains each observation-point Job node into the corresponding terminal's `next`                                                |
-| Game data snapshot      | `tools/pipeline-generate/EnvironmentMonitoring/kite_station.json`                   | Official terminal/commission data from `zmdmap` (multi-language names, `shotTargetName`)                                                         |
-| Generator config        | `tools/pipeline-generate/EnvironmentMonitoring/config.json`                         | Per-point output config: `outputPattern: "${Station}/${Id}.json"`                                                                                |
-| Terminal gen. config    | `tools/pipeline-generate/EnvironmentMonitoring/terminals-config.json`               | Merged terminal output config: `outputFile: "Terminals.json"`                                                                                    |
-| Locale strings          | `assets/locales/interface/*.json`                                                   | `task.EnvironmentMonitoring.*` label / description (task level; observation-point names use OCR)                                                 |
-| MapTracker dependency   | `agent/go-service/map-tracker/`                                                     | `MapTrackerMove`, `MapTrackerAssertLocation` (see [map-tracker.md](../components/map-tracker.md))                                                |
-| SceneManager dependency | `assets/resource/pipeline/SceneManager/`, `Interface/`                              | `SceneEnterWorldWuling*`, `SceneEnterMenuRegionalDevelopmentWulingEnvironmentMonitoring` (see [scene-manager.md](../scene-manager.md))            |
+| Module                  | Path                                                                     | Purpose                                                                                                                                |
+| ----------------------- | ------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------- |
+| Task entry              | `assets/tasks/EnvironmentMonitoring.json`                                | Interface task definition (no configurable options; controller = Win32-Front / Wlroots / ADB)                                          |
+| Main-flow Pipeline      | `assets/resource/pipeline/EnvironmentMonitoring.json`                    | Top-level entry node `EnvironmentMonitoringMain`, loops over the two monitoring terminals                                              |
+| Terminal groups (gen.)  | `assets/resource/pipeline/EnvironmentMonitoring/Terminals.json`          | Entry nodes for Outskirts / MarkerStone terminals and their observation-point `next` lists (**generated**)                             |
+| Terminal navigation     | `assets/resource/pipeline/EnvironmentMonitoring/Locations.json`          | `EnvironmentMonitoringGoTo*` and `Select*` nodes that navigate from the main menu into the respective terminal                         |
+| Photo-taking flow       | `assets/resource/pipeline/EnvironmentMonitoring/TakePhoto.json`          | Enters photo mode, adjusts camera facing, identifies the shutter button, returns to the terminal after completion                      |
+| Camera swipe            | `assets/resource/pipeline/EnvironmentMonitoring/TakePhoto.json`          | `EnvironmentMonitoringSwipeScreen{Up/Down/Left/Right}` four-direction facing adjustment                                                |
+| Shared buttons          | `assets/resource/pipeline/EnvironmentMonitoring/Button.json`             | Environment-monitoring-specific shared buttons such as `TrackMissionButton`                                                            |
+| Observation-point nodes | `assets/resource/pipeline/EnvironmentMonitoring/{Station}/{Id}.json`     | **One JSON per observation point**, rendered from the template (**generated**)                                                         |
+| Point template          | `tools/pipeline-generate/EnvironmentMonitoring/template.jsonc`           | Single-observation-point Pipeline template (text recognition, accept/go-to, teleport, pathfinding, photo)                              |
+| Terminal template       | `tools/pipeline-generate/EnvironmentMonitoring/terminals-template.jsonc` | Terminal-group node template                                                                                                           |
+| Route / coordinate data | `tools/pipeline-generate/EnvironmentMonitoring/routes.mjs`               | `ROUTE_CONFIG`: teleport target, map name, path, camera-swipe direction for each observation point                                     |
+| Terminal list data      | `tools/pipeline-generate/EnvironmentMonitoring/terminals-data.mjs`       | Terminal ID list; chains each observation-point Job node into the corresponding terminal's `next`                                      |
+| Game data snapshot      | `tools/pipeline-generate/EnvironmentMonitoring/kite_station.json`        | Official terminal/commission data from `zmdmap` (multi-language names, `shotTargetName`)                                               |
+| Generator config        | `tools/pipeline-generate/EnvironmentMonitoring/config.json`              | Per-point output config: `outputPattern: "${Station}/${Id}.json"`                                                                      |
+| Terminal gen. config    | `tools/pipeline-generate/EnvironmentMonitoring/terminals-config.json`    | Merged terminal output config: `outputFile: "Terminals.json"`                                                                          |
+| Locale strings          | `assets/locales/interface/*.json`                                        | `task.EnvironmentMonitoring.*` label / description (task level; observation-point names use OCR)                                       |
+| MapTracker dependency   | `agent/go-service/map-tracker/`                                          | `MapTrackerMove`, `MapTrackerAssertLocation` (see [map-tracker.md](../components/map-tracker.md))                                      |
+| SceneManager dependency | `assets/resource/pipeline/SceneManager/`, `Interface/`                   | `SceneEnterWorldWuling*`, `SceneEnterMenuRegionalDevelopmentWulingEnvironmentMonitoring` (see [scene-manager.md](../scene-manager.md)) |
 
 ## Main flow
 
@@ -137,18 +137,18 @@ When a new Station appears, **the generator side (`routes.mjs` + `data.mjs`) req
 
 `data.mjs`'s default export is an array; each element is the render context for one observation point (field names map to `${Xxx}` placeholders in `template.jsonc`). It reads the manually maintained `ROUTE_CONFIG` / `ROUTE_DEFAULTS` from `routes.mjs` and assembles each row together with `kite_station.json`:
 
-| Field                               | Source                                                                                  |
-| ----------------------------------- | --------------------------------------------------------------------------------------- |
-| `Station`                           | English terminal name from `kite_station.json` (PascalCase)                             |
-| `Id`                                | `ROUTE_CONFIG[*].Id` if provided; otherwise official English name PascalCase'd          |
-| `Name`                              | `name["zh-CN"]` from `kite_station.json`, special characters stripped                   |
-| `GoToMonitoringTerminal`            | Determined by `Station`                                                                  |
-| `EnterMap`                          | `ROUTE_CONFIG[*].EnterMap`; **must be an existing SceneManager node name**               |
-| `MapName` / `MapTarget` / `MapPath` | `ROUTE_CONFIG[*]`; maps to `MapTrackerMove` / `MapTrackerAssertLocation` parameters      |
-| `CameraSwipeDirection`              | `ROUTE_CONFIG[*]`; must be one of `EnvironmentMonitoringSwipeScreen{Up/Down/Left/Right}` |
+| Field                               | Source                                                                                                                                          |
+| ----------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Station`                           | English terminal name from `kite_station.json` (PascalCase)                                                                                     |
+| `Id`                                | `ROUTE_CONFIG[*].Id` if provided; otherwise official English name PascalCase'd                                                                  |
+| `Name`                              | `name["zh-CN"]` from `kite_station.json`, special characters stripped                                                                           |
+| `GoToMonitoringTerminal`            | Determined by `Station`                                                                                                                         |
+| `EnterMap`                          | `ROUTE_CONFIG[*].EnterMap`; **must be an existing SceneManager node name**                                                                      |
+| `MapName` / `MapTarget` / `MapPath` | `ROUTE_CONFIG[*]`; maps to `MapTrackerMove` / `MapTrackerAssertLocation` parameters                                                             |
+| `CameraSwipeDirection`              | `ROUTE_CONFIG[*]`; must be one of `EnvironmentMonitoringSwipeScreen{Up/Down/Left/Right}`                                                        |
 | `CameraMaxHit`                      | `ROUTE_CONFIG[*].CameraMaxHit`; defaults to `ROUTE_DEFAULTS.CameraMaxHit` (`2`); corresponds to the max-hit count for `${Id}AdjustCamera` swipe |
-| `ExpectedText`                      | Expanded automatically from `mission.name` multi-language map in `kite_station.json` (5 languages, English converted to a flexible regex) |
-| `InExpectedText`                    | Expanded from `mission.shotTargetName` in `kite_station.json`                            |
+| `ExpectedText`                      | Expanded automatically from `mission.name` multi-language map in `kite_station.json` (5 languages, English converted to a flexible regex)       |
+| `InExpectedText`                    | Expanded from `mission.shotTargetName` in `kite_station.json`                                                                                   |
 
 ### Terminal groups: `terminals-config.json`
 
