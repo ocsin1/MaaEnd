@@ -1,22 +1,22 @@
 {
-    "IndoorCropsJob": {
-        "desc": "室内作物任务",
+    "MiniShellbeastJob": {
+        "desc": "小壳兽任务",
         "max_hit": 1,
         "recognition": "And",
         "all_of": [
-            "CheckIndoorCropsText",
-            "CheckIndoorCropsIcon",
-            "CheckIndoorCropsReadyText"
+            "CheckMiniShellbeastText",
+            "CheckMiniShellbeastIcon",
+            "CheckMiniShellbeastReadyText"
         ],
         "pre_delay": 0,
         "post_delay": 0,
         "next": [
-            "AcceptIndoorCrops",
-            "GoToIndoorCropsMission"
+            "AcceptMiniShellbeast",
+            "GoToMiniShellbeastMission"
         ]
     },
-    "CheckIndoorCropsText": {
-        "desc": "检查是否有室内作物文本",
+    "CheckMiniShellbeastText": {
+        "desc": "检查是否有小壳兽文本",
         "recognition": "OCR",
         "roi": [
             63,
@@ -25,18 +25,18 @@
             71
         ],
         "expected": [
-            "室内作物",
-            "室內作物",
-            "(?i)Indoor\\s*Crops",
-            "室内の作物",
-            "실내 작물"
+            "小壳兽",
+            "小殼獸",
+            "(?i)Mini\\s*Shellbeast",
+            "小さな甲獣",
+            "작은 셸비스트"
         ],
         "order_by": "Vertical"
     },
-    "CheckIndoorCropsIcon": {
-        "desc": "检查室内作物文本下方的图标",
+    "CheckMiniShellbeastIcon": {
+        "desc": "检查小壳兽文本下方的图标",
         "recognition": "TemplateMatch",
-        "roi": "CheckIndoorCropsText",
+        "roi": "CheckMiniShellbeastText",
         "roi_offset": [
             -18,
             0,
@@ -46,10 +46,10 @@
         "template": "EnvironmentMonitoring/PhotoIcon.png",
         "threshold": 0.8
     },
-    "CheckIndoorCropsReadyText": {
-        "desc": "检查室内作物委托是否准备好",
+    "CheckMiniShellbeastReadyText": {
+        "desc": "检查小壳兽委托是否准备好",
         "recognition": "OCR",
-        "roi": "CheckIndoorCropsIcon",
+        "roi": "CheckMiniShellbeastIcon",
         "roi_offset": [
             -14,
             332,
@@ -69,10 +69,10 @@
             "임무로 이동하기"
         ]
     },
-    "CheckIndoorCropsJob": {
-        "desc": "检查室内作物委托是否可以接取",
+    "CheckMiniShellbeastJob": {
+        "desc": "检查小壳兽委托是否可以接取",
         "recognition": "OCR",
-        "roi": "CheckIndoorCropsIcon",
+        "roi": "CheckMiniShellbeastIcon",
         "roi_offset": [
             -14,
             332,
@@ -87,10 +87,10 @@
             "의뢰 수령"
         ]
     },
-    "CheckIndoorCropsGoToMissionText": {
-        "desc": "检查室内作物委托是否可以前往",
+    "CheckMiniShellbeastGoToMissionText": {
+        "desc": "检查小壳兽委托是否可以前往",
         "recognition": "OCR",
-        "roi": "CheckIndoorCropsIcon",
+        "roi": "CheckMiniShellbeastIcon",
         "roi_offset": [
             -14,
             332,
@@ -105,8 +105,8 @@
             "임무로 이동하기"
         ]
     },
-    "InIndoorCropsMission": {
-        "desc": "是否在室内作物任务界面",
+    "InMiniShellbeastMission": {
+        "desc": "是否在小壳兽任务界面",
         "recognition": "OCR",
         "roi": [
             415,
@@ -115,72 +115,72 @@
             241
         ],
         "expected": [
-            "拍摄室内培育的作物",
-            "拍攝室內培育的作物",
-            "(?i)Photograph\\s*the\\s*growing\\s*crop",
-            "室内栽培の作物の写真を撮る",
-            "실내 재배하고 있는 작물을 촬영하기"
+            "拍摄缩进壳中的小壳兽",
+            "拍攝縮進殼中的小殼獸",
+            "(?i)Photo:\\s*Mini\\s*Shellbeast\\s*in\\s*Defense",
+            "殻にこもる小さな甲獣の写真を撮る",
+            "껍질 속으로 숨은 작은 셸비스트를 촬영하기"
         ]
     },
-    "AcceptIndoorCrops": {
-        "desc": "接取室内作物委托",
+    "AcceptMiniShellbeast": {
+        "desc": "接取小壳兽委托",
         "recognition": "And",
         "all_of": [
-            "CheckIndoorCropsText",
-            "CheckIndoorCropsIcon",
-            "CheckIndoorCropsJob"
+            "CheckMiniShellbeastText",
+            "CheckMiniShellbeastIcon",
+            "CheckMiniShellbeastJob"
         ],
         "box_index": 2,
         "action": "Click",
         "next": [
-            "GoToIndoorCropsMission"
+            "GoToMiniShellbeastMission"
         ]
     },
-    "GoToIndoorCropsMission": {
-        "desc": "前往室内作物任务",
+    "GoToMiniShellbeastMission": {
+        "desc": "前往小壳兽任务",
         "recognition": "And",
         "all_of": [
-            "CheckIndoorCropsText",
-            "CheckIndoorCropsIcon",
-            "CheckIndoorCropsGoToMissionText"
+            "CheckMiniShellbeastText",
+            "CheckMiniShellbeastIcon",
+            "CheckMiniShellbeastGoToMissionText"
         ],
         "box_index": 2,
         "action": "Click",
         "next": [
-            "IndoorCropsTrackOrGoTo"
+            "MiniShellbeastTrackOrGoTo"
         ]
     },
-    "IndoorCropsTrackOrGoTo": {
-        "desc": "在室内作物任务中，如果有开始追踪的按钮就点击追踪，没有就直接前往",
+    "MiniShellbeastTrackOrGoTo": {
+        "desc": "在小壳兽任务中，如果有开始追踪的按钮就点击追踪，没有就直接前往",
         "recognition": "And",
         "all_of": [
-            "InIndoorCropsMission"
+            "InMiniShellbeastMission"
         ],
         "next": [
-            "TrackIndoorCrops",
-            "GoToIndoorCrops"
+            "TrackMiniShellbeast",
+            "GoToMiniShellbeast"
         ]
     },
-    "TrackIndoorCrops": {
-        "desc": "追踪室内作物任务",
+    "TrackMiniShellbeast": {
+        "desc": "追踪小壳兽任务",
         "recognition": "And",
         "all_of": [
             "TrackMissionButton",
-            "InIndoorCropsMission"
+            "InMiniShellbeastMission"
         ],
         "action": "Click",
         "next": [
-            "GoToIndoorCrops"
+            "GoToMiniShellbeast"
         ]
     },
-    "IndoorCropsNotAdapted": {
-        "desc": "室内作物任务尚未适配，仅接取并追踪",
+    "MiniShellbeastNotAdapted": {
+        "desc": "小壳兽任务尚未适配，仅接取并追踪",
         "focus": {
             "Node.Recognition.Succeeded": "$task.EnvironmentMonitoring.not_adapted"
         }
     },
-    "GoToIndoorCrops": {
-        "desc": "前往室内作物，先回到大世界再进行判断",
+    "GoToMiniShellbeast": {
+        "desc": "前往小壳兽，先回到大世界再进行判断",
         "action": "Custom",
         "custom_action": "SubTask",
         "custom_action_param": {
@@ -189,12 +189,12 @@
             ]
         },
         "next": [
-            "GoToIndoorCropsStartPos",
-            "GoToIndoorCropsNotAtStartPos"
+            "GoToMiniShellbeastStartPos",
+            "GoToMiniShellbeastNotAtStartPos"
         ]
     },
-    "GoToIndoorCropsStartPos": {
-        "desc": "在室内作物任务开始位置附近",
+    "GoToMiniShellbeastStartPos": {
+        "desc": "在小壳兽任务开始位置附近",
         "recognition": "Custom",
         "custom_recognition": "MapTrackerAssertLocation",
         "custom_recognition_param": {
@@ -202,20 +202,20 @@
                 {
                     "map_name": "map02_lv002",
                     "target": [
-                        240,
-                        695,
-                        15,
-                        15
+                        238.6,
+                        694.1,
+                        15.2,
+                        14.6
                     ]
                 }
             ]
         },
         "next": [
-            "GoToIndoorCropsMapTrackerMove"
+            "GoToMiniShellbeastMapTrackerMove"
         ]
     },
-    "GoToIndoorCropsNotAtStartPos": {
-        "desc": "不在室内作物任务开始位置附近，先传送再复核落点",
+    "GoToMiniShellbeastNotAtStartPos": {
+        "desc": "不在小壳兽任务开始位置附近，先传送再复核落点",
         "action": "Custom",
         "custom_action": "SubTask",
         "custom_action_param": {
@@ -224,12 +224,12 @@
             ]
         },
         "next": [
-            "GoToIndoorCropsRecheckStartPos",
-            "GoToIndoorCropsReEnterMap"
+            "GoToMiniShellbeastRecheckStartPos",
+            "GoToMiniShellbeastReEnterMap"
         ]
     },
-    "GoToIndoorCropsRecheckStartPos": {
-        "desc": "传送后再次检查是否已在室内作物任务开始位置附近",
+    "GoToMiniShellbeastRecheckStartPos": {
+        "desc": "传送后再次检查是否已在小壳兽任务开始位置附近",
         "recognition": "Custom",
         "custom_recognition": "MapTrackerAssertLocation",
         "custom_recognition_param": {
@@ -237,20 +237,20 @@
                 {
                     "map_name": "map02_lv002",
                     "target": [
-                        240,
-                        695,
-                        15,
-                        15
+                        238.6,
+                        694.1,
+                        15.2,
+                        14.6
                     ]
                 }
             ]
         },
         "next": [
-            "GoToIndoorCropsMapTrackerMove"
+            "GoToMiniShellbeastMapTrackerMove"
         ]
     },
-    "GoToIndoorCropsReEnterMap": {
-        "desc": "传送后仍未到达室内作物任务开始位置附近，重试一次传送",
+    "GoToMiniShellbeastReEnterMap": {
+        "desc": "传送后仍未到达小壳兽任务开始位置附近，重试一次传送",
         "action": "Custom",
         "custom_action": "SubTask",
         "custom_action_param": {
@@ -259,11 +259,11 @@
             ]
         },
         "next": [
-            "GoToIndoorCropsFinalCheckStartPos"
+            "GoToMiniShellbeastFinalCheckStartPos"
         ]
     },
-    "GoToIndoorCropsFinalCheckStartPos": {
-        "desc": "二次传送后再次检查是否已在室内作物任务开始位置附近",
+    "GoToMiniShellbeastFinalCheckStartPos": {
+        "desc": "二次传送后再次检查是否已在小壳兽任务开始位置附近",
         "recognition": "Custom",
         "custom_recognition": "MapTrackerAssertLocation",
         "custom_recognition_param": {
@@ -271,72 +271,56 @@
                 {
                     "map_name": "map02_lv002",
                     "target": [
-                        240,
-                        695,
-                        15,
-                        15
+                        238.6,
+                        694.1,
+                        15.2,
+                        14.6
                     ]
                 }
             ]
         },
         "next": [
-            "GoToIndoorCropsMapTrackerMove"
+            "GoToMiniShellbeastMapTrackerMove"
         ]
     },
-    "GoToIndoorCropsMapTrackerMove": {
-        "desc": "前往室内作物",
+    "GoToMiniShellbeastMapTrackerMove": {
+        "desc": "前往小壳兽",
         "action": "Custom",
         "custom_action": "MapTrackerMove",
         "custom_action_param": {
             "map_name": "map02_lv002",
             "path": [
                 [
-                    237,
-                    703
+                    240.3,
+                    703.6
                 ],
                 [
-                    219,
-                    705
+                    214.6,
+                    703.7
                 ],
                 [
                     214,
-                    716
+                    708.3
                 ],
                 [
-                    211,
-                    727
-                ],
-                [
-                    198,
-                    729
-                ],
-                [
-                    195,
-                    721
-                ],
-                [
-                    187,
-                    721
-                ],
-                [
-                    190,
-                    729
+                    182.8,
+                    707.9
                 ]
             ]
         },
         "anchor": {
             "EnvironmentMonitoringBactToTerminal": "EnvironmentMonitoringGoToOutskirtsMonitoringTerminal",
-            "EnvironmentMonitoringAdjustCamera": "IndoorCropsAdjustCamera"
+            "EnvironmentMonitoringAdjustCamera": "MiniShellbeastAdjustCamera"
         },
         "next": [
             "EnvironmentMonitoringTakePhoto"
         ]
     },
-    "IndoorCropsAdjustCamera": {
-        "desc": "室内作物任务中调整朝向",
+    "MiniShellbeastAdjustCamera": {
+        "desc": "小壳兽任务中调整朝向",
         "max_hit": 2,
         "next": [
-            "EnvironmentMonitoringSwipeScreenUp"
+            "EnvironmentMonitoringSwipeScreenLeft"
         ]
     }
 }
