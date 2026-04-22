@@ -6,7 +6,9 @@ import (
 	_ "image/png"
 	"math"
 	"os"
+	"runtime"
 	"sync"
+	"unsafe"
 )
 
 // Template represents a preloaded template image along with its integral array and statistics for matching.
@@ -83,6 +85,41 @@ func (i *TemplateLoader) Get() (*Template, error) {
 	return i.template, i.templateErr
 }
 
+var matchTemplateWorkerPool struct {
+	once  sync.Once
+	tasks chan func()
+}
+
+func runMatchWorkers(workerCount int, fn func(workerID int)) {
+	if workerCount <= 1 {
+		fn(0)
+		return
+	}
+
+	matchTemplateWorkerPool.once.Do(func() {
+		poolSize := max(1, runtime.GOMAXPROCS(0))
+		matchTemplateWorkerPool.tasks = make(chan func(), poolSize*2)
+		for range poolSize {
+			go func() {
+				for task := range matchTemplateWorkerPool.tasks {
+					task()
+				}
+			}()
+		}
+	})
+
+	var wg sync.WaitGroup
+	wg.Add(workerCount)
+	for workerID := range workerCount {
+		id := workerID
+		matchTemplateWorkerPool.tasks <- func() {
+			defer wg.Done()
+			fn(id)
+		}
+	}
+	wg.Wait()
+}
+
 func subpixelOffset(neg, pos float64) float64 {
 	wn := max(0.0, neg)
 	wp := max(0.0, pos)
@@ -98,6 +135,13 @@ func subpixelOffset(neg, pos float64) float64 {
 	return min(1.0, max(-1.0, offset))
 }
 
+func dotRGBA3(imgPix, tplPix *uint8, pixels int) uint64 {
+	if pixels <= 0 {
+		return 0
+	}
+	return dotRGBA3Impl(unsafe.Pointer(imgPix), unsafe.Pointer(tplPix), pixels)
+}
+
 // ComputeNCC computes the normalized cross-correlation between a rectangle region in the haystack image
 // and a template image, using precomputed integral array for efficiency
 func ComputeNCC(img *image.RGBA, imgIntArr IntegralArray, tpl *image.RGBA, tplStats StatsResult, ox, oy int) float64 {
@@ -111,18 +155,12 @@ func ComputeNCC(img *image.RGBA, imgIntArr IntegralArray, tpl *image.RGBA, tplSt
 	tpx, ts := tpl.Pix, tpl.Stride
 
 	var dot uint64
-	iOffBase := oy*is + ox*4
-	for y := range th {
-		iOff := iOffBase
-		tOff := y * ts
-		for range tw {
-			dot += uint64(ipx[iOff]) * uint64(tpx[tOff])
-			dot += uint64(ipx[iOff+1]) * uint64(tpx[tOff+1])
-			dot += uint64(ipx[iOff+2]) * uint64(tpx[tOff+2])
-			iOff += 4
-			tOff += 4
-		}
-		iOffBase += is
+	iOff := oy*is + ox*4
+	tOff := 0
+	for range th {
+		dot += dotRGBA3(&ipx[iOff], &tpx[tOff], tw)
+		iOff += is
+		tOff += ts
 	}
 
 	count := float64(tw * th * 3)
@@ -174,16 +212,7 @@ func ComputeNCCInCircle(
 
 		iOff := (oy+ty)*is + (ox+x0)*4
 		tOff := ty*ts + x0*4
-
-		for x := x0; x <= x1; x++ {
-			ir, ig, ib := uint64(ipx[iOff]), uint64(ipx[iOff+1]), uint64(ipx[iOff+2])
-			tr, tg, tb := uint64(tpx[tOff]), uint64(tpx[tOff+1]), uint64(tpx[tOff+2])
-
-			dot += ir*tr + ig*tg + ib*tb
-
-			iOff += 4
-			tOff += 4
-		}
+		dot += dotRGBA3(&ipx[iOff], &tpx[tOff], width)
 	}
 
 	count := float64(pixelCount * 3)
@@ -263,27 +292,23 @@ func MatchTemplateInArea(
 		s    float64
 	}
 
-	numWorkers, stepLen := 4, 3
-	resChan := make(chan result, numWorkers)
-
-	for i := range numWorkers {
-		go func(id int) {
-			lx, ly, lm := 0, 0, -1.0
-			for y := minY + id*stepLen; y <= maxY; y += numWorkers * stepLen {
-				for x := minX; x <= maxX; x += stepLen {
-					s := ComputeNCC(img, imgIntArr, tpl, tplStats, x, y)
-					if s > lm {
-						lm, lx, ly = s, x, y
-					}
+	numWorkers, stepLen := 8, 3
+	results := make([]result, numWorkers)
+	runMatchWorkers(numWorkers, func(id int) {
+		lx, ly, lm := 0, 0, -1.0
+		for y := minY + id*stepLen; y <= maxY; y += numWorkers * stepLen {
+			for x := minX; x <= maxX; x += stepLen {
+				s := ComputeNCC(img, imgIntArr, tpl, tplStats, x, y)
+				if s > lm {
+					lm, lx, ly = s, x, y
 				}
 			}
-			resChan <- result{lx, ly, lm}
-		}(i)
-	}
+		}
+		results[id] = result{lx, ly, lm}
+	})
 
 	bc := result{minX, minY, -1.0}
-	for range numWorkers {
-		r := <-resChan
+	for _, r := range results {
 		if r.s > bc.s {
 			bc = r
 		}
@@ -367,27 +392,23 @@ func MatchCircleTemplateInArea(
 		s float64
 	}
 
-	numWorkers, stepLen := 4, 3
-	resChan := make(chan result, numWorkers)
-
-	for i := range numWorkers {
-		go func(id int) {
-			lx, ly, lm := minX, minY, -1.0
-			for y := minY + id*stepLen; y <= maxY; y += numWorkers * stepLen {
-				for x := minX; x <= maxX; x += stepLen {
-					s := ComputeNCCInCircle(img, imgIntArr, tpl, tplCircleStats, spans, pixelCount, x, y)
-					if s > lm {
-						lm, lx, ly = s, x, y
-					}
+	numWorkers, stepLen := 8, 3
+	results := make([]result, numWorkers)
+	runMatchWorkers(numWorkers, func(id int) {
+		lx, ly, lm := minX, minY, -1.0
+		for y := minY + id*stepLen; y <= maxY; y += numWorkers * stepLen {
+			for x := minX; x <= maxX; x += stepLen {
+				s := ComputeNCCInCircle(img, imgIntArr, tpl, tplCircleStats, spans, pixelCount, x, y)
+				if s > lm {
+					lm, lx, ly = s, x, y
 				}
 			}
-			resChan <- result{lx, ly, lm}
-		}(i)
-	}
+		}
+		results[id] = result{lx, ly, lm}
+	})
 
 	bc := result{minX, minY, -1.0}
-	for range numWorkers {
-		r := <-resChan
+	for _, r := range results {
 		if r.s > bc.s {
 			bc = r
 		}
@@ -478,51 +499,47 @@ func MatchTemplateAnyScale(
 		}
 
 		workerCount := min(stepCount, 8)
-		resChan := make(chan result, stepCount)
+		results := make([]result, stepCount)
+		runMatchWorkers(workerCount, func(id int) {
+			for idx := id; idx < stepCount; idx += workerCount {
+				scale := minScale
+				if stepCount == 1 {
+					scale = (minScale + maxScale) * 0.5
+				} else {
+					scale = minScale + float64(idx)*stepLen
+				}
 
-		for workerID := range workerCount {
-			go func(id int) {
-				for idx := id; idx < stepCount; idx += workerCount {
-					scale := minScale
-					if stepCount == 1 {
-						scale = (minScale + maxScale) * 0.5
-					} else {
-						scale = minScale + float64(idx)*stepLen
-					}
+				if scale <= 0 {
+					results[idx] = result{idx: idx, scale: scale, score: -1.0, valid: false}
+					continue
+				}
 
-					if scale <= 0 {
-						resChan <- result{idx: idx, scale: scale, score: -1.0, valid: false}
-						continue
-					}
-
-					scaledTpl := ImageScale(tpl, scale)
-					scaledStats := GetImageStats(scaledTpl)
-					if scaledStats.Std < 1e-12 {
-						resChan <- result{
-							idx:   idx,
-							scale: scale,
-							score: -1.0,
-							valid: false,
-						}
-						continue
-					}
-
-					x, y, score := MatchTemplate(img, imgIntArr, scaledTpl, scaledStats)
-
-					resChan <- result{
+				scaledTpl := ImageScale(tpl, scale)
+				scaledStats := GetImageStats(scaledTpl)
+				if scaledStats.Std < 1e-12 {
+					results[idx] = result{
 						idx:   idx,
 						scale: scale,
-						x:     x,
-						y:     y,
-						score: score,
-						valid: true,
+						score: -1.0,
+						valid: false,
 					}
+					continue
 				}
-			}(workerID)
-		}
 
-		for range stepCount {
-			res := <-resChan
+				x, y, score := MatchTemplate(img, imgIntArr, scaledTpl, scaledStats)
+
+				results[idx] = result{
+					idx:   idx,
+					scale: scale,
+					x:     x,
+					y:     y,
+					score: score,
+					valid: true,
+				}
+			}
+		})
+
+		for _, res := range results {
 			if res.valid {
 				if res.score > iterBestScore {
 					iterBestScore = res.score
