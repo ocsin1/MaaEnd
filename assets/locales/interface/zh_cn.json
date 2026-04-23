@@ -729,5 +729,15 @@
     "task.BatchUseDetector.option.Category.Detector": "探物器",
     "task.BatchUseDetector.option.Category.Compass": "罗盘",
     "task.BatchUseDetector.option.Times.label": "使用次数",
-    "task.BatchUseDetector.option.Times.input.label": "次数"
+    "task.BatchUseDetector.option.Times.input.label": "次数",
+    "task.ResourceRecycleStation.label": "🦉资源回收站",
+    "task.ResourceRecycleStation.description": "自动收取武陵和四号谷地的资源回收站物资",
+    "option.ResourceRecycleStationRegion.label": "收取地区",
+    "option.ResourceRecycleStationWuling.label": "武陵",
+    "option.ResourceRecycleStationValleyIV.label": "四号谷地",
+    "task.ResourceRecycleStation.focus.WulingStart": "开始收取武陵资源回收站",
+    "task.ResourceRecycleStation.focus.ValleyIVStart": "开始收取四号谷地资源回收站",
+    "task.ResourceRecycleStation.focus.LimitReached": "稀有资源已达上限，滑动查看",
+    "task.ResourceRecycleStation.focus.Found": "发现资源回收站",
+    "task.ResourceRecycleStation.focus.Empty": "该地区暂无可收取资源"
 }
