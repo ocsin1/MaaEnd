@@ -3,14 +3,22 @@
 package maafocus
 
 import (
+	"fmt"
+
 	"github.com/MaaXYZ/maa-framework-go/v4"
 	"github.com/rs/zerolog/log"
 )
 
 const nodeName = "_GO_SERVICE_FOCUS_"
 
-// Print sends focus payload on node action starting event.
+// Print sends focus payload on node action starting event,
+// so that the client can make the payload visible to users.
+//
 // The actual UI rendering is handled by client side.
+// See https://maafw.com/en/docs/3.1-PipelineProtocol#node-notifications
+//
+// If the content is too large, consider using [PrintLargeContent]
+// to avoid potential performance issues.
 func Print(ctx *maa.Context, content string) {
 	if ctx == nil {
 		log.Warn().
@@ -34,4 +42,13 @@ func Print(ctx *maa.Context, content string) {
 			Str("event", "node_action_starting").
 			Msg("failed to send focus")
 	}
+}
+
+// PrintLargeContent sends payload to [fmt.Println] for large content.
+//
+// Instead of [Print], this function will not record the content into Maa's log system.
+//
+// Note that this function does not require a context argument.
+func PrintLargeContent(content string) {
+	fmt.Println(content)
 }
