@@ -506,6 +506,9 @@
         "recognition": "And",
         "all_of": ["_AutoEcoFarmInWorld"],
         "inverse": true,
-        "next": ["[JumpBack]SceneAnyEnterWorld", "_AutoEcoFarmJumpBack"]
+        "next": [
+            "[JumpBack]SceneAnyEnterWorld",
+            "_AutoEcoFarmJumpBack"
+        ]
     }
 }
