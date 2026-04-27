@@ -68,7 +68,7 @@
 `BetterSliding` 当前有两种执行模式：
 
 1. **对外调用模式**：当业务任务以 `custom_action: "BetterSliding"` 调用它时，Go 侧会自动构造内部 Pipeline override，并从 `BetterSlidingMain` 开始执行整条内部节点链。
-2. **内部节点模式**：在当前节点本身就是 `BetterSlidingMain`、`BetterSlidingFindStart`、`BetterSlidingGetMaxQuantity`、`BetterSlidingFindEnd`、`BetterSlidingCheckQuantity`、`BetterSlidingDone` 之一时，Go 侧会直接处理该阶段逻辑。
+2. **内部节点模式**：在当前节点本身就是 `BetterSlidingMain`、`BetterSlidingFindStart`、`BetterSlidingGetMaxTarget`、`BetterSlidingGetMaxQuantity`、`BetterSlidingFindEnd`、`BetterSlidingCheckQuantity`、`BetterSlidingDone` 之一时，Go 侧会直接处理该阶段逻辑。
 
 业务接入方通常只需要传一次 `custom_action_param`，**不需要**手动串起内部节点。
 
@@ -80,14 +80,15 @@
 
 1. 识别滑块当前位置，记录滑动起点。
 2. 将滑块拖到最大值。
-3. OCR 识别当前最大可选数量。
-4. 再次识别滑块位置，记录滑动终点。
-5. 根据 `Target` 与 `maxQuantity` 计算精确点击位置。
-6. 点击该位置。
-7. OCR 再次识别当前数量；若仍不等于目标值，则通过加减按钮微调。
-8. 数量与目标一致后结束。
+3. 若提供了 `MaxTarget`，则通过 OCR 读取物品的**最大可用数量**（从专门的 `MaxTarget.Box` 区域），并据此解析有效目标值。若 `MaxTarget` 未提供，则该步骤保持禁用。
+4. 通过 OCR 从 `Quantity.Box` 区域读取**滑块终点值**。若步骤 3 被跳过，则使用该值作为回退来解析有效目标值。
+5. 再次识别滑块位置，记录滑动终点。
+6. 根据解析后的目标值与滑块终点值计算精确点击位置。
+7. 点击该位置。
+8. OCR 再次识别当前数量；若仍不等于目标值，则通过加减按钮微调。
+9. 数量与目标一致后结束。
 
-其中第 5 步的精确点击位置按线性插值计算：
+其中第 6 步的精确点击位置按线性插值计算：
 
 ```text
 numerator = Target - 1
@@ -190,41 +191,46 @@ clickY = startY + (endY - startY) * numerator / denominator
 
 除上表 4 个字段外，其余参数当前都只能从 `custom_action_param` 读取：
 
-| 字段                      | 类型                    | 必填 | 说明                                                                                                                                                                                                 |
-| ------------------------- | ----------------------- | ---- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `GreenMask`               | `bool`                  | 否   | 使用模板路径定位按钮时，是否对模板匹配启用绿色掩膜过滤。默认 `false`。                                                                                                                               |
-| `Quantity.Box`            | `int[4]`                | 是\* | 当前数量 OCR 区域，格式固定为 `[x, y, w, h]`。仅滑动模式下忽略。                                                                                                                                     |
-| `MaxQuantity.Box`         | `int[4]`                | 否   | `BetterSlidingGetMaxQuantity` 用于识别“最大可选数量”的 OCR 区域，格式固定为 `[x, y, w, h]`。若整个 `MaxQuantity` 都未填写，go-service 会回落到 `Quantity`。                                          |
-| `Quantity.Filter`         | `object`                | 否   | 当前数量 OCR 的可选颜色过滤参数，适合数字颜色稳定但背景干扰较多的场景。                                                                                                                              |
-| `MaxQuantity.Filter`      | `object`                | 否   | 最大数量 OCR 的可选颜色过滤参数。若整个 `MaxQuantity` 都未填写，go-service 会回落到 `Quantity.Filter`。                                                                                              |
-| `Quantity.OnlyRec`        | `bool`                  | 否   | 是否为数量 OCR 节点启用 `only_rec`。当前默认值为 `false`；若显式传入，则按传入值覆盖。Go 侧仍只从 `Results.Best.AsOCR().Text` 读取数量文本。                                                         |
-| `MaxQuantity.OnlyRec`     | `bool`                  | 否   | 是否为 `BetterSlidingGetMaxQuantity` 的 OCR 节点启用 `only_rec`。若整个 `MaxQuantity` 都未填写，go-service 会回落到 `Quantity`。一旦传入 `MaxQuantity`，就按与 `Quantity` 相同的 JSON 结构独立解析。 |
-| `Direction`               | `string`                | 是   | 拖动方向，支持 `left` / `right` / `up` / `down`。Go 侧会先去掉首尾空白并转成小写后再校验。                                                                                                           |
-| `IncreaseButton`          | `string` 或 `int[2\|4]` | 是\* | "增加数量"按钮。可传模板路径，也可传坐标。仅滑动模式下忽略。                                                                                                                                         |
-| `DecreaseButton`          | `string` 或 `int[2\|4]` | 是\* | "减少数量"按钮。可传模板路径，也可传坐标。仅滑动模式下忽略。                                                                                                                                         |
-| `CenterPointOffset`       | `int[2]`                | 否   | 相对滑块识别框中心点的点击偏移，默认 `[-10, 0]`。                                                                                                                                                    |
-| `ClampTargetToMax`        | `bool`                  | 否   | 为 `true` 时，若目标超过识别到的 `maxQuantity`，自动将目标值钳制为 `maxQuantity` 并继续，而非直接失败。默认 `false`（超过上限时直接失败）。                                                          |
-| `SwipeButton`             | `string`                | 否   | 自定义滑块模板路径。提供时覆盖 `BetterSlidingSwipeButton` 节点的默认模板。路径相对于 `resource/image/` 目录。默认 `""`（使用共享默认模板）。                                                         |
-| `ExceedingOverrideEnable` | `string`                | 否   | 当解析后的目标超出可滑动范围时，将指定 Pipeline 节点的 `enabled` 设为 `true`，然后返回成功。用于目标无法到达时触发降级分支。默认 `""`（禁用，动作直接失败）。                                        |
+| 字段                      | 类型                    | 必填 | 说明                                                                                                                                                                                                                                                           |
+| ------------------------- | ----------------------- | ---- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `GreenMask`               | `bool`                  | 否   | 使用模板路径定位按钮时，是否对模板匹配启用绿色掩膜过滤。默认 `false`。                                                                                                                                                                                         |
+| `Quantity.Box`            | `int[4]`                | 是\* | 当前数量 OCR 区域，格式固定为 `[x, y, w, h]`。仅滑动模式下忽略。                                                                                                                                                                                               |
+| `MaxTarget.Box`           | `int[4]`                | 否   | OCR 区域，用于读取物品的最大可用数量（如可购买/可出售数量），由 `BetterSlidingGetMaxTarget` 用于 TargetType / TargetReverse 计算。格式固定为 `[x, y, w, h]`。若 `MaxTarget` 未填写，go-service 会使用 `BetterSlidingGetMaxQuantity` 读取的滑块终点值作为回退。 |
+| `Quantity.Filter`         | `object`                | 否   | 当前数量 OCR 的可选颜色过滤参数，适合数字颜色稳定但背景干扰较多的场景。                                                                                                                                                                                        |
+| `MaxTarget.Filter`        | `object`                | 否   | 最大目标数量 OCR 的可选颜色过滤参数。仅在显式提供 `MaxTarget` 时使用。                                                                                                                                                                                         |
+| `Quantity.OnlyRec`        | `bool`                  | 否   | 是否为数量 OCR 节点启用 `only_rec`。当前默认值为 `false`；若显式传入，则按传入值覆盖。Go 侧仍只从 `Results.Best.AsOCR().Text` 读取数量文本。                                                                                                                   |
+| `MaxTarget.OnlyRec`       | `bool`                  | 否   | 是否为 `BetterSlidingGetMaxTarget` 的 OCR 节点启用 `only_rec`。仅在显式提供 `MaxTarget` 时使用；一旦传入 `MaxTarget`，就按与 `Quantity` 相同的 JSON 结构独立解析。                                                                                             |
+| `Direction`               | `string`                | 是   | 拖动方向，支持 `left` / `right` / `up` / `down`。Go 侧会先去掉首尾空白并转成小写后再校验。                                                                                                                                                                     |
+| `IncreaseButton`          | `string` 或 `int[2\|4]` | 是\* | "增加数量"按钮。可传模板路径，也可传坐标。仅滑动模式下忽略。                                                                                                                                                                                                   |
+| `DecreaseButton`          | `string` 或 `int[2\|4]` | 是\* | "减少数量"按钮。可传模板路径，也可传坐标。仅滑动模式下忽略。                                                                                                                                                                                                   |
+| `CenterPointOffset`       | `int[2]`                | 否   | 相对滑块识别框中心点的点击偏移，默认 `[-10, 0]`。                                                                                                                                                                                                              |
+| `ClampTargetToMax`        | `bool`                  | 否   | 为 `true` 时，若目标超过识别到的 `maxQuantity`，自动将目标值钳制为 `maxQuantity` 并继续，而非直接失败。默认 `false`（超过上限时直接失败）。                                                                                                                    |
+| `SwipeButton`             | `string`                | 否   | 自定义滑块模板路径。提供时覆盖 `BetterSlidingSwipeButton` 节点的默认模板。路径相对于 `resource/image/` 目录。默认 `""`（使用共享默认模板）。                                                                                                                   |
+| `ExceedingOverrideEnable` | `string`                | 否   | 当解析后的目标超出可滑动范围时，将指定 Pipeline 节点的 `enabled` 设为 `true`，然后返回成功。上限溢出时现在会先由 `ClampTargetToMax` 钳制；下限反向溢出仍会走这里。默认 `""`（禁用，动作直接失败）。                                                                 |
 
 \* 正常模式下必填；仅滑动模式下忽略。
 
-### `MaxQuantity`
+### `MaxTarget`
 
-`MaxQuantity` 与 `Quantity` 使用完全相同的 JSON 结构：
+`MaxTarget` 代表**物品的最大可用数量**（即可以购买或出售的数量），通常显示在滑条以外的独立区域。它与 `Quantity` 使用完全相同的 JSON 结构：
 
 ```json
-"MaxQuantity": {
+"MaxTarget": {
     "Box": [360, 420, 110, 70],
     "OnlyRec": false
 }
 ```
 
-只有当界面上的**最大数量**与**当前可滑动数量**不在同一个 OCR 区域时，才需要单独填写 `MaxQuantity`。如果 `MaxQuantity` 整个对象缺失，或显式写成 `null`，go-service 会把 `Quantity` 作为 `BetterSlidingGetMaxQuantity` 的实际配置复用，包括 `Box`、`Filter` 与 `OnlyRec`。
+`MaxTarget` 与滑块终点值是两种不同的概念：
 
-这种回落是“整对象级别”的，不是按字段逐个继承。也就是说，一旦传入了 `MaxQuantity`，go-service 就不会再把其中缺失的子字段从 `Quantity` 补齐。
+- **`MaxTarget.Box`**：用于 OCR 识别**物品的最大可用数量**（如“该物品还能买多少个”）的区域。当提供时，`BetterSlidingGetMaxTarget` 会在 `SwipeToMax` 之后读取该值，并用于 `resolveTarget`（TargetType / TargetReverse 计算）。
+- **`Quantity.Box`**：同时用于读取**当前滑块数量**（`BetterSlidingGetQuantity`）和拖动到最大值后的**滑块终点值**（`BetterSlidingGetMaxQuantity`）的 OCR 区域。
 
-也就是说，常见场景依然只需要写 `Quantity`；`MaxQuantity` 只是为“最大数量显示区域与当前数量显示区域不一致”的少数场景提供覆盖入口。
+如果 `MaxTarget` 缺失或显式写成 `null`，则 `BetterSlidingGetMaxTarget` 保持禁用，`BetterSlidingGetMaxQuantity` 读取的滑块终点值会被用作 `resolveTarget` 的回退值。
+
+这种两阶段方法解决了滑块终点值与物品实际最大值不一致的场景——例如，滑块最大值固定为 9999，但物品本身只有 37 个库存。
+
+注意：`MaxTarget` 是“整对象级别”的开关。缺失时，专用的最大目标 OCR 路径保持禁用；一旦传入了 `MaxTarget`，go-service 就按该对象独立解析，不会再从 `Quantity` 按字段补齐缺失的子字段。
 
 `CenterPointOffset` 用于微调 `BetterSlidingPreciseClick` 的落点。格式固定为 `[x, y]`：
 
@@ -232,11 +238,11 @@ clickY = startY + (endY - startY) * numerator / denominator
 - `y` 为垂直方向偏移，负数表示向上，正数表示向下；
 - 不传时默认使用 `[-10, 0]`，即相对滑块中心向左偏移 10 像素。
 
-### `Quantity.Filter` / `MaxQuantity.Filter`
+### `Quantity.Filter` / `MaxTarget.Filter`
 
 `Quantity.Filter` 是一个**可选增强项**。不传时，仅表示不启用 `BetterSlidingGetQuantity` 的颜色过滤预处理；传入后，会先对该 OCR 结果做颜色过滤，再识别数字。
 
-`MaxQuantity.Filter` 与它使用完全相同的结构，但作用于 `BetterSlidingGetMaxQuantity`。如果整个 `MaxQuantity` 未传，`MaxQuantity.Filter` 会随 `MaxQuantity` 一起整对象回落到 `Quantity.Filter`；一旦传入了 `MaxQuantity`，就按该对象内的 `Filter` 独立解析，不再按字段级别从 `Quantity` 补齐。
+`MaxTarget.Filter` 与它使用完全相同的结构，但仅在显式提供 `MaxTarget` 时作用于 `BetterSlidingGetMaxTarget`。一旦传入了 `MaxTarget`，就按该对象内的 `Filter` 独立解析，不再按字段级别从 `Quantity` 补齐。
 
 最小示例：
 
@@ -257,8 +263,8 @@ clickY = startY + (endY - startY) * numerator / denominator
 - 通道数量必须与 `method` 匹配：`4`（RGB）和 `40`（HSV）需要 3 个通道，`6`（GRAY）需要 1 个通道；
 - 当前仅支持**单组**颜色阈值，不支持 `[[...], [...]]` 这种多段范围；
 - 可以把它理解为对数量区域先做一次按颜色的"近似二值化"，尽量只留下目标数字再交给 OCR；
-- 如果干扰数字和目标数字颜色完全一致，`Quantity.Filter` / `MaxQuantity.Filter` 也无法从根本上区分，这时仍应优先收紧对应的 `Box`；
-- `Quantity.Filter` / `MaxQuantity.Filter` 只是增强 OCR 预处理，不是 `Quantity.Box` / `MaxQuantity.Box` 选区不准时的替代品。
+- 如果干扰数字和目标数字颜色完全一致，`Quantity.Filter` / `MaxTarget.Filter` 也无法从根本上区分，这时仍应优先收紧对应的 `Box`；
+- `Quantity.Filter` / `MaxTarget.Filter` 只是增强 OCR 预处理，不是 `Quantity.Box` / `MaxTarget.Box` 选区不准时的替代品。
 
 ### `IncreaseButton` / `DecreaseButton` 的写法
 
@@ -416,14 +422,15 @@ clickY = startY + (endY - startY) * numerator / denominator
 - `解析后的目标 > maxQuantity` —— 总是超出范围。
 - `TargetType = "Value"` 且 `TargetReverse = true` 且 `maxQuantity - target < 1` —— 计算值为负或零，视为超出范围。
 
-### 优先于 `ClampTargetToMax`
+### 与 `ClampTargetToMax` 的优先级
 
-`ExceedingOverrideEnable` 在 `ClampTargetToMax` **之前**评估。当设置了 `ExceedingOverrideEnable` 时：
+对于上限溢出（`Target > maxQuantity`），`ClampTargetToMax` 现在先评估。两个参数同时开启时，会先把目标钳制到 `maxQuantity`，再考虑 `ExceedingOverrideEnable`。
 
-1. 如果超出范围：将指定 Pipeline 节点的 `enabled` 设为 `true`，流程直接分支到 `BetterSlidingDone`，`BetterSliding` 返回**成功**。
-2. 如果在范围内：将指定 Pipeline 节点的 `enabled` 设为 `false`，正常流程继续（包括任何 `ClampTargetToMax` 逻辑）。
+如果上限钳制后目标仍在范围内，`ExceedingOverrideEnable` 对应节点会被设为 `false`，流程继续正常执行。
 
-当**未**设置 `ExceedingOverrideEnable` 且目标超出范围（包括 `Value + TargetReverse` 产生 `< 1` 的情况），动作立即返回 **false**，`ClampTargetToMax` 不会被应用。
+下限反向溢出（`Value + TargetReverse` 产生 `< 1`）仍然视为越界，`ExceedingOverrideEnable` 依然是这里的回退行为。
+
+当**未**设置 `ExceedingOverrideEnable` 且目标超出范围时，动作立即返回 **false**。
 
 ### 示例
 

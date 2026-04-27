@@ -8,7 +8,7 @@ import (
 type betterSlidingParam struct {
 	Target                  int                        `json:"Target"`
 	Quantity                quantityParam              `json:"Quantity"`
-	MaxQuantity             quantityParam              `json:"MaxQuantity"`
+	MaxTarget               quantityParam              `json:"MaxTarget"`
 	GreenMask               bool                       `json:"GreenMask"`
 	Direction               string                     `json:"Direction"`
 	IncreaseButton          any                        `json:"IncreaseButton"`
@@ -26,7 +26,7 @@ type betterSlidingParam struct {
 type betterSlidingParamPresence struct {
 	Target                  bool
 	Quantity                bool
-	MaxQuantity             bool
+	MaxTarget               bool
 	GreenMask               bool
 	Direction               bool
 	IncreaseButton          bool
@@ -59,12 +59,16 @@ type quantityFilterParam struct {
 //
 // Parameter fields:
 //   - Target: target quantity (overridden by attach.Target when present)
-//   - Quantity.Box: OCR ROI [x,y,w,h] for reading the quantity
-//   - MaxQuantity.Box: OCR ROI [x,y,w,h] for reading the maximum quantity; falls back to Quantity when omitted
+//   - Quantity.Box: OCR ROI [x,y,w,h] for reading the current slider quantity.
+//   - MaxTarget.Box: OCR ROI [x,y,w,h] for reading the max available quantity of the item.
+//     When provided, BetterSlidingGetMaxTarget runs after SwipeToMax and its OCR result is used for
+//     resolveTarget (TargetReverse / TargetType calculation).
+//     When MaxTarget is not provided, BetterSlidingGetMaxTarget stays disabled and
+//     resolveTarget falls back to the BetterSlidingGetMaxQuantity runtime value (slider endpoint).
 //   - Quantity.Filter: optional color filter for quantity OCR
 //   - Quantity.OnlyRec: enable only_rec for the quantity OCR node
-//   - MaxQuantity.Filter: optional color filter for max-quantity OCR; falls back to Quantity when MaxQuantity is omitted
-//   - MaxQuantity.OnlyRec: enable only_rec for the max-quantity OCR node; falls back to Quantity when MaxQuantity is omitted
+//   - MaxTarget.Filter: optional color filter for max-target OCR when MaxTarget is provided
+//   - MaxTarget.OnlyRec: enable only_rec for the max-target OCR node when MaxTarget is provided
 //   - GreenMask: map to green_mask in TemplateMatch for slider/button templates
 //   - Direction: swipe direction (left/right/up/down)
 //   - IncreaseButton: increase button template path or coordinates
@@ -79,11 +83,12 @@ type quantityFilterParam struct {
 type BetterSlidingAction struct {
 	Target                  int
 	QuantityBox             []int
-	MaxQuantityBox          []int
+	MaxTargetBox            []int
+	MaxTargetExplicit       bool
 	QuantityFilter          *quantityFilterParam
-	MaxQuantityFilter       *quantityFilterParam
+	MaxTargetFilter         *quantityFilterParam
 	QuantityOnlyRec         bool
-	MaxQuantityOnlyRec      bool
+	MaxTargetOnlyRec        bool
 	GreenMask               bool
 	Direction               string
 	IncreaseButton          buttonTarget
@@ -101,6 +106,8 @@ type BetterSlidingAction struct {
 	startBox              []int
 	endBox                []int
 	maxQuantity           int
+	maxTarget             int
+	maxTargetResolved     bool
 	exceeded              bool
 	runtimeTargetResolved bool
 	logger                zerolog.Logger

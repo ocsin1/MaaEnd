@@ -27,11 +27,12 @@ func buildSwipeEnd(direction string) ([]int, error) {
 func buildMainInitializationOverride(
 	end []int,
 	quantityBox []int,
-	maxQuantityBox []int,
+	maxTargetBox []int,
+	maxTargetExplicit bool,
 	quantityFilter *quantityFilterParam,
-	maxQuantityFilter *quantityFilterParam,
+	maxTargetFilter *quantityFilterParam,
 	quantityOnlyRec bool,
-	maxQuantityOnlyRec bool,
+	maxTargetOnlyRec bool,
 	swipeButton string,
 	greenMask bool,
 ) map[string]any {
@@ -86,27 +87,32 @@ func buildMainInitializationOverride(
 		},
 	}
 
-	if len(maxQuantityBox) > 0 {
-		maxQuantityParam := map[string]any{
-			"roi":      append([]int(nil), maxQuantityBox...),
-			"only_rec": maxQuantityOnlyRec,
+	if maxTargetExplicit {
+		maxTargetParam := map[string]any{
+			"roi":      append([]int(nil), maxTargetBox...),
+			"only_rec": maxTargetOnlyRec,
 		}
-		if maxQuantityFilter != nil {
-			maxQuantityParam["color_filter"] = nodeBetterSlidingMaxQuantityFilter
-			override[nodeBetterSlidingMaxQuantityFilter] = map[string]any{
+		if maxTargetFilter != nil {
+			maxTargetParam["color_filter"] = nodeBetterSlidingMaxTargetFilter
+			override[nodeBetterSlidingMaxTargetFilter] = map[string]any{
 				"recognition": map[string]any{
 					"param": map[string]any{
-						"method": maxQuantityFilter.Method,
-						"lower":  [][]int{append([]int(nil), maxQuantityFilter.Lower...)},
-						"upper":  [][]int{append([]int(nil), maxQuantityFilter.Upper...)},
+						"method": maxTargetFilter.Method,
+						"lower":  [][]int{append([]int(nil), maxTargetFilter.Lower...)},
+						"upper":  [][]int{append([]int(nil), maxTargetFilter.Upper...)},
 					},
 				},
 			}
 		}
-		override[nodeBetterSlidingGetMaxQuantity] = map[string]any{
+		override[nodeBetterSlidingGetMaxTarget] = map[string]any{
+			"enabled": true,
 			"recognition": map[string]any{
-				"param": maxQuantityParam,
+				"param": maxTargetParam,
 			},
+		}
+	} else {
+		override[nodeBetterSlidingGetMaxTarget] = map[string]any{
+			"enabled": false,
 		}
 	}
 
