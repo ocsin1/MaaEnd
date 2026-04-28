@@ -691,5 +691,6 @@
     "resource/image/SceneManager/MapWuling/MarkerStoneCoreTopLeft": "e23d90b55d8a0db0bf419b0e02159237e7560bf58a49484f1798d6f827a00e0e",
     "resource/image/SceneManager/MapWuling/MarkerStone4Top": "e3a4b52f2874a54dd2d875856c18c269731f283fc961c9f537e53f90a41d7707",
     "resource/image/SceneManager/MapWuling/MarkerStone4Center": "13cc0c841011b132414cb569ed88c86f8fadb14b5f83a83b7dfe07d5249d443d",
-    "resource/image/AutoEssence/SpDialogCloseButton": "0a73f8c8c4ea9ad224143dc5379c4d3e57eb8bfe8dd6869c2f29470f44e5a841"
+    "resource/image/AutoEssence/SpDialogCloseButton": "0a73f8c8c4ea9ad224143dc5379c4d3e57eb8bfe8dd6869c2f29470f44e5a841",
+    "resource/image/DailyRewards/Event/EventSwitchSuccess": "c821d04969c4b2d7bcf01e37a318fad49eb463bc3a9d454072a16c4f312ac0b6"
 }
