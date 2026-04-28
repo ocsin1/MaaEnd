@@ -101,8 +101,8 @@
                         500
                     ]
                 ],
-                "duration": 100,
-                "end_hold": 200
+                "end_hold": 200,
+                "duration": 100
             }
         },
         "post_wait_freezes": {
