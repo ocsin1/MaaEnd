@@ -438,11 +438,11 @@ In `custom_action_param.path`, set the third element of a target coordinate to t
 
 ### Files the Route Author Should Care About
 
-| File | Purpose | When to Edit |
-|---|---|---|
+| File                                                          | Purpose                                                                    | When to Edit                                                              |
+| ------------------------------------------------------------- | -------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
 | `assets/resource/pipeline/AutoCollect/AutoCollectRoute*.json` | Route definitions with `MapNavigateAction` nodes and gathering coordinates | Adding routes, adjusting coordinates, adding or removing gathering points |
-| `assets/resource/pipeline/AutoCollect/AutoCollectClick.json` | `COLLECT` OCR + click subtask, entry: `AutoCollectClickStart` | Adding or removing OCR-recognized material names |
-| `assets/resource/pipeline/AutoCollect/AutoCollectDig.json` | `DIG` digging subtask, entry: `AutoCollectDigStart` | When digging interaction logic changes |
+| `assets/resource/pipeline/AutoCollect/AutoCollectClick.json`  | `COLLECT` OCR + click subtask, entry: `AutoCollectClickStart`              | Adding or removing OCR-recognized material names                          |
+| `assets/resource/pipeline/AutoCollect/AutoCollectDig.json`    | `DIG` digging subtask, entry: `AutoCollectDigStart`                        | When digging interaction logic changes                                    |
 
 **In the vast majority of cases, a route author only needs to touch `AutoCollectRoute*.json`.**
 
