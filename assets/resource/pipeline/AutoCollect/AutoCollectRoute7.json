@@ -199,7 +199,7 @@
         },
         "next": [
             "AutoCollectRoute7GotoFindLine3"
-        ]        
+        ]
     },
     "AutoCollectRoute7GotoFindLine3": {
         "desc": "寻路至血菌",
@@ -280,7 +280,7 @@
         },
         "next": [
             "AutoCollectClickStart"
-        ]        
+        ]
     },
     "AutoCollectRoute7GotoFind2": {
         "desc": "前往收集地2",
@@ -504,7 +504,6 @@
     },
     "AutoCollectRoute7FindButtonUsing": {
         "desc": "点击使用按钮",
-        "pre_wait_freezes": 300,
         "recognition": {
             "type": "OCR",
             "param": {
@@ -520,6 +519,7 @@
                 ]
             }
         },
+        "pre_wait_freezes": 300,
         "action": {
             "type": "Custom",
             "param": {
@@ -571,7 +571,7 @@
                     304.9,
                     293.7
                 ],
-               [
+                [
                     303.7,
                     290.0
                 ],
@@ -663,7 +663,7 @@
         },
         "next": [
             "AutoCollectDigStart"
-        ]        
+        ]
     },
     "AutoCollectRoute7GotoFind12": {
         "desc": "前往收集地2",
@@ -687,7 +687,7 @@
         },
         "next": [
             "AutoCollectDigStart"
-        ]        
+        ]
     },
     "AutoCollectRoute7GotoFind13": {
         "desc": "前往收集地3",
@@ -711,7 +711,7 @@
         },
         "next": [
             "AutoCollectDigStart"
-        ]        
+        ]
     },
     "AutoCollectRoute7GotoFind14": {
         "desc": "前往收集地4",
@@ -735,7 +735,7 @@
         },
         "next": [
             "AutoCollectDigStart"
-        ]        
+        ]
     },
     "AutoCollectRoute7GotoFind15": {
         "desc": "前往收集地5",
@@ -759,7 +759,7 @@
         },
         "next": [
             "AutoCollectDigStart"
-        ]        
+        ]
     },
     "AutoCollectRoute7GotoFind16": {
         "desc": "前往收集地6",
@@ -787,6 +787,6 @@
         },
         "next": [
             "AutoCollectDigStart"
-        ]        
+        ]
     }
 }

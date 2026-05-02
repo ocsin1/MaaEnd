@@ -1,8 +1,5 @@
 {
     "SoldOut": {
-        "post_delay": 0,
-        "pre_delay": 0,
-        "rate_limit": 0,
         "desc": "识别到已售罄区域,需要退出",
         "recognition": {
             "type": "OCR",
@@ -24,7 +21,10 @@
                     "罄"
                 ]
             }
-        }
+        },
+        "pre_delay": 0,
+        "post_delay": 0,
+        "rate_limit": 0
     },
     "ConfirmBuyText": {
         "desc": "识别当前确认购买按钮文本",

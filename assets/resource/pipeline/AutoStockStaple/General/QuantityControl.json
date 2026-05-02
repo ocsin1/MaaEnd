@@ -2825,6 +2825,9 @@
             }
         },
         "pre_delay": 0,
+        "action": {
+            "type": "Click"
+        },
         "post_wait_freezes": {
             "time": 100,
             "target": [
@@ -2833,9 +2836,6 @@
                 602,
                 239
             ]
-        },
-        "action": {
-            "type": "Click"
         },
         "next": [
             "AutoStockStapleQuantityControlCloseRewards"
@@ -2875,12 +2875,12 @@
                 ]
             }
         },
+        "pre_delay": 0,
         "action": {
             "type": "Click"
         },
         "post_wait_freezes": 200,
         "post_delay": 0,
-        "pre_delay": 0,
         "rate_limit": 0
     },
     "AutoStockStapleQuantityControlCloseRewards": {
@@ -2893,9 +2893,6 @@
                 ]
             }
         },
-        "action": {
-            "type": "Click"
-        },
         "pre_wait_freezes": {
             "time": 200,
             "target": [
@@ -2904,6 +2901,9 @@
                 602,
                 239
             ]
+        },
+        "action": {
+            "type": "Click"
         },
         "post_delay": 0
     }
