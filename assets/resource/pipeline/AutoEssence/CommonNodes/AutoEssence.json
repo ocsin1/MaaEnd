@@ -2,19 +2,29 @@
     "AutoEssenceMain": {
         "desc": "自动基质刷取的主入口",
         "pre_delay": 0,
-        "anchor": {
-            "AutoEssenceAfterMoveToTriggerPoint": "AutoEssenceClickTriggerButtonPre"
-        },
         "post_delay": 0,
         "next": [
-            "AutoEssenceTryRechallengeFromBattleResult",
-            "AutoEssenceClickEssenceStartButton",
-            "[JumpBack]AutoEssenceLocationSetupMaybeAutoMove",
-            "[Anchor]AutoEssenceMoveToTriggerPoint"
+            "[JumpBack]AutoEssenceBackToWorld",
+            "AutoEssenceAtTriggerState"
         ],
         "focus": {
             "Node.Action.Starting": "▶️**准备开始本次基质刷取**"
         }
+    },
+    "AutoEssenceAtTriggerState": {
+        "desc": "状态识别并根据当前状态决定下一步做什么",
+        "next": [
+            "AutoEssenceTryRechallengeFromBattleResult",
+            "AutoEssenceClickEssenceStartButton",
+            "[JumpBack]AutoEssenceCheckObtain",
+            "[JumpBack]AutoEssenceLocationSetupMaybeAutoMove",
+            "[Anchor]AutoEssenceMoveToTriggerPoint"
+        ]
+    },
+    "AutoEssenceBackToWorld": {
+        "desc": "开始任务前万能跳转回大世界",
+        "max_hit": 1,
+        "next": ["SceneAnyEnterWorld"]
     },
     "AutoEssenceTryRechallengeFromBattleResult": {
         "desc": "再来一次",
@@ -52,6 +62,7 @@
             "VFPowerPlateauLocationAssertion",
             "WLWulingCityLocationAssertion",
             "WLQingboStockadeLocationAssertion",
+            "WLSerenityGardenLocationAssertion",
             // 如果上述所有地区都没有命中，则无事发生
             "AutoEssenceLocationSetupFailed"
         ],
@@ -78,6 +89,7 @@
             "VFPowerPlateauLocationAssertion",
             "WLWulingCityLocationAssertion",
             "WLQingboStockadeLocationAssertion",
+            "WLSerenityGardenLocationAssertion",
             // 如果上述所有地区都没有命中，则自动导航到指定的某个淤积点
             "AutoEssenceSpecifiedLocation"
         ],
@@ -105,6 +117,7 @@
             }
         },
         "next": [
+            "AutoEssenceMistakeFactoryDevice",
             "[Anchor]AutoEssenceAfterAltKeyUp"
         ]
     },
@@ -353,9 +366,6 @@
         },
         "inverse": true,
         "pre_delay": 0,
-        "anchor": {
-            "AutoEssenceAfterMoveToTriggerPoint": "AutoEssenceClickObtainButtonPre"
-        },
         "post_delay": 0,
         "next": [
             "[JumpBack]AutoEssenceLocationSetup",
@@ -364,6 +374,39 @@
         "focus": {
             "Node.Recognition.Starting": "🔍检查挑战是否结束",
             "Node.Action.Starting": "👌识别到挑战结束"
+        }
+    },
+    "AutoEssenceCheckObtain": {
+        "desc": "确认是否刷完领取奖励状态",
+        "recognition": {
+            "type": "And",
+            "param": {
+                "all_of": [
+                    "AutoEssenceClickObtainButton"
+                    //"AutoEssenceCheckObtainText"ocr先放着，看看后面需不需要
+                ]
+            }
+        },
+        "next": [
+            "AutoEssenceClickObtainButtonPre"
+        ],
+        "focus": {
+            "Node.Recognition.Succeeded": "已经是刷完状态"
+        }
+    },
+    "AutoEssenceCheckObtainText": {
+        "desc": "确认有无领取奖励的文字",
+        "recognition": {
+            "type": "OCR",
+            "param": {
+                "roi": [
+                    868,
+                    451,
+                    134,
+                    94
+                ],
+                "expected": ["领取奖励"]
+            }
         }
     },
     "AutoEssenceClickObtainButtonPre": {

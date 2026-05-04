@@ -1,0 +1,195 @@
+{
+    "VFOriginiumScienceParkMoveToTriggerPointAuto": {
+        "anchor": {
+            "AutoEssenceMoveToTriggerPoint": "VFOriginiumScienceParkMoveToTriggerPoint",
+            "AutoEssenceWalkAround": "VFOriginiumScienceParkWalkAround1"
+        },
+        "next": [
+            "[JumpBack]VFOriginiumScienceParkMaybeTeleport",
+            "VFOriginiumScienceParkMoveToTriggerPoint"
+        ]
+    },
+    "VFOriginiumScienceParkLocationAssertion": {
+        "recognition": {
+            "type": "Custom",
+            "param": {
+                "custom_recognition": "MapTrackerAssertLocation",
+                "custom_recognition_param": {
+                    "expected": [
+                        {
+                            // 淤积点附近（锚点也在这个区域里）
+                            "map_name": "map01_lv005",
+                            "target": [
+                                359.0,
+                                207.0,
+                                30.0,
+                                55.0
+                            ]
+                        }
+                    ]
+                }
+            }
+        },
+        "anchor": {
+            "AutoEssenceMoveToTriggerPoint": "VFOriginiumScienceParkMoveToTriggerPoint",
+            "AutoEssenceWalkAround": "VFOriginiumScienceParkWalkAround1"
+        },
+        "focus": {
+            "Node.Action.Starting": "📍附近的能量淤积点：\n<p style=\"text-align: center\"><strong>源石研究园</strong></p>"
+        }
+    },
+    "VFOriginiumScienceParkMaybeTeleport": {
+        "recognition": {
+            "type": "Custom",
+            "param": {
+                "custom_recognition": "MapTrackerAssertLocation",
+                "custom_recognition_param": {
+                    "expected": [
+                        {
+                            // 淤积点附近（锚点也在这个区域里）
+                            "map_name": "map01_lv005",
+                            "target": [
+                                359.0,
+                                207.0,
+                                30.0,
+                                55.0
+                            ]
+                        }
+                    ]
+                }
+            }
+        },
+        "inverse": true,
+        "next": [
+            "SceneEnterWorldValleyIVOriginiumSciencePark1"
+        ],
+        "focus": {
+            "Node.Action.Starting": "✈️准备传送到最近锚点"
+        }
+    },
+    "VFOriginiumScienceParkMoveToTriggerPoint": {
+        "action": {
+            "type": "Custom",
+            "param": {
+                "custom_action": "MapTrackerMove",
+                "custom_action_param": {
+                    "map_name": "map01_lv005",
+                    "path": [
+                        [
+                            362.0,
+                            210.4
+                        ],
+                        [
+                            373.2,
+                            210.5
+                        ],
+                        [
+                            384.5,
+                            221.6
+                        ],
+                        [
+                            385.8,
+                            228.0
+                        ],
+                        [
+                            385.6,
+                            241.5
+                        ],
+                        [
+                            385.5,
+                            241.8
+                        ]
+                    ],
+                    "path_trim": true
+                }
+            }
+        },
+        "next": [
+            "VFOriginiumScienceParkMoveToTriggerPointExact"
+        ],
+        "focus": {
+            "Node.Action.Starting": "🚶正在前往预备位置"
+        }
+    },
+    "VFOriginiumScienceParkMoveToTriggerPointExact": {
+        "action": {
+            "type": "Custom",
+            "param": {
+                "custom_action": "MapTrackerMove",
+                "custom_action_param": {
+                    "map_name": "map01_lv005",
+                    "path": [
+                        [
+                            385,
+                            240
+                        ],
+                        [
+                            377,
+                            242
+                        ]
+                    ]
+                }
+            }
+        },
+        "next": [
+            "AutoEssenceAtTriggerState"
+        ],
+        "focus": {
+            "Node.Action.Starting": "🚶正在前往激发点"
+        }
+    },
+    "VFOriginiumScienceParkWalkAround1": {
+        "action": {
+            "type": "Custom",
+            "param": {
+                "custom_action": "MapTrackerMove",
+                "custom_action_param": {
+                    "map_name": "map01_lv005",
+                    "path": [
+                        [
+                            367,
+                            233
+                        ]
+                    ],
+                    "rotation_lower_threshold": 12.0,
+                    "rotation_upper_threshold": 120.0,
+                    "sprint_threshold": 6.0
+                }
+            }
+        },
+        "next": [
+            "AutoEssenceCheckOngoing",
+            "VFOriginiumScienceParkWalkAround2"
+        ],
+        "focus": {
+            "Node.Action.Starting": "🚶正在散步中"
+        }
+    },
+    "VFOriginiumScienceParkWalkAround2": {
+        "action": {
+            "type": "Custom",
+            "param": {
+                "custom_action": "MapTrackerMove",
+                "custom_action_param": {
+                    "map_name": "map01_lv005",
+                    "path": [
+                        [
+                            384,
+                            254
+                        ]
+                    ],
+                    "rotation_lower_threshold": 12.0,
+                    "rotation_upper_threshold": 120.0,
+                    "sprint_threshold": 6.0
+                }
+            }
+        },
+        "next": [
+            "AutoEssenceCheckOngoing",
+            "VFOriginiumScienceParkWalkAround1"
+        ],
+        "focus": {
+            "Node.Action.Starting": "🚶正在散步中"
+        }
+    }
+}

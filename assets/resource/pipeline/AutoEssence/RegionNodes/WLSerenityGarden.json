@@ -1,15 +1,15 @@
 {
-    "VFOriginiumScienceParkMoveToTriggerPointAuto": {
+    "WLSerenityGardenMoveToTriggerPointAuto": {
         "anchor": {
-            "AutoEssenceMoveToTriggerPoint": "VFOriginiumScienceParkMoveToTriggerPoint",
-            "AutoEssenceWalkAround": "VFOriginiumScienceParkWalkAround1"
+            "AutoEssenceMoveToTriggerPoint": "WLSerenityGardenMoveToTriggerPoint",
+            "AutoEssenceWalkAround": "WLSerenityGardenWalkAround1"
         },
         "next": [
-            "[JumpBack]VFOriginiumScienceParkMaybeTeleport",
-            "VFOriginiumScienceParkMoveToTriggerPoint"
+            "[JumpBack]WLSerenityGardenMaybeTeleport",
+            "WLSerenityGardenMoveToTriggerPoint"
         ]
     },
-    "VFOriginiumScienceParkLocationAssertion": {
+    "WLSerenityGardenLocationAssertion": {
         "recognition": {
             "type": "Custom",
             "param": {
@@ -17,13 +17,13 @@
                 "custom_recognition_param": {
                     "expected": [
                         {
-                            // 淤积点附近（锚点也在这个区域里）
-                            "map_name": "map01_lv005",
+                            // 淤积点附近
+                            "map_name": "map02_lv004",
                             "target": [
-                                359.0,
-                                207.0,
-                                30.0,
-                                55.0
+                                312.7,
+                                393.6,
+                                21.3,
+                                20.6
                             ]
                         }
                     ]
@@ -31,14 +31,14 @@
             }
         },
         "anchor": {
-            "AutoEssenceMoveToTriggerPoint": "VFOriginiumScienceParkMoveToTriggerPoint",
-            "AutoEssenceWalkAround": "VFOriginiumScienceParkWalkAround1"
+            "AutoEssenceMoveToTriggerPoint": "WLSerenityGardenMoveToTriggerPoint",
+            "AutoEssenceWalkAround": "WLSerenityGardenWalkAround1"
         },
         "focus": {
-            "Node.Action.Starting": "📍附近的能量淤积点：\n<p style=\"text-align: center\"><strong>源石研究园</strong></p>"
+            "Node.Action.Starting": "📍附近的能量淤积点：\n<p style=\"text-align: center\"><strong>安思园</strong></p>"
         }
     },
-    "VFOriginiumScienceParkMaybeTeleport": {
+    "WLSerenityGardenMaybeTeleport": {
         "recognition": {
             "type": "Custom",
             "param": {
@@ -46,13 +46,23 @@
                 "custom_recognition_param": {
                     "expected": [
                         {
-                            // 淤积点附近（锚点也在这个区域里）
-                            "map_name": "map01_lv005",
+                            // 距离淤积点最近的锚点附近坐标范围
+                            "map_name": "map02_lv004",
                             "target": [
-                                359.0,
-                                207.0,
-                                30.0,
-                                55.0
+                                402.4,
+                                313.4,
+                                20.8,
+                                17.4
+                            ]
+                        },
+                        {
+                            // 淤积点附近
+                            "map_name": "map02_lv004",
+                            "target": [
+                                272.8,
+                                355.6,
+                                106.9,
+                                102.5
                             ]
                         }
                     ]
@@ -61,43 +71,43 @@
         },
         "inverse": true,
         "next": [
-            "SceneEnterWorldValleyIVOriginiumSciencePark1"
+            "SceneEnterWorldWulingMarkerStone2"
         ],
         "focus": {
             "Node.Action.Starting": "✈️准备传送到最近锚点"
         }
     },
-    "VFOriginiumScienceParkMoveToTriggerPoint": {
+    "WLSerenityGardenMoveToTriggerPoint": {
         "action": {
             "type": "Custom",
             "param": {
                 "custom_action": "MapTrackerMove",
                 "custom_action_param": {
-                    "map_name": "map01_lv005",
+                    "map_name": "map02_lv004",
                     "path": [
                         [
-                            362.0,
-                            210.4
+                            418.8,
+                            322.3
                         ],
                         [
-                            373.2,
-                            210.5
+                            418.8,
+                            328.5
                         ],
                         [
-                            384.5,
-                            221.6
+                            415.0,
+                            328.5
                         ],
                         [
-                            385.8,
-                            228.0
+                            415.0,
+                            322.2
                         ],
                         [
-                            385.6,
-                            241.5
+                            323.8,
+                            322.2
                         ],
                         [
-                            385.5,
-                            241.8
+                            323.2,
+                            394.9
                         ]
                     ],
                     "path_trim": true
@@ -105,50 +115,54 @@
             }
         },
         "next": [
-            "VFOriginiumScienceParkMoveToTriggerPointExact"
+            "WLSerenityGardenMoveToTriggerPointExact"
         ],
         "focus": {
-            "Node.Action.Starting": "🚶正在前往预备位置"
+            "Node.Action.Starting": "🚶正在前往激发点附近"
         }
     },
-    "VFOriginiumScienceParkMoveToTriggerPointExact": {
+    "WLSerenityGardenMoveToTriggerPointExact": {
         "action": {
             "type": "Custom",
             "param": {
                 "custom_action": "MapTrackerMove",
                 "custom_action_param": {
-                    "map_name": "map01_lv005",
+                    "map_name": "map02_lv004",
                     "path": [
                         [
-                            385,
-                            240
+                            323.2,
+                            394.9
                         ],
                         [
-                            377,
-                            242
+                            324.9,
+                            404.7
                         ]
                     ]
                 }
             }
         },
         "next": [
-            "[Anchor]AutoEssenceAfterMoveToTriggerPoint"
+            "AutoEssenceAtTriggerState"
         ],
         "focus": {
             "Node.Action.Starting": "🚶正在前往激发点"
         }
     },
-    "VFOriginiumScienceParkWalkAround1": {
+    "WLSerenityGardenWalkAround1": {
         "action": {
             "type": "Custom",
             "param": {
                 "custom_action": "MapTrackerMove",
                 "custom_action_param": {
-                    "map_name": "map01_lv005",
+                    "map_name": "map02_lv004",
                     "path": [
                         [
-                            367,
-                            233
+                            332.6,
+                            413.5
+                        ],
+                        [
+                            313.7,
+                            394.5
                         ]
                     ],
                     "rotation_lower_threshold": 12.0,
@@ -159,23 +173,27 @@
         },
         "next": [
             "AutoEssenceCheckOngoing",
-            "VFOriginiumScienceParkWalkAround2"
+            "WLSerenityGardenWalkAround2"
         ],
         "focus": {
             "Node.Action.Starting": "🚶正在散步中"
         }
     },
-    "VFOriginiumScienceParkWalkAround2": {
+    "WLSerenityGardenWalkAround2": {
         "action": {
             "type": "Custom",
             "param": {
                 "custom_action": "MapTrackerMove",
                 "custom_action_param": {
-                    "map_name": "map01_lv005",
+                    "map_name": "map02_lv004",
                     "path": [
                         [
-                            384,
-                            254
+                            313.7,
+                            394.5
+                        ],
+                        [
+                            332.6,
+                            413.5
                         ]
                     ],
                     "rotation_lower_threshold": 12.0,
@@ -186,7 +204,7 @@
         },
         "next": [
             "AutoEssenceCheckOngoing",
-            "VFOriginiumScienceParkWalkAround1"
+            "WLSerenityGardenWalkAround1"
         ],
         "focus": {
             "Node.Action.Starting": "🚶正在散步中"

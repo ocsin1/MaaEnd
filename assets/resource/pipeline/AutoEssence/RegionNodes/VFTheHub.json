@@ -1,15 +1,15 @@
 {
-    "WLQingboStockadeMoveToTriggerPointAuto": {
+    "VFTheHubMoveToTriggerPointAuto": {
         "anchor": {
-            "AutoEssenceMoveToTriggerPoint": "WLQingboStockadeMoveToTriggerPoint",
-            "AutoEssenceWalkAround": "WLQingboStockadeWalkAround1"
+            "AutoEssenceMoveToTriggerPoint": "VFTheHubMoveToTriggerPoint",
+            "AutoEssenceWalkAround": "VFTheHubWalkAround1"
         },
         "next": [
-            "[JumpBack]WLQingboStockadeMaybeTeleport",
-            "WLQingboStockadeMoveToTriggerPoint"
+            "[JumpBack]VFTheHubMaybeTeleport",
+            "VFTheHubMoveToTriggerPoint"
         ]
     },
-    "WLQingboStockadeLocationAssertion": {
+    "VFTheHubLocationAssertion": {
         "recognition": {
             "type": "Custom",
             "param": {
@@ -18,12 +18,12 @@
                     "expected": [
                         {
                             // 淤积点附近（锚点也在这个区域里）
-                            "map_name": "map02_lv003",
+                            "map_name": "map01_lv001",
                             "target": [
-                                384.5,
-                                542.0,
-                                28.0,
-                                40.0
+                                385.0,
+                                496.0,
+                                32.0,
+                                42.0
                             ]
                         }
                     ]
@@ -31,14 +31,14 @@
             }
         },
         "anchor": {
-            "AutoEssenceMoveToTriggerPoint": "WLQingboStockadeMoveToTriggerPoint",
-            "AutoEssenceWalkAround": "WLQingboStockadeWalkAround1"
+            "AutoEssenceMoveToTriggerPoint": "VFTheHubMoveToTriggerPoint",
+            "AutoEssenceWalkAround": "VFTheHubWalkAround1"
         },
         "focus": {
-            "Node.Action.Starting": "📍附近的能量淤积点：\n<p style=\"text-align: center\"><strong>清波寨</strong></p>"
+            "Node.Action.Starting": "📍附近的能量淤积点：\n<p style=\"text-align: center\"><strong>枢纽区</strong></p>"
         }
     },
-    "WLQingboStockadeMaybeTeleport": {
+    "VFTheHubMaybeTeleport": {
         "recognition": {
             "type": "Custom",
             "param": {
@@ -47,12 +47,12 @@
                     "expected": [
                         {
                             // 淤积点附近（锚点也在这个区域里）
-                            "map_name": "map02_lv003",
+                            "map_name": "map01_lv001",
                             "target": [
-                                384.5,
-                                542.0,
-                                28.0,
-                                40.0
+                                385.0,
+                                496.0,
+                                32.0,
+                                42.0
                             ]
                         }
                     ]
@@ -61,54 +61,50 @@
         },
         "inverse": true,
         "next": [
-            "SceneEnterWorldWulingQingboStockade2"
+            "SceneEnterWorldValleyIVTheHub1"
         ],
         "focus": {
             "Node.Action.Starting": "✈️准备传送到最近锚点"
         }
     },
-    "WLQingboStockadeMoveToTriggerPoint": {
+    "VFTheHubMoveToTriggerPoint": {
         "action": {
             "type": "Custom",
             "param": {
                 "custom_action": "MapTrackerMove",
                 "custom_action_param": {
-                    "map_name": "map02_lv003",
+                    "map_name": "map01_lv001",
                     "path": [
                         [
-                            402.5,
-                            559.0
+                            398,
+                            524
                         ],
                         [
-                            390.5,
-                            561.0
-                        ],
-                        [
-                            391.5,
-                            571.0
+                            406,
+                            531
                         ]
                     ]
                 }
             }
         },
         "next": [
-            "[Anchor]AutoEssenceAfterMoveToTriggerPoint"
+            "AutoEssenceAtTriggerState"
         ],
         "focus": {
             "Node.Action.Starting": "🚶正在前往激发点"
         }
     },
-    "WLQingboStockadeWalkAround1": {
+    "VFTheHubWalkAround1": {
         "action": {
             "type": "Custom",
             "param": {
                 "custom_action": "MapTrackerMove",
                 "custom_action_param": {
-                    "map_name": "map02_lv003",
+                    "map_name": "map01_lv001",
                     "path": [
                         [
-                            394.5,
-                            579.0
+                            414,
+                            518
                         ]
                     ],
                     "rotation_lower_threshold": 12.0,
@@ -119,23 +115,23 @@
         },
         "next": [
             "AutoEssenceCheckOngoing",
-            "WLQingboStockadeWalkAround2"
+            "VFTheHubWalkAround2"
         ],
         "focus": {
             "Node.Action.Starting": "🚶正在散步中"
         }
     },
-    "WLQingboStockadeWalkAround2": {
+    "VFTheHubWalkAround2": {
         "action": {
             "type": "Custom",
             "param": {
                 "custom_action": "MapTrackerMove",
                 "custom_action_param": {
-                    "map_name": "map02_lv003",
+                    "map_name": "map01_lv001",
                     "path": [
                         [
-                            393.5,
-                            561.0
+                            396,
+                            542
                         ]
                     ],
                     "rotation_lower_threshold": 12.0,
@@ -146,7 +142,7 @@
         },
         "next": [
             "AutoEssenceCheckOngoing",
-            "WLQingboStockadeWalkAround1"
+            "VFTheHubWalkAround1"
         ],
         "focus": {
             "Node.Action.Starting": "🚶正在散步中"
