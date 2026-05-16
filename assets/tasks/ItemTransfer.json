@@ -11,7 +11,7 @@
                 "TransferAll",
                 "OriginRegion",
                 "DestinationRegion",
-                "PreClearBag"
+                "StashBackpackSubTask"
             ],
             "controller": [
                 "Win32-Window",
@@ -3853,24 +3853,6 @@
                 }
             ],
             "default_case": "Wuling"
-        },
-        "PreClearBag": {
-            "type": "switch",
-            "label": "$task.AutoEcoFarm.option.AutoEcoFarmClearBagBeforeTasks.label",
-            "description": "$task.ItemTransfer.option.PreClearBag.description",
-            "cases": [
-                {
-                    "name": "No"
-                },
-                {
-                    "name": "Yes",
-                    "pipeline_override": {
-                        "ItemTransferPreClearBag": {
-                            "enabled": true
-                        }
-                    }
-                }
-            ]
         }
     }
 }
