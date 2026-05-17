@@ -100,10 +100,8 @@
     },
     "GiftOperatorClearHitCount": {
         "desc": "清空节点MaxHit",
-        "action": "Custom",
-        "post_delay": 0,
         "pre_delay": 0,
-        "rate_limit": 0,
+        "action": "Custom",
         "custom_action": "ClearHitCount",
         "custom_action_param": {
             "nodes": [
@@ -114,6 +112,8 @@
                 "GiftOperatorMoveLocation1",
                 "GiftOperatorMoveLocation1Move"
             ]
-        }
+        },
+        "post_delay": 0,
+        "rate_limit": 0
     }
 }

@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"image"
 
-	maa "github.com/MaaXYZ/maa-framework-go/v4"
 	"github.com/MaaXYZ/MaaEnd/agent/go-service/pkg/control"
+	maa "github.com/MaaXYZ/maa-framework-go/v4"
 	"github.com/rs/zerolog/log"
 )
 

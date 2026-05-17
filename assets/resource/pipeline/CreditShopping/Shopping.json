@@ -128,11 +128,11 @@
     "CreditShoppingScanItemAction": {
         "desc": "货架快照",
         "recognition": "DirectHit",
-        "post_delay": 0,
         "pre_delay": 0,
-        "rate_limit": 0,
         "action": "Custom",
         "custom_action": "CreditShoppingScanItemAction",
+        "post_delay": 0,
+        "rate_limit": 0,
         "next": [
             "AutoGetCredits",
             "CreditShoppingBuyPriority1",

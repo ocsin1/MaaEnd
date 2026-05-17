@@ -11,9 +11,9 @@ import (
 const creditShoppingScanItemActionName = "CreditShoppingScanItemAction"
 
 // RecordShelfSnapshotsAction 信用点商店货架库存快照：
-//  1) OCR UID 与 RefreshCost，推断本地游戏日（04:00 切日）与第几次刷新；
-//  2) PC 一屏 7+3；ADB 两屏各一排（首屏 slot 0–5 含折扣，滑动后 slot 6–9 含折扣）；
-//  3) 以 uid + game_date + refresh_index 为键写入 JSON，键冲突则覆盖。
+//  1. OCR UID 与 RefreshCost，推断本地游戏日（04:00 切日）与第几次刷新；
+//  2. PC 一屏 7+3；ADB 两屏各一排（首屏 slot 0–5 含折扣，滑动后 slot 6–9 含折扣）；
+//  3. 以 uid + game_date + refresh_index 为键写入 JSON，键冲突则覆盖。
 type RecordShelfSnapshotsAction struct{}
 
 var _ maa.CustomActionRunner = (*RecordShelfSnapshotsAction)(nil)

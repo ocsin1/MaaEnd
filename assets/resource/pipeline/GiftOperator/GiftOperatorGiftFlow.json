@@ -350,12 +350,12 @@
                 ]
             }
         },
-        "action": {
-            "type": "Click"
-        },
         "pre_wait_freezes": {
             "time": 200,
             "timeout": 2000
+        },
+        "action": {
+            "type": "Click"
         },
         "next": [
             "GiftOperatorBranchGift",

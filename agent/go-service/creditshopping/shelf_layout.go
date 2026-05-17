@@ -10,12 +10,12 @@ import (
 
 // 720p 货架槽位：PC 一屏两行 7+3；ADB 一屏仅见一排名称，需滑动后见另一排（上 6 + 下 4）。
 const (
-	shelfSlotCount     = 10
-	pcTopRowSlots      = 7
-	pcBottomRowSlots   = 3
-	adbTopRowSlots     = 6
-	adbBottomRowSlots  = 4
-	adbBottomSlotStart  = 6
+	shelfSlotCount        = 10
+	pcTopRowSlots         = 7
+	pcBottomRowSlots      = 3
+	adbTopRowSlots        = 6
+	adbBottomRowSlots     = 4
+	adbBottomSlotStart    = 6
 	adbShelfNameRowSplitY = 400 // 首屏名称 Y<400；滑动后第二排名称 Y>=400
 	rowClusterGapY        = 80
 )
