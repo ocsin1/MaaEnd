@@ -777,5 +777,10 @@
     "resource/image/MapTracker/StuckMitigator/ChatDialog": "fed212b230695bcc1ed8f761aae183dc123d67e6908ebc865344b697622c40e2",
     "resource/image/MapTracker/StuckMitigator/BagDialog": "b9d88c1707672c037396c04f10ea4b3bb3fe04e974d58b06dabd8f5274df94f0",
     "resource/image/MapTracker/StuckMitigator/CloseBagDialogButton": "bb8899d0ebb72a8c4cbe702715e6257c84fbf594a0b9f070e2a524bfcb15e7f8",
-    "resource/image/MapTracker/StuckMitigator/SkipChatButton": "78d27fbe907bbfced80af2076b5e321eba8a370c27772daf1261dc3056581bb9"
+    "resource/image/MapTracker/StuckMitigator/SkipChatButton": "78d27fbe907bbfced80af2076b5e321eba8a370c27772daf1261dc3056581bb9",
+    "resource/image/WebEvent/202605/ClickToContinue1": "c3be3bc2b8462dd6723437be0fec02185e09fec687913bac3d81dcb0abbf3e4e",
+    "resource/image/WebEvent/202605/BackButton": "80d67e5c03993f39f9dca21f75cdf4f29d590f64571d7ede31a80015bcfc2d69",
+    "resource/image/WebEvent/202605/StartButton": "1dba71936a0650d00dccc50e1e94fc6706f90bdd57ec39d79797e4ada5995535",
+    "resource/image/WebEvent/202605/Heart": "f6d676c440268b7fa54a73a9d9888af7b29d0c096a08c310b237488d668fc211",
+    "resource/image/WebEvent/202605/ClickToContinue2": "f42a16f5e74db74a6865646fd3cd2d676645dc644206d19f42e954a53c326ae9"
 }
