@@ -25,16 +25,16 @@ description: MaaEnd MapTracker 相关组件编写指南。为 agent/go-service/m
 Go 代码位于 agent/go-service/maptracker 目录下，主要包含以下子包：
 
 - default 包：主要提供小地图（游戏画面左上角的实时小地图）识别、寻路的功能，属于核心功能；
-  - assert_location：MapTrackerAssetLocation 节点实现；
-  - infer.go：MapTrackerInfer 节点实现；
-  - move.go：MapTrackerMove 节点实现；
-  - 其他辅助文件。
+    - assert_location：MapTrackerAssetLocation 节点实现；
+    - infer.go：MapTrackerInfer 节点实现；
+    - move.go：MapTrackerMove 节点实现；
+    - 其他辅助文件。
 - bigmap 包：主要提供大地图（游戏内打开地图页面时显示的大地图）识别的功能；
-  - infer.go：MapTrackerBigMapInfer 节点实现；
-  - pick.go：MapTrackerBigMapPick 节点实现；
-  - 其他辅助文件。
+    - infer.go：MapTrackerBigMapInfer 节点实现；
+    - pick.go：MapTrackerBigMapPick 节点实现；
+    - 其他辅助文件。
 - internal 包：主要提供一些辅助功能；
-  - resource.go：资源加载辅助。
+    - resource.go：资源加载辅助。
 - compatible 包：对 Cpp 方案的兼容层，次要，一般无需维护。
 
 主要的依赖项是 agent/go-service/pkg/minicv 包，提供了定制化的计算机视觉功能，例如模板匹配。
@@ -43,14 +43,14 @@ Go 代码位于 agent/go-service/maptracker 目录下，主要包含以下子包
 
 为了帮助使用者和维护者对地图图片、路线进行快速的操作和可视化，在 tools/map_tracker 目录下提供了一些使用 Python 写的工具代码。具体如下：
 
-- _internal 包：
-  - core_utils.py：常用工具函数；
-  - gui_widget.py：提供了一些可复用的工具 GUI 组件；
-  - http_utils.py：下载相关；
-  - location_service.py：依赖于 maa_interface.py 提供工具内调用 MapTracker 定位的功能；
-  - maa_interface.py：提供了与游戏交互的接口；
-  - pipeline_handler.py：提供了 pipeline JSON 解析的功能；
-  - zmdmap_schemas.py：提供了 zmdmap 数据解析的功能。
+- \_internal 包：
+    - core_utils.py：常用工具函数；
+    - gui_widget.py：提供了一些可复用的工具 GUI 组件；
+    - http_utils.py：下载相关；
+    - location_service.py：依赖于 maa_interface.py 提供工具内调用 MapTracker 定位的功能；
+    - maa_interface.py：提供了与游戏交互的接口；
+    - pipeline_handler.py：提供了 pipeline JSON 解析的功能；
+    - zmdmap_schemas.py：提供了 zmdmap 数据解析的功能。
 - map_fetcher.py：提供了从 zmdmap 获取最新地图图片的功能；
 - map_generator.py：提供了基于最新图片来生成优化后的地图图片和数据的功能；
 - map_tracker_editor：向用户提供路线编辑等可视化功能。
