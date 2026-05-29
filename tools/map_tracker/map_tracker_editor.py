@@ -24,7 +24,6 @@ from _internal.core_utils import (
     Color,
     Drawer,
     cv2,
-    MapName,
     ViewportManager,
     Layer,
     clipboard_copy_text,
@@ -42,9 +41,9 @@ from _internal.gui_widgets import (
     SwitchWidget,
     ScrollableListWidget,
     TextInputWidget,
-    RadioSelectWidget,
     UndoRedoHistory,
     UndoRedoWidget,
+    WidgetGroup,
 )
 from _internal.location_service import LocationService, unique_map_key
 from _internal.pipeline_handler import (
@@ -147,8 +146,6 @@ class PathEditPage(MapViewportPage):
     ):
         self._map_dir = map_dir
         self.map_name = _resolve_editor_map_name(str(map_name), map_dir)
-        self._main_map_name = self.map_name
-        self._active_map_name = self.map_name
         self.map_path = os.path.join(map_dir, self.map_name)
         self.img = cv2.imread(self.map_path)
 
@@ -158,8 +155,6 @@ class PathEditPage(MapViewportPage):
         super().__init__(
             window_name, 1280, 720, image=self.img, min_zoom=0.5, max_zoom=10.0
         )
-        self._main_img = self.img.copy()
-        self._main_dim_img = cv2.convertScaleAbs(self._main_img, alpha=0.25)
         self._status = StatusRecord(
             time.time(), 0xFFFFFF, "Welcome to MapTracker Editor!"
         )
@@ -197,20 +192,6 @@ class PathEditPage(MapViewportPage):
         self._realtime_last_point_ts: float | None = None
         self._realtime_segment_has_checkpoint = False
 
-        # Button hit-rects: (x1, y1, x2, y2) – populated by _render_sidebar
-        self._btn_save_rect: tuple | None = None
-        self._btn_record_rect: tuple | None = None
-        self._btn_back_rect: tuple | None = None
-        self._btn_finish_rect: tuple | None = None
-        self._btn_delete_rect: tuple | None = None
-        self._btn_copy_rect: tuple | None = None
-
-        # Tier map selector in sidebar (shown only when tier maps exist)
-        self._tier_selector = RadioSelectWidget(title="Tiers List", item_height=24)
-        self._tier_selector_rect: tuple[int, int, int, int] | None = None
-        self._tier_maps = self._collect_tier_maps(self._main_map_name)
-        if len(self._tier_maps) > 1:
-            self._tier_selector.set_items(self._tier_maps, selected_data=self.map_name)
         self._recorder_mode_switch = SwitchWidget(
             "Loop",
             "Once",
@@ -264,17 +245,14 @@ class PathEditPage(MapViewportPage):
             on_click=self._copy_selected_point,
             font_scale=0.42,
         )
-        self.buttons.extend(
-            [
-                self._save_button,
-                self._record_button,
-                self._back_button,
-                self._finish_button,
-                self._delete_button,
-                self._copy_button,
-                *self._history_widget.buttons,
-            ]
+        self._sidebar_group = WidgetGroup((0, 0, self.SIDEBAR_W, self.window_h))
+        self.groups.append(self._sidebar_group)
+        self.configure_map_layer_switching(
+            logical_map_name=self.map_name,
+            map_dir=self._map_dir,
+            base_image=self.img,
         )
+        self.buttons.extend(self._history_widget.buttons)
 
     def hook_idle(self) -> None:
         self._update_recording()
@@ -322,7 +300,7 @@ class PathEditPage(MapViewportPage):
             result = self.location_service.infer_once(self.map_name)
             map_name, x, y = result["map_name"], result["x"], result["y"]
             if map_name:
-                self._sync_tier_by_log_map(map_name)
+                self.sync_displayed_layer_from_map_name(map_name)
             updated = self._append_realtime_point(x, y)
             self._update_status(
                 0x50DC50 if updated else 0xD2D200,
@@ -479,69 +457,6 @@ class PathEditPage(MapViewportPage):
         img_h, img_w = self.img.shape[:2]
         self.view.fit_to([(0, 0), (img_w, img_h)], padding=0.02)
 
-    def _collect_tier_maps(self, main_map_name: str) -> list[dict]:
-        main_base = os.path.basename(main_map_name)
-        try:
-            main_parsed = MapName.parse(main_base)
-        except ValueError:
-            return [{"label": "main", "data": main_base}]
-
-        tiers: list[dict] = [{"label": "main", "data": main_base}]
-        if not os.path.isdir(self._map_dir):
-            return tiers
-
-        for file_name in sorted(os.listdir(self._map_dir), key=lambda n: n.lower()):
-            try:
-                parsed = MapName.parse(file_name)
-            except ValueError:
-                continue
-            if (
-                parsed.map_type != "tier"
-                or parsed.map_id != main_parsed.map_id
-                or parsed.map_level_id != main_parsed.map_level_id
-            ):
-                continue
-            tiers.append({"label": f"tier_{parsed.tier_suffix}", "data": file_name})
-        return tiers
-
-    def _switch_active_map(self, map_name: str) -> None:
-        if map_name == self._active_map_name:
-            return
-        if map_name == self._main_map_name:
-            target_path = os.path.join(self._map_dir, self._main_map_name)
-            img = self._main_img
-        else:
-            target_path = os.path.join(self._map_dir, map_name)
-            tier_img = cv2.imread(target_path)
-            if tier_img is None:
-                return
-            # Compose once: dimmed main as base, tier non-black pixels as overlay.
-            img = self._main_dim_img.copy()
-            tier_mask = (
-                (tier_img[:, :, 0] > 2)
-                | (tier_img[:, :, 1] > 2)
-                | (tier_img[:, :, 2] > 2)
-            )
-            img[tier_mask] = tier_img[tier_mask]
-        self._active_map_name = map_name
-        self.map_path = target_path
-        self.img = img
-        self.set_map_image(self.img)
-        self.render_request()
-
-    def _sync_tier_by_log_map(self, log_map_name: str) -> None:
-        if len(self._tier_maps) <= 1:
-            return
-        resolved = find_map_file(log_map_name, self._map_dir)
-        if not resolved:
-            return
-        available = {str(item.get("data", "")) for item in self._tier_maps}
-        if resolved not in available:
-            return
-        self._tier_selector.select_by_data(resolved)
-        if resolved != self._active_map_name:
-            self._switch_active_map(resolved)
-
     def _do_save(self):
         if self.pipeline_context is None:
             return
@@ -623,7 +538,7 @@ class PathEditPage(MapViewportPage):
                 map_name, x, y = result["map_name"], result["x"], result["y"]
 
                 if map_name:
-                    self._sync_tier_by_log_map(map_name)
+                    self.sync_displayed_layer_from_map_name(map_name)
 
                 updated = self._append_realtime_point(x, y) or updated
             except queue.Empty:
@@ -722,13 +637,7 @@ class PathEditPage(MapViewportPage):
         self._render_status_bar(drawer)
         self._render_sidebar_bg(drawer)
         self._render_sidebar(drawer)
-
-    @staticmethod
-    def _hit_button(x: int, y: int, rect: tuple[int, int, int, int] | None) -> bool:
-        if rect is None:
-            return False
-        x1, y1, x2, y2 = rect
-        return x1 <= x <= x2 and y1 <= y <= y2
+        self.render_map_layer_selector(drawer, sidebar_width=self.SIDEBAR_W)
 
     def _render_attribute_panel(
         self,
@@ -739,11 +648,6 @@ class PathEditPage(MapViewportPage):
         panel_w: int,
     ) -> int:
         selected = self._get_selected_point()
-        hidden_rect = (-100, -100, -90, -90)
-        self._delete_button.rect = hidden_rect
-        self._copy_button.rect = hidden_rect
-        self._btn_delete_rect = None
-        self._btn_copy_rect = None
 
         if selected is None:
             return y0
@@ -777,21 +681,23 @@ class PathEditPage(MapViewportPage):
         btn_y1 = btn_y0 + btn_h
         btn_w = (panel_w - btn_gap) // 2
 
-        self._btn_delete_rect = (x0, btn_y0, x0 + btn_w, btn_y1)
-        self._delete_button.rect = self._btn_delete_rect
+        delete_rect = (x0, btn_y0, x0 + btn_w, btn_y1)
         self._delete_button.text = "[Del] Delete"
         self._delete_button.text_color = 0xFFFFFF
+        self._sidebar_group.add_button(self._delete_button, delete_rect)
 
         copy_x0 = x0 + btn_w + btn_gap
-        self._btn_copy_rect = (copy_x0, btn_y0, copy_x0 + btn_w, btn_y1)
-        self._copy_button.rect = self._btn_copy_rect
+        copy_rect = (copy_x0, btn_y0, copy_x0 + btn_w, btn_y1)
         self._copy_button.text = "[C] Copy"
         self._copy_button.text_color = 0xFFFFFF
+        self._sidebar_group.add_button(self._copy_button, copy_rect)
 
         return y2 + 12
 
     def _render_sidebar(self, drawer: "Drawer"):
         self._render_sidebar_bg(drawer)
+        self._sidebar_group.set_rect((0, 0, self.SIDEBAR_W, self.window_h))
+        self._sidebar_group.clear()
         sw = self.SIDEBAR_W
         h = self.window_h
         pad = 15
@@ -831,8 +737,8 @@ class PathEditPage(MapViewportPage):
         cy += 12
         switch_h = 26
         self._recorder_switch_rect = (pad, cy, sw - pad, cy + switch_h)
-        self._recorder_mode_switch.render(
-            drawer,
+        self._sidebar_group.add_switch(
+            self._recorder_mode_switch,
             self._recorder_switch_rect,
             font_scale=0.4,
         )
@@ -845,20 +751,9 @@ class PathEditPage(MapViewportPage):
         has_pipeline = self.pipeline_context is not None
         dirty = self.is_dirty
 
-        hidden_rect = (-100, -100, -90, -90)
-        self._save_button.rect = hidden_rect
-        self._record_button.rect = hidden_rect
-        self._back_button.rect = hidden_rect
-        self._finish_button.rect = hidden_rect
-        self._delete_button.rect = hidden_rect
-        self._copy_button.rect = hidden_rect
-
-        self._btn_save_rect = None
-
         record_y0 = cy
         record_y1 = cy + btn_h
-        self._btn_record_rect = (btn_x0, record_y0, btn_x0 + btn_w, record_y1)
-        self._record_button.rect = self._btn_record_rect
+        record_rect = (btn_x0, record_y0, btn_x0 + btn_w, record_y1)
         if self.is_loop_record_mode:
             is_recording = self.location_service.is_recording
             self._record_button.base_color = 0xB44022 if is_recording else 0x1A40B8
@@ -869,10 +764,10 @@ class PathEditPage(MapViewportPage):
             self._record_button.base_color = 0x1A40B8
             self._record_button.text = "[Enter] Get Location"
         self._record_button.text_color = 0xFFFFFF
+        self._sidebar_group.add_button(self._record_button, record_rect)
         cy = record_y1 + 12
         cy = _draw_section_divider(cy, gap_after=14)
 
-        self._tier_selector_rect = None
         rendered_info_panel = False
         if self._get_selected_point() is not None:
             cy = self._render_attribute_panel(
@@ -882,45 +777,35 @@ class PathEditPage(MapViewportPage):
                 panel_w=btn_w,
             )
             rendered_info_panel = True
-        elif len(self._tier_maps) > 1:
-            tier_h = self._tier_selector.get_height()
-            self._tier_selector_rect = (pad, cy, sw - pad, cy + tier_h)
-            self._tier_selector.render(
-                drawer,
-                self._tier_selector_rect,
-                font_scale=0.4,
-            )
-            cy += tier_h + 12
-            rendered_info_panel = True
         if rendered_info_panel:
             cy = _draw_section_divider(cy, gap_after=12)
 
         back_y0 = cy
         back_y1 = cy + btn_h
-        self._btn_back_rect = (btn_x0, back_y0, btn_x0 + btn_w, back_y1)
-        self._back_button.rect = self._btn_back_rect
+        back_rect = (btn_x0, back_y0, btn_x0 + btn_w, back_y1)
         self._back_button.text = "Back"
         self._back_button.base_color = 0x4C4C64
         self._back_button.text_color = 0xFFFFFF
+        self._sidebar_group.add_button(self._back_button, back_rect)
         cy = back_y1 + 8
 
         if has_pipeline:
             save_y0 = cy
             save_y1 = cy + btn_h
-            self._btn_save_rect = (btn_x0, save_y0, btn_x0 + btn_w, save_y1)
-            self._save_button.rect = self._btn_save_rect
+            save_rect = (btn_x0, save_y0, btn_x0 + btn_w, save_y1)
             self._save_button.text = "[S] Save"
             self._save_button.base_color = 0x64C800 if dirty else 0x3C643C
             self._save_button.text_color = 0xFFFFFF if dirty else 0x648264
+            self._sidebar_group.add_button(self._save_button, save_rect)
             cy = save_y1 + 8
 
         finish_y0 = cy
         finish_y1 = cy + btn_h
-        self._btn_finish_rect = (btn_x0, finish_y0, btn_x0 + btn_w, finish_y1)
-        self._finish_button.rect = self._btn_finish_rect
+        finish_rect = (btn_x0, finish_y0, btn_x0 + btn_w, finish_y1)
         self._finish_button.text = "Finish"
         self._finish_button.base_color = 0x4C4C64 if has_pipeline else 0x3C643C
         self._finish_button.text_color = 0xFFFFFF
+        self._sidebar_group.add_button(self._finish_button, finish_rect)
         cy = finish_y1 + 12
         cy = _draw_section_divider(cy, gap_after=8)
 
@@ -961,7 +846,7 @@ class PathEditPage(MapViewportPage):
     def _on_mouse(self, event, x, y, flags, param) -> None:
         mx, my = self._get_map_coords(x, y)
 
-        if self.handle_view_mouse(event, x, y, flags, mx, my):
+        if self.consume_view_mouse(event, x, y, flags, mx, my):
             return
 
         if event == cv2.EVENT_MOUSEMOVE:
@@ -1024,33 +909,12 @@ class PathEditPage(MapViewportPage):
             self.render_request()
 
         elif event == cv2.EVENT_LBUTTONDOWN:
-            # Sidebar action buttons are handled by BasePage/Button.
             if x < self.SIDEBAR_W:
-                if (
-                    self._recorder_switch_rect is not None
-                    and self._recorder_mode_switch.handle_click(
-                        x,
-                        y,
-                        self._recorder_switch_rect,
-                    )
-                ):
-                    self.render_request()
-                    return
                 if self._get_selected_point() is not None:
                     self.selected_idx = -1
                     self._update_status(0xD2D200, "Cleared point selection.")
                     self.render_request()
                     return
-                if self._tier_selector_rect is not None:
-                    idx = self._tier_selector.handle_click(
-                        x,
-                        y,
-                        self._tier_selector_rect,
-                    )
-                    if idx >= 0:
-                        selected_map = self._tier_selector.get_selected_data()
-                        if isinstance(selected_map, str) and selected_map:
-                            self._switch_active_map(selected_map)
                 return
 
             # ── Map area clicks ─────────────────────────────────
@@ -1169,6 +1033,7 @@ class AreaEditPage(MapViewportPage):
         pipeline_context: dict | None = None,
         window_name: str = "MapTracker Tool - Area Editor",
     ):
+        self._map_dir = map_dir
         self.map_name = _resolve_editor_map_name(str(map_name), map_dir)
         self.map_path = os.path.join(map_dir, self.map_name)
         self.img = cv2.imread(self.map_path)
@@ -1212,7 +1077,13 @@ class AreaEditPage(MapViewportPage):
             on_click=self._on_click_finish,
             font_scale=0.45,
         )
-        self.buttons.extend([self._save_button, self._back_button, self._finish_button])
+        self._sidebar_group = WidgetGroup((0, 0, self.SIDEBAR_W, self.window_h))
+        self.groups.append(self._sidebar_group)
+        self.configure_map_layer_switching(
+            logical_map_name=self.map_name,
+            map_dir=self._map_dir,
+            base_image=self.img,
+        )
 
     @property
     def is_dirty(self) -> bool:
@@ -1296,6 +1167,8 @@ class AreaEditPage(MapViewportPage):
     def _render_ui(self, drawer: Drawer) -> None:
         self._render_status_bar(drawer)
         self._render_sidebar_bg(drawer)
+        self._sidebar_group.set_rect((0, 0, self.SIDEBAR_W, self.window_h))
+        self._sidebar_group.clear()
 
         sw = self.SIDEBAR_W
         h = self.window_h
@@ -1315,28 +1188,28 @@ class AreaEditPage(MapViewportPage):
         btn_h = 30
         btn_w = sw - pad * 2
         btn_x0 = pad
-        hidden_rect = (-100, -100, -90, -90)
-        self._save_button.rect = hidden_rect
-        self._back_button.rect = hidden_rect
-        self._finish_button.rect = hidden_rect
 
-        self._back_button.rect = (btn_x0, cy, btn_x0 + btn_w, cy + btn_h)
+        back_rect = (btn_x0, cy, btn_x0 + btn_w, cy + btn_h)
         self._back_button.base_color = 0x4C4C64
         self._back_button.text_color = 0xFFFFFF
+        self._sidebar_group.add_button(self._back_button, back_rect)
         cy += btn_h + 8
 
         has_pipeline = self.pipeline_context is not None
         if has_pipeline:
-            self._save_button.rect = (btn_x0, cy, btn_x0 + btn_w, cy + btn_h)
+            save_rect = (btn_x0, cy, btn_x0 + btn_w, cy + btn_h)
             self._save_button.base_color = 0x64C800 if self.is_dirty else 0x3C643C
             self._save_button.text_color = 0xFFFFFF if self.is_dirty else 0x648264
+            self._sidebar_group.add_button(self._save_button, save_rect)
             cy += btn_h + 8
 
-        self._finish_button.rect = (btn_x0, cy, btn_x0 + btn_w, cy + btn_h)
+        finish_rect = (btn_x0, cy, btn_x0 + btn_w, cy + btn_h)
         self._finish_button.base_color = 0x4C4C64 if has_pipeline else 0x3C643C
         self._finish_button.text_color = 0xFFFFFF
+        self._sidebar_group.add_button(self._finish_button, finish_rect)
 
         drawer.text(f"Zoom: {self.view.zoom:.2f}x", (pad, h - 70), 0.45, color=0xD2D200)
+        self.render_map_layer_selector(drawer, sidebar_width=self.SIDEBAR_W)
 
     def _render_once(self, drawer: Drawer) -> None:
         self._render_map_layer(drawer)
@@ -1386,7 +1259,7 @@ class AreaEditPage(MapViewportPage):
     def _on_mouse(self, event, x, y, flags, param) -> None:
         mx, my = self._get_map_coords(x, y)
 
-        if self.handle_view_mouse(event, x, y, flags, mx, my):
+        if self.consume_view_mouse(event, x, y, flags, mx, my):
             return
 
         if event == cv2.EVENT_LBUTTONDOWN:
@@ -1567,19 +1440,19 @@ class FileSelectStep(StepPage):
         )
 
     def _handle_content_mouse(self, event, x, y, flags, param):
-        rect = (50, 160, self.WINDOW_W - 50, self.WINDOW_H - self.FOOTER_H - 20)
-        if event == cv2.EVENT_LBUTTONDOWN:
-            idx = self.file_list.handle_click(x, y, rect)
-            if idx >= 0:
+        if self.file_list.consume_mouse(event, x, y, flags):
+            if self.file_list.submitted_idx >= 0:
                 self.stepper.push_step(
-                    NodeSelectStep(self.file_list.items[idx]["data"])
+                    NodeSelectStep(
+                        self.file_list.items[self.file_list.submitted_idx]["data"]
+                    )
                 )
-        elif event == cv2.EVENT_MOUSEWHEEL:
-            if self.file_list.handle_wheel(x, y, flags, rect):
+            else:
                 self.stepper.request_render()
+            return
 
     def _handle_content_key(self, key):
-        if self.search_input.handle_key(key):
+        if self.search_input.consume_key(key):
             q = self.search_input.text.lower()
             filtered = [
                 f
@@ -1589,17 +1462,16 @@ class FileSelectStep(StepPage):
             self.file_list.set_items(filtered)
             self.stepper.request_render()
             return
-        is_up = self.is_up_key(key)
-        is_down = self.is_down_key(key)
-        if is_up or is_down:
-            self.file_list.navigate(-1 if is_up else 1)
-            self.stepper.request_render()
-        elif key in (10, 13) and self.file_list.selected_idx >= 0:
-            self.stepper.push_step(
-                NodeSelectStep(
-                    self.file_list.items[self.file_list.selected_idx]["data"]
+        if self.file_list.consume_key(key):
+            if self.file_list.submitted_idx >= 0:
+                self.stepper.push_step(
+                    NodeSelectStep(
+                        self.file_list.items[self.file_list.submitted_idx]["data"]
+                    )
                 )
-            )
+            else:
+                self.stepper.request_render()
+            return
 
 
 class NodeSelectStep(StepPage):
@@ -1641,23 +1513,20 @@ class NodeSelectStep(StepPage):
         )
 
     def _handle_content_mouse(self, event, x, y, flags, param):
-        rect = (50, 100, self.WINDOW_W - 50, self.WINDOW_H - self.FOOTER_H - 20)
-        if event == cv2.EVENT_LBUTTONDOWN:
-            idx = self.node_list.handle_click(x, y, rect)
-            if idx >= 0:
-                self._submit(idx)
-        elif event == cv2.EVENT_MOUSEWHEEL:
-            if self.node_list.handle_wheel(x, y, flags, rect):
+        if self.node_list.consume_mouse(event, x, y, flags):
+            if self.node_list.submitted_idx >= 0:
+                self._submit(self.node_list.submitted_idx)
+            else:
                 self.stepper.request_render()
+            return
 
     def _handle_content_key(self, key):
-        is_up = self.is_up_key(key)
-        is_down = self.is_down_key(key)
-        if is_up or is_down:
-            self.node_list.navigate(-1 if is_up else 1)
-            self.stepper.request_render()
-        elif key in (10, 13) and self.node_list.selected_idx >= 0:
-            self._submit(self.node_list.selected_idx)
+        if self.node_list.consume_key(key):
+            if self.node_list.submitted_idx >= 0:
+                self._submit(self.node_list.submitted_idx)
+            else:
+                self.stepper.request_render()
+            return
 
     def _submit(self, idx):
         selected = self.candidates[idx]
@@ -1742,15 +1611,15 @@ class EditorAdapterStep(BasePage):
             return None
         return self.editor.render()
 
-    def _on_mouse(self, event, x, y, flags, param):
+    def consume_mouse(self, event, x, y, flags, param) -> bool:
         if self.editor is None:
-            return
-        self.editor.handle_mouse(event, x, y, flags, param)
+            return False
+        return self.editor.consume_mouse(event, x, y, flags, param)
 
-    def _on_key(self, key):
+    def consume_key(self, key: int) -> bool:
         if self.editor is None:
-            return
-        self.editor.handle_key(key)
+            return False
+        return self.editor.consume_key(key)
 
 
 class ExportStep(StepPage):
@@ -1796,21 +1665,24 @@ class ExportStep(StepPage):
             )
 
     def _handle_content_mouse(self, event, x, y, flags, param):
-        rect = (100, 150, self.WINDOW_W - 100, 350)
-        if event == cv2.EVENT_LBUTTONDOWN:
-            idx = self.list_widget.handle_click(x, y, rect)
-            if idx >= 0:
-                self._submit(self.list_widget.items[idx]["data"])
+        if self.list_widget.consume_mouse(event, x, y, flags):
+            if self.list_widget.submitted_idx >= 0:
+                self._submit(
+                    self.list_widget.items[self.list_widget.submitted_idx]["data"]
+                )
+            else:
+                self.stepper.request_render()
+            return
 
     def _handle_content_key(self, key):
-        if key in (10, 13) and self.list_widget.selected_idx >= 0:
-            self._submit(self.list_widget.items[self.list_widget.selected_idx]["data"])
-        elif key in (82, 0x260000, 65362):
-            self.list_widget.navigate(-1)
-            self.stepper.request_render()
-        elif key in (84, 0x280000, 65364):
-            self.list_widget.navigate(1)
-            self.stepper.request_render()
+        if self.list_widget.consume_key(key):
+            if self.list_widget.submitted_idx >= 0:
+                self._submit(
+                    self.list_widget.items[self.list_widget.submitted_idx]["data"]
+                )
+            else:
+                self.stepper.request_render()
+            return
 
     def _submit(self, mode):
         if mode == "S":
@@ -1977,15 +1849,15 @@ class RegionEditorAdapterStep(BasePage):
             return None
         return self.editor.render()
 
-    def _on_mouse(self, event, x, y, flags, param):
+    def consume_mouse(self, event, x, y, flags, param) -> bool:
         if self.editor is None:
-            return
-        self.editor.handle_mouse(event, x, y, flags, param)
+            return False
+        return self.editor.consume_mouse(event, x, y, flags, param)
 
-    def _on_key(self, key):
+    def consume_key(self, key: int) -> bool:
         if self.editor is None:
-            return
-        self.editor.handle_key(key)
+            return False
+        return self.editor.consume_key(key)
 
 
 class App(PageStepper):
