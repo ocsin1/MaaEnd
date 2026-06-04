@@ -43,9 +43,7 @@
                 ]
             }
         },
-        "post_delay": 0,
         "pre_delay": 0,
-        "rate_limit": 0,
         "post_wait_freezes": {
             "time": 100,
             "target": [
@@ -55,6 +53,8 @@
                 140
             ]
         },
+        "post_delay": 0,
+        "rate_limit": 0,
         "next": [
             "CreditShoppingClaimCredit",
             "CreditShoppingNoCreditClaim"
