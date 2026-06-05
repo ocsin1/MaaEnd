@@ -75,8 +75,9 @@ jobs:
       - name: Install dependencies
         run: |
           pip install -r tools/map_tracker/requirements.txt
+          pip install -r tools/optimize_templates/requirements.txt
 
-      - name: Fetch layout data
+      - name: Download JSON data
         run: |
           python3 tools/map_tracker/map_fetcher.py json -o .cache/data
 
@@ -88,7 +89,7 @@ jobs:
           echo "game_version=${VER[1]}" >> "$GITHUB_OUTPUT"
           echo "res_version=${VER[2]}" >> "$GITHUB_OUTPUT"
 
-      - name: Fetch map images
+      - name: Download map images
         run: |
           python3 tools/map_tracker/map_fetcher.py image -i .cache/data -o .cache/images
 
@@ -100,14 +101,22 @@ jobs:
         run: |
           python3 tools/map_tracker/map_generator.py tidy_tiers -i .cache/images -o .cache/final
 
-      - name: Generate bbox data
-        run: |
-          python3 tools/map_tracker/map_generator.py bbox -i .cache/final -o .cache/final
-
-      - name: Copy results to assets
+      - name: Copy images to assets
         run: |
           cp -f .cache/final/*.png assets/resource/image/MapTracker/map/
-          cp -f .cache/final/*.json assets/data/MapTracker/
+
+      - name: Generate bbox data
+        run: |
+          python3 tools/map_tracker/map_generator.py bbox -i assets/resource/image/MapTracker/map -o assets/data/MapTracker
+
+      - name: Setup oxipng
+        uses: baptiste0928/cargo-install@v3
+        with:
+          crate: oxipng
+
+      - name: Optimize png images
+        run: |
+          python3 tools/optimize_templates/optimize_templates.py
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v8
