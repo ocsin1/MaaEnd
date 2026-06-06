@@ -501,7 +501,14 @@ class ViewportManager:
         self._vx = real_x - view_w / 2.0
         self._vy = real_y - view_h / 2.0
 
-    def fit_to(self, real_points: list[Point], padding: float = 0.3) -> None:
+    def fit_to(
+        self,
+        real_points: list[Point],
+        *,
+        padding: float = 0.0,
+        min_zoom: float | None = None,
+        max_zoom: float | None = None,
+    ) -> None:
         if not real_points:
             return
         min_x = min(p[0] for p in real_points)
@@ -514,8 +521,11 @@ class ViewportManager:
         padding = max(0.0, min(0.49, padding))
         fit_w = max(1.0, self._vw * (1.0 - 2.0 * padding))
         fit_h = max(1.0, self._vh * (1.0 - 2.0 * padding))
+
         target_zoom = min(fit_w / span_x, fit_h / span_y)
-        self.zoom = target_zoom
+        min_zoom = self._min_zoom if min_zoom is None else max(self._min_zoom, min_zoom)
+        max_zoom = self._max_zoom if max_zoom is None else min(self._max_zoom, max_zoom)
+        self.zoom = max(min_zoom, min(max_zoom, target_zoom))
 
         view_w = self._vw / self._zoom
         view_h = self._vh / self._zoom
