@@ -53,12 +53,12 @@ jobs:
       - name: 查看完整输入输出
         if: always()
         env:
-          ANALYSIS_PROMPT: ${{ steps.analysis.outputs.analysis-prompt }}
-          ISSUE_NUMBER: ${{ steps.analysis.outputs.issue-number }}
-          COMMENT_ID: ${{ steps.analysis.outputs.comment-id }}
-          COMMENT_URL: ${{ steps.analysis.outputs.comment-url }}
-          CODEX_OUTPUT: ${{ steps.analysis.outputs.codex-output }}
-          FINAL_CONCLUSION: ${{ steps.analysis.outputs.final-conclusion }}
+          ANALYSIS_PROMPT: ${{ steps.codex.outputs.analysis-prompt }}
+          ISSUE_NUMBER: ${{ steps.codex.outputs.issue-number }}
+          COMMENT_ID: ${{ steps.codex.outputs.comment-id }}
+          COMMENT_URL: ${{ steps.codex.outputs.comment-url }}
+          CODEX_OUTPUT: ${{ steps.codex.outputs.codex-output }}
+          FINAL_CONCLUSION: ${{ steps.codex.outputs.final-conclusion }}
         run: |
           printf '%s\n' "$ANALYSIS_PROMPT"
           echo "issue_number=$ISSUE_NUMBER"
