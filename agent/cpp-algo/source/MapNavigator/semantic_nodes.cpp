@@ -2,6 +2,7 @@
 #include <chrono>
 #include <cmath>
 #include <limits>
+#include <optional>
 #include <thread>
 
 #include <MaaFramework/MaaAPI.h>
@@ -162,6 +163,7 @@ Result TickPortalTransit(const Context& ctx)
         ctx.runtime_state->semantic.portal_transit_keep_moving_until_fix = false;
         ctx.runtime_state->semantic.portal_transit_needs_reacquire = false;
         ctx.runtime_state->semantic.portal_transit_started = {};
+        ctx.runtime_state->dynamic_replan_requested = true;
         ClearHeldZoneCandidate(ctx.runtime_state);
         LogInfo << "Portal transit landing confirmed." << VAR(ctx.position->zone_id);
         result.consumed = true;
@@ -397,7 +399,7 @@ Result ConsumeInlineSemantics(const Context& ctx)
 Result HandleArrivalSemantic(const Context& ctx, const Waypoint& waypoint, double actual_distance)
 {
     Result result;
-    const size_t arrived_absolute_node_idx = ctx.session->CurrentAbsoluteNodeIndex();
+    const std::optional<size_t> arrived_absolute_node_idx = ctx.session->CurrentAbsoluteNodeIndex();
 
     if (waypoint.RequiresStrictArrival() && ctx.motion_controller->IsMoving()) {
         StopMotionAndCommitment(ctx);

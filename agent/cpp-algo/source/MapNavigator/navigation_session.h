@@ -3,6 +3,7 @@
 #include <chrono>
 #include <cstdint>
 #include <limits>
+#include <optional>
 #include <string>
 #include <vector>
 
@@ -28,19 +29,21 @@ struct NavigationSession
     const std::vector<Waypoint>& current_path() const;
     size_t path_origin_index() const;
     size_t current_node_idx() const;
-    size_t CurrentAbsoluteNodeIndex() const;
+    std::optional<size_t> CurrentAbsoluteNodeIndex() const;
 
     bool HasCanonicalFinalGoal() const;
     const Waypoint& CanonicalFinalGoal() const;
     bool HasReachedCanonicalFinalGoal(const NaviPosition& position) const;
     bool HasSatisfiedFinalSuccess(const NaviPosition& position, const char* reason);
-    void NoteCanonicalFinalGoalConsumed(size_t consumed_absolute_index, const NaviPosition& position, const char* reason);
+    void NoteCanonicalFinalGoalConsumed(std::optional<size_t> consumed_absolute_index, const NaviPosition& position, const char* reason);
     void NoteRouteTailConsumed(const NaviPosition& position, const char* reason);
 
     bool success() const;
     bool HasCurrentWaypoint() const;
     const Waypoint& CurrentWaypoint() const;
     const Waypoint& CurrentPathAt(size_t index) const;
+    std::optional<size_t> CanonicalIndexAtCurrent() const;
+    std::optional<size_t> CanonicalIndexAtCurrentPath(size_t index) const;
 
     const std::string& current_zone_id() const;
     void UpdateCurrentZone(const std::string& zone_id);
@@ -54,8 +57,7 @@ struct NavigationSession
     int64_t StalledMs(const std::chrono::steady_clock::time_point& now) const;
     double best_distance_to_target() const;
 
-    size_t FindRejoinSliceStart(size_t continue_index) const;
-    void ApplyRejoinSlice(size_t slice_start, const NaviPosition& pos);
+    void ApplyDynamicOverlay(std::vector<Waypoint> generated_prefix, size_t continue_index, const NaviPosition& pos);
 
     NaviPhase phase() const;
     void UpdatePhase(NaviPhase next_phase, const char* reason);
@@ -64,6 +66,7 @@ private:
     std::vector<Waypoint> original_path_;
     std::vector<Waypoint> current_path_;
     size_t path_origin_index_ = 0;
+    size_t generated_prefix_size_ = 0;
     size_t current_node_idx_ = 0;
     std::string current_zone_id_;
     NaviPhase phase_ = NaviPhase::Bootstrap;
