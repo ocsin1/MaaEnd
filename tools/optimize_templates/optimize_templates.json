@@ -830,5 +830,13 @@
     "resource/image/SeizeDeliveryJobs/JobListTab": "d956973af531e29ccca51b04998b7eec1f671ffd5a657bdfb69c5e87f50856c1",
     "resource/image/SeizeDeliveryJobs/SubmitGood": "332e810540704b3df63777d378c58e35cfa667b6b47404f9294302b562cbfc30",
     "resource/image/SeizeDeliveryJobs/JobListTabActive": "bcbe83d938792ca385bd80257a748f9db908e547eb2a7bcc869c939456613015",
-    "resource/image/SeizeDeliveryJobs/InWulingDepotNode": "0f9c84dd024932d14a587dfcfe165351085a0a85a18449b5d3b2eb2590d08ea5"
+    "resource/image/SeizeDeliveryJobs/InWulingDepotNode": "0f9c84dd024932d14a587dfcfe165351085a0a85a18449b5d3b2eb2590d08ea5",
+    "resource/image/TrialOfSwordmancy/BattlePts": "c38be83096051f79d9ddb311f7e2ab0a23496a09e582433ba9e0b3b1c22a332b",
+    "resource/image/TrialOfSwordmancy/RewardMode": "d9d98df92b355ff6b5299a6bb63a0ad1283ce39c54454c546183535c70fbaa8d",
+    "resource/image/TrialOfSwordmancy/MonsterCard": "404a23ebfb2cc2f1b88709e6fc69be86a7f8babab1319c4e241297c86829284b",
+    "resource/image/TrialOfSwordmancy/TrialStart": "33c5bf10afa68b6288731dc70843601d74d90d2c55fab47c1aa7ba0e863a747c",
+    "resource/image/TrialOfSwordmancy/TrialTrigger1": "2bf9939b0e557db9224582e8727be4f0aa90680ad3fd7f8ff4928e2dc9981933",
+    "resource/image/TrialOfSwordmancy/TrialTrigger2": "04e926de4a49ae134fb76777cdecc9b0c54d215f67150f5fae43235dc1c9ffe8",
+    "resource/image/TrialOfSwordmancy/DoubleReward": "422bb77719c93efda7eed9677b9c7ba4c7c77ab5a9423a087491ef5d00c8ab38",
+    "resource/image/LevelUpOperator/LevelUpWhitePlus": "b992d4a36dcead56627d3a7c10946f28c35f9b94c1be907e2b268f18f2e352fb"
 }
