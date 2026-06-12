@@ -14,8 +14,9 @@ import (
 )
 
 const (
-	seizeDeliveryJobsDepartureComponent       = "SeizeDeliveryJobsDepartureAction"
-	seizeDeliveryJobsBlueTaskLocationTemplate = "image/SeizeDeliveryJobs/BlueTaskLocation.png"
+	seizeDeliveryJobsDepartureComponent          = "SeizeDeliveryJobsDepartureAction"
+	seizeDeliveryJobsBlueTaskLocationTemplate    = "image/SeizeDeliveryJobs/BlueTaskLocation.png"
+	seizeDeliveryJobsBlueTaskLocationTemplateAlt = "image/SeizeDeliveryJobs/BlueTaskLocation2.png"
 )
 
 // SeizeDeliveryJobsDepartureAction navigates from the tracked task marker back in the open world.
@@ -47,6 +48,7 @@ func (a *SeizeDeliveryJobsDepartureAction) Run(ctx *maa.Context, arg *maa.Custom
 		return false
 	}
 
+	// 1. Parse parameters
 	param, err := a.parseParam(arg.CustomActionParam)
 	if err != nil {
 		log.Error().
@@ -56,9 +58,11 @@ func (a *SeizeDeliveryJobsDepartureAction) Run(ctx *maa.Context, arg *maa.Custom
 		return false
 	}
 
+	// 2. Find the destination on the big-map, or use a cached one if currently retrying
 	var mapName string
 	var target [2]float64
 	if param.IsRetry {
+		// Current call is a retry, then use cached destination
 		cached, ok := a.loadCachedDestination()
 		if !ok {
 			log.Error().
@@ -75,6 +79,7 @@ func (a *SeizeDeliveryJobsDepartureAction) Run(ctx *maa.Context, arg *maa.Custom
 			Float64("targetY", target[1]).
 			Msg("using cached delivery job destination")
 	} else {
+		// Current call is the first attempt, find the destination and cache it
 		screenTarget, ok := a.findAndCacheTarget(ctx, arg, &mapName, &target)
 		if !ok {
 			return false
@@ -84,6 +89,7 @@ func (a *SeizeDeliveryJobsDepartureAction) Run(ctx *maa.Context, arg *maa.Custom
 		}
 	}
 
+	// 3. Return to open world if currently in big-map
 	if detail, err := ctx.RunTask("SceneAnyEnterWorld"); err != nil || detail == nil || !detail.Status.Success() {
 		event := log.Error().
 			Err(err).
@@ -96,10 +102,12 @@ func (a *SeizeDeliveryJobsDepartureAction) Run(ctx *maa.Context, arg *maa.Custom
 		return false
 	}
 
+	// 4. Run the goal to navigate to the destination
 	if !a.runGoal(ctx, arg, mapName, target) {
 		return false
 	}
 
+	// 5. After reaching the destination, submit the delivery job
 	return a.runSubmitEntry(ctx)
 }
 
@@ -171,6 +179,7 @@ func (a *SeizeDeliveryJobsDepartureAction) findTarget(ctx *maa.Context, arg *maa
 		return "", [2]float64{}, [2]int{}, false
 	}
 
+	// Figure out the current big-map information
 	inferResult, err := a.inferBigMap(ctx, arg, img)
 	if err != nil {
 		log.Error().
@@ -180,12 +189,12 @@ func (a *SeizeDeliveryJobsDepartureAction) findTarget(ctx *maa.Context, arg *maa
 		return "", [2]float64{}, [2]int{}, false
 	}
 
-	matches, err := a.findBlueTaskLocation(ctx, arg, img)
+	// Invoke find-image to locate the task marker on the big-map
+	matches, err := a.findBlueTaskLocation(ctx, arg, img, inferResult.MapName)
 	if err != nil {
 		log.Error().
 			Err(err).
 			Str("component", seizeDeliveryJobsDepartureComponent).
-			Str("template", seizeDeliveryJobsBlueTaskLocationTemplate).
 			Msg("failed to find delivery job marker")
 		return "", [2]float64{}, [2]int{}, false
 	}
@@ -197,6 +206,7 @@ func (a *SeizeDeliveryJobsDepartureAction) findTarget(ctx *maa.Context, arg *maa
 		return "", [2]float64{}, [2]int{}, false
 	}
 
+	// Choose the best match for the task marker
 	best := matches[0]
 	screenTarget := [2]int{int(math.Round(best.ScreenX)), int(math.Round(best.ScreenY))}
 	return inferResult.MapName, [2]float64{best.MapX, best.MapY}, screenTarget, true
@@ -224,27 +234,22 @@ func (a *SeizeDeliveryJobsDepartureAction) inferBigMap(ctx *maa.Context, arg *ma
 	if result.MapName == "" {
 		return nil, fmt.Errorf("big-map inference returned empty map name")
 	}
-	if result.ViewPort.Scale <= 0 {
-		return nil, fmt.Errorf("invalid inferred scale: %f", result.ViewPort.Scale)
-	}
 	return &result, nil
 }
 
-func (a *SeizeDeliveryJobsDepartureAction) findBlueTaskLocation(ctx *maa.Context, arg *maa.CustomActionArg, img image.Image) ([]maptrackerbigmap.MapTrackerBigMapFindImageMatch, error) {
-	param := struct {
-		Template   string  `json:"template"`
-		Expected   bool    `json:"expected"`
-		GreenMask  bool    `json:"green_mask,omitempty"`
-		ZoomValue  float64 `json:"zoom_value,omitempty"`
-		MaxMatches int     `json:"max_matches,omitempty"`
-	}{
-		Template:   seizeDeliveryJobsBlueTaskLocationTemplate,
-		Expected:   true,
-		GreenMask:  true,
-		ZoomValue:  0.25,
-		MaxMatches: 1,
+func (a *SeizeDeliveryJobsDepartureAction) findBlueTaskLocation(ctx *maa.Context, arg *maa.CustomActionArg, img image.Image, mapName string) ([]maptrackerbigmap.MapTrackerBigMapFindImageMatch, error) {
+	tpl := seizeDeliveryJobsBlueTaskLocationTemplate
+	if mapName == "map02_lv005" {
+		tpl = seizeDeliveryJobsBlueTaskLocationTemplateAlt
 	}
-	paramBytes, err := json.Marshal(param)
+
+	paramBytes, err := json.Marshal(map[string]any{
+		"template":    tpl,
+		"expected":    true,
+		"green_mask":  true,
+		"zoom_value":  0.25,
+		"max_matches": 1,
+	})
 	if err != nil {
 		return nil, fmt.Errorf("failed to marshal find-image parameters: %w", err)
 	}
@@ -258,9 +263,6 @@ func (a *SeizeDeliveryJobsDepartureAction) findBlueTaskLocation(ctx *maa.Context
 		Roi:                    maa.Rect{0, 0, img.Bounds().Dx(), img.Bounds().Dy()},
 	})
 	if resultWrapper == nil || resultWrapper.Detail == "" {
-		if !hit {
-			return nil, nil
-		}
 		return nil, fmt.Errorf("find-image result is empty")
 	}
 
@@ -303,34 +305,13 @@ func (a *SeizeDeliveryJobsDepartureAction) clickTracking(ctx *maa.Context, scree
 	return true
 }
 
-func (a *SeizeDeliveryJobsDepartureAction) runSubmitEntry(ctx *maa.Context) bool {
-	if detail, err := ctx.RunTask("SeizeDeliveryJobsSubmitEntry"); err != nil || detail == nil || !detail.Status.Success() {
-		event := log.Error().
-			Err(err).
-			Str("component", seizeDeliveryJobsDepartureComponent).
-			Str("node", "SeizeDeliveryJobsSubmitEntry")
-		if detail != nil {
-			event = event.Int64("subtaskID", detail.ID).Str("subtaskStatus", detail.Status.String())
-		}
-		event.Msg("failed to submit delivery job")
-		return false
-	}
-	return true
-}
-
 func (a *SeizeDeliveryJobsDepartureAction) runGoal(ctx *maa.Context, arg *maa.CustomActionArg, mapName string, target [2]float64) bool {
-	param := struct {
-		MapName         string     `json:"map_name"`
-		Target          [2]float64 `json:"target"`
-		ZiplinePolicy   string     `json:"zipline_policy"`
-		StuckMitigators []string   `json:"stuck_mitigators"`
-	}{
-		MapName:         mapName,
-		Target:          target,
-		ZiplinePolicy:   maptrackerdefault.ZIPLINE_POLICY_LAZY,
-		StuckMitigators: []string{"MoveOrDeleteDevice"},
-	}
-	paramBytes, err := json.Marshal(param)
+	paramBytes, err := json.Marshal(map[string]any{
+		"map_name":        mapName,
+		"target":          target,
+		"zipline_policy":  maptrackerdefault.ZIPLINE_POLICY_LAZY,
+		"stuck_mitigators": []string{"MoveOrDeleteDevice"},
+	})
 	if err != nil {
 		log.Error().
 			Err(err).
@@ -356,4 +337,19 @@ func (a *SeizeDeliveryJobsDepartureAction) runGoal(ctx *maa.Context, arg *maa.Cu
 			Msg("MapTrackerGoal failed")
 	}
 	return ok
+}
+
+func (a *SeizeDeliveryJobsDepartureAction) runSubmitEntry(ctx *maa.Context) bool {
+	if detail, err := ctx.RunTask("SeizeDeliveryJobsSubmitEntry"); err != nil || detail == nil || !detail.Status.Success() {
+		event := log.Error().
+			Err(err).
+			Str("component", seizeDeliveryJobsDepartureComponent).
+			Str("node", "SeizeDeliveryJobsSubmitEntry")
+		if detail != nil {
+			event = event.Int64("subtaskID", detail.ID).Str("subtaskStatus", detail.Status.String())
+		}
+		event.Msg("failed to submit delivery job")
+		return false
+	}
+	return true
 }
