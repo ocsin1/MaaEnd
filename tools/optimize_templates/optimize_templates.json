@@ -871,5 +871,6 @@
     "resource/image/TrialOfSwordmancy/ChallengeBackground": "f06af020f910e7617f9952fa044a0f6f5f90cb6e1778753e0ba4fea6d03aaa69",
     "resource/image/TrialOfSwordmancy/OverflowExclamation": "764c37d79f192ef848977b540212a1b93a8b42cff562de9d923dc4a0413f67ba",
     "resource/image/TrialOfSwordmancy/GiveUpNormal": "c30564332c3d5443de8b27675cc797dea7c99510518f8ab51ff50bd9b4e6953c",
-    "resource/image/MapTracker/MiniMapIcons/Pointer": "5c7290606a9c4d9f14c330bb31a9f36981c28a7213c3d91a54b9c89a430c6373"
+    "resource/image/MapTracker/MiniMapIcons/Pointer": "5c7290606a9c4d9f14c330bb31a9f36981c28a7213c3d91a54b9c89a430c6373",
+    "resource/image/SeizeDeliveryJobs/DepotNodePage/JobListLoaded": "d3d0aacb5c41f4f8a85d8448fbd446c6a12c919c1093346d23e0814da64f94a6"
 }
