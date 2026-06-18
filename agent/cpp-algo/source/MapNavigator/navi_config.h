@@ -94,6 +94,13 @@ constexpr double kCloseGoalDetourSuppressSlack = 6.0;
 constexpr int32_t kLocalizationLossUnstickIntervalMs = kObstacleRecoveryMinTriggerMs;
 constexpr int32_t kLocalizationLossTimeoutMs = kDynamicRecoveryTotalTimeoutMs;
 
+// Off-route wedge watchdog. Corridor progress (what the stall clocks see) keeps advancing while the authored
+// cursor is pinned far off-route, so a bad latch wanders with zero route progress until the action hard-fails.
+// Runs only while off-corridor with no straight-line gain: replan first, then fail-fast so the pipeline retries.
+constexpr int32_t kOffRouteWedgeReplanMs = 6000;
+constexpr int32_t kOffRouteWedgeReplanCooldownMs = 4000;
+constexpr int32_t kOffRouteWedgeFailMs = 12000;
+
 // --- NavRunController (RUN corridor follower) ---
 constexpr double kNavRunLookaheadLowSpeedM = 2.5;
 constexpr double kNavRunLookaheadWalkM = 4.0;
@@ -136,6 +143,25 @@ constexpr const char* kDefaultCompressedNavmeshRelativePath = "assets/resource/m
 constexpr const char* kDefaultCollectEntry = "AutoCollectClickStart";
 constexpr const char* kCollectPipelineOverride = R"({"AutoCollectClickEnd":{"next":[]}})";
 constexpr int32_t kCollectPostSleepMs = 80;
+
+constexpr const char* kCollectPrewarmOverride =
+    R"({"AutoCollectClick":{"action":{"type":"DoNothing"},"next":[]},"AutoCollectClickEnd":{"next":[]}})";
+constexpr const char* kCollectRoiNode = "AutoCollectClick";
+constexpr int32_t kCollectRoiBaseWidth = 1280;
+constexpr int32_t kCollectRoiBaseHeight = 720;
+
+constexpr const char* kCollectIconRelativePath = "resource/image/RealTimeTask/AutoPick.png";
+constexpr double kCollectIconMatchThreshold = 0.75;
+constexpr int32_t kCollectLabelBrightThreshold = 210;  // 0-255 luma; near-white glyphs survive, grass (~200) drops
+constexpr int32_t kCollectLabelMorphWidth = 8;         // horizontal close width that merges glyphs into a word
+constexpr int32_t kCollectLabelMinWidth = 24;          // ~2-char CJK name floor (the 5-char label measured 78px)
+constexpr int32_t kCollectLabelMinHeight = 7;          // reject thin specks (label glyph row ~14px)
+constexpr int32_t kCollectLabelMaxHeight = 26;         // reject tall non-text structures
+constexpr double kCollectLabelMaxFill = 0.80;          // text is sparse (label fill ~0.4-0.66); solid blob = panel/icon
+constexpr int32_t kCollectScanIntervalMs = 1500;
+constexpr double kCollectRetryMinMoveWu = 2.5;
+constexpr double kCollectSprintSuppressBandWu = 8.0;
+constexpr int32_t kSprintCancelReleaseMs = 60;
 
 constexpr const char* kDefaultDigEntry = "AutoCollectDigStart";
 constexpr const char* kDigPipelineOverride = R"({"AutoCollectDigEnd":{"next":[]}})";
