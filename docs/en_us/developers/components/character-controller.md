@@ -69,7 +69,7 @@ On each invocation, one of the following actions is taken based on the current f
 
 | Condition                                                                                  | Action            |
 | ------------------------------------------------------------------------------------------ | ----------------- |
-| Bounding box width < `far_target_width` (when `far_target_width` is set)                 | Step forward      |
+| Bounding box width < `far_target_width` (when `far_target_width` is set)                   | Step forward      |
 | Target is to the left of screen center (beyond `align_threshold`)                          | Rotate view left  |
 | Target is to the right of screen center (beyond `align_threshold`)                         | Rotate view right |
 | Target is aligned, but Y coordinate > 480 (target in lower half of screen, already passed) | Step backward     |

@@ -91,8 +91,8 @@
             "6天",
             "7天"
         ],
-        "order_by": "Expected",
-        "only_rec": true
+        "only_rec": true,
+        "order_by": "Expected"
     },
     "FindDeadlineEmergencySanityBooster": {
         "desc": "识别带时限的应急理智加强剂",

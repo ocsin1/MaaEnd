@@ -472,8 +472,8 @@
             "TrialOfSwordmancyGiveUp"
         ],
         "action": "Click",
-        "rate_limit": 300,
         "timeout": 10000,
+        "rate_limit": 300,
         "next": [
             "TrialOfSwordmancyAbandProbeWaitPopup"
         ]
@@ -494,8 +494,8 @@
             "CancelButton"
         ],
         "action": "Click",
-        "rate_limit": 300,
         "timeout": 10000,
+        "rate_limit": 300,
         "next": [
             "TrialOfSwordmancyAbandProbeWaitBackFreeze"
         ]

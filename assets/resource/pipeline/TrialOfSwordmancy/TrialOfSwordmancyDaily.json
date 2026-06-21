@@ -64,12 +64,12 @@
         "desc": "选剑演武单步决策",
         "recognition": "Custom",
         "custom_recognition": "TrialOfSwordmancy.Recognize",
+        "pre_delay": 0,
         "action": "Custom",
         "custom_action": "TrialOfSwordmancy.Decide",
         "custom_action_param": {
             "overflowMode": "OverflowNone"
         },
-        "pre_delay": 0,
         "post_delay": 0,
         // next 由 go 运行时 override，按决策分派到：
         //   抽牌 → DoDrawCard ｜ 翻倍 → DoDoubleReward ｜ 放弃 → DailyGiveUp ｜ 开始演算 → StartTrial（Fight.json）
@@ -109,7 +109,6 @@
         "all_of": [
             "TrialOfSwordmancyDrawCard"
         ],
-        "pre_delay": 0,
         "pre_wait_freezes": {
             "time": 200,
             "target": [
@@ -119,6 +118,7 @@
                 289
             ]
         },
+        "pre_delay": 0,
         "post_wait_freezes": {
             "time": 200,
             "target": [
