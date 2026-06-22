@@ -47,9 +47,9 @@
                 ]
             }
         },
+        "action": "StopTask",
         "focus": {
             "Node.Recognition.Succeeded": "$task.AutoUseSpMedication.focus.no_booster_available"
-        },
-        "action": "StopTask"
+        }
     }
 }
