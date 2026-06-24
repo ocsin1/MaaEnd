@@ -73,6 +73,7 @@
                 "SeizeDeliveryJobsDepartureAction",
                 "SeizeDeliveryJobsResetScanStateAction",
                 "SeizeDeliveryJobsScanTargetAction",
+                "SeizeDeliveryJobsTimedFallbackResetAction",
                 "RealTimeTaskAction",
                 "SceneManagerMenuListClickItemAction",
                 "SubTask",
