@@ -1,0 +1,22 @@
+{
+    "CloseGame": {
+        "action": "StopApp",
+        "package": ""
+    },
+    "CloseGame_CN": {
+        "action": "StopApp",
+        "package": ""
+    },
+    "CloseGame_Bilibili": {
+        "action": "StopApp",
+        "package": ""
+    },
+    "CloseGame_Global": {
+        "action": "StopApp",
+        "package": ""
+    },
+    "CloseGame_VN": {
+        "action": "StopApp",
+        "package": ""
+    }
+}
