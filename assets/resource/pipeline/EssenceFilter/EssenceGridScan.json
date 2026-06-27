@@ -29,12 +29,6 @@
                 }
             }
         },
-        "attach": {
-            "flawless_essence": true,
-            "pure_essence": false,
-            "skip_thumb_lock": true,
-            "skip_thumb_discard": true
-        },
         "pre_wait_freezes": {
             "time": 100,
             "target": [
@@ -49,7 +43,13 @@
         "post_delay": 0,
         "next": [
             "EssenceFilterFinish"
-        ]
+        ],
+        "attach": {
+            "flawless_essence": true,
+            "pure_essence": false,
+            "skip_thumb_lock": true,
+            "skip_thumb_discard": true
+        }
     },
     "EssenceGridClickPending": {
         "desc": "点击 C++ 已选择的基质格子",
