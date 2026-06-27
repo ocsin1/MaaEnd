@@ -39,7 +39,6 @@ concurrency:
 
 jobs:
   prepare:
-    if: github.repository == 'MaaEnd/MaaEnd'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     outputs:

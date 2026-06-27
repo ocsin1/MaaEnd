@@ -7,7 +7,6 @@ on:
 
 jobs:
   format:
-    if: ${{ github.repository_owner == 'MaaEnd' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository

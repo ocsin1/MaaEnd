@@ -10,24 +10,7 @@ permissions:
   contents: write
 
 jobs:
-  check-repository:
-    runs-on: ubuntu-latest
-    outputs:
-      should_run: ${{ steps.check.outputs.should_run }}
-    steps:
-      - id: check
-        run: |
-          if [[ "${{ github.repository }}" == "MaaEnd/MaaEnd" ]]; then
-            echo "Repository is MaaEnd/MaaEnd, proceeding with sync"
-            echo "should_run=true" >> $GITHUB_OUTPUT
-          else
-            echo "Repository is not MaaEnd/MaaEnd, skipping sync"
-            echo "should_run=false" >> $GITHUB_OUTPUT
-          fi
-
   sync-schema-files:
-    needs: check-repository
-    if: needs.check-repository.outputs.should_run == 'true'
     runs-on: ubuntu-latest
 
     steps:

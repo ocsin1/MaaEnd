@@ -20,7 +20,6 @@ permissions:
 jobs:
   cherry-pick:
     if: |
-      github.repository_owner == 'MaaEnd' &&
       github.event.pull_request.merged == true &&
       startsWith(github.event.pull_request.base.ref, 'release/v')
     runs-on: ubuntu-latest

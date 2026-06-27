@@ -18,8 +18,7 @@ jobs:
     name: Optimize PNG Images
     # Only run on main repo, skip bot commits to prevent infinite loops
     if: >-
-      ${{ github.repository_owner == 'MaaEnd' &&
-          github.actor != 'github-actions[bot]' &&
+      ${{ github.actor != 'github-actions[bot]' &&
           github.triggering_actor != 'github-actions[bot]' }}
     runs-on: ubuntu-latest
     steps:
