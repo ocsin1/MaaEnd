@@ -5,34 +5,34 @@ Last updated June 28, 2026.
 
 ## File overview
 
-| Path                                                                | Role                                              |
-| ------------------------------------------------------------------- | ------------------------------------------------- |
-| `assets/interface.json`                                             | Task mount (`dijiang_ship` group)                 |
-| `assets/tasks/GiftOperator.json`                                    | Task entry and UI options                         |
-| `assets/resource/pipeline/GiftOperator/GiftOperatorMain.json`       | Entry and Dijiang positioning                     |
-| `assets/resource/pipeline/GiftOperator/GiftOperatorNavigation.json` | Pathfinding and contact terminal interaction      |
-| `assets/resource/pipeline/GiftOperator/GiftOperatorContact.json`    | Operator selection on the contact screen          |
-| `assets/resource/pipeline/GiftOperator/GiftOperatorGiftFlow.json`   | Gift giving / receiving in dialogue               |
-| `assets/resource/pipeline/GiftOperator/GiftOperatorBagFull.json`    | Full-inventory handling                           |
-| `assets/resource/pipeline/GiftOperator/Operator/Operator.json`      | Operator recognition in receive-only mode         |
-| `assets/resource/image/GiftOperator/`                               | Win32 recognition images                          |
-| `assets/resource_adb/image/GiftOperator/`                           | ADB recognition images                            |
-| `assets/resource_adb/pipeline/GiftOperator/`                        | ADB Pipeline mirror                               |
-| `tools/gift_operator/fill_gift_operator_green_box.py`               | Operator portrait `green_mask` formatting         |
-| `assets/locales/interface/*.json`                                   | Task, option, and operator name strings           |
+| Path                                                                | Role                                         |
+| ------------------------------------------------------------------- | -------------------------------------------- |
+| `assets/interface.json`                                             | Task mount (`dijiang_ship` group)            |
+| `assets/tasks/GiftOperator.json`                                    | Task entry and UI options                    |
+| `assets/resource/pipeline/GiftOperator/GiftOperatorMain.json`       | Entry and Dijiang positioning                |
+| `assets/resource/pipeline/GiftOperator/GiftOperatorNavigation.json` | Pathfinding and contact terminal interaction |
+| `assets/resource/pipeline/GiftOperator/GiftOperatorContact.json`    | Operator selection on the contact screen     |
+| `assets/resource/pipeline/GiftOperator/GiftOperatorGiftFlow.json`   | Gift giving / receiving in dialogue          |
+| `assets/resource/pipeline/GiftOperator/GiftOperatorBagFull.json`    | Full-inventory handling                      |
+| `assets/resource/pipeline/GiftOperator/Operator/Operator.json`      | Operator recognition in receive-only mode    |
+| `assets/resource/image/GiftOperator/`                               | Win32 recognition images                     |
+| `assets/resource_adb/image/GiftOperator/`                           | ADB recognition images                       |
+| `assets/resource_adb/pipeline/GiftOperator/`                        | ADB Pipeline mirror                          |
+| `tools/gift_operator/fill_gift_operator_green_box.py`               | Operator portrait `green_mask` formatting    |
+| `assets/locales/interface/*.json`                                   | Task, option, and operator name strings      |
 
 ## Paths to update when adding an operator
 
 When adding a new operator, update at least these 6 places (`<Name>` is the operator identifier and must match the template filename and option case name):
 
-| #   | Path                                                               | Description                                                                                                    |
-| --- | ------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------- |
-| 1   | `assets/resource/image/GiftOperator/Operators/<Name>.png`          | Win32 operator portrait template; run through `tools/gift_operator/fill_gift_operator_green_box.py` before commit |
-| 2   | `assets/resource_adb/image/GiftOperator/Operators/<Name>.png`      | ADB operator portrait template; same processing as above                                                       |
-| 3   | `assets/tasks/GiftOperator.json` → `SelectOperator`                | Add a case for UI selection and to supply operator info for the receive-only route                             |
-| 4   | `assets/resource/pipeline/GiftOperator/Operator/Operator.json`     | Per-operator OCR recognition and whitelist in receive-only mode                                                |
+| #   | Path                                                                                               | Description                                                                                                            |
+| --- | -------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| 1   | `assets/resource/image/GiftOperator/Operators/<Name>.png`                                          | Win32 operator portrait template; run through `tools/gift_operator/fill_gift_operator_green_box.py` before commit      |
+| 2   | `assets/resource_adb/image/GiftOperator/Operators/<Name>.png`                                      | ADB operator portrait template; same processing as above                                                               |
+| 3   | `assets/tasks/GiftOperator.json` → `SelectOperator`                                                | Add a case for UI selection and to supply operator info for the receive-only route                                     |
+| 4   | `assets/resource/pipeline/GiftOperator/Operator/Operator.json`                                     | Per-operator OCR recognition and whitelist in receive-only mode                                                        |
 | 5   | `assets/resource/pipeline/GiftOperator/GiftOperatorContact.json` → `GiftOperatorSelectGiftOp.next` | Append `GiftOperatorSelect_<Name>` to the `next` array, or the receive-only route never triggers the new operator node |
-| 6   | `assets/locales/interface/*.json` → `operator.<Name>`              | Localized operator display names                                                                               |
+| 6   | `assets/locales/interface/*.json` → `operator.<Name>`                                              | Localized operator display names                                                                                       |
 
 ## Route 1: Default (give + receive)
 
@@ -124,11 +124,11 @@ After confirm summon, the task waits for the operator and tries to click the dia
 
 Correction uses three fixed presets, each tried once (counters reset at task start to avoid carry-over):
 
-| Order | Facing              | Move target    |
-| ----- | ------------------- | -------------- |
-| 1     | West (270°)         | (186.6, 175.0) |
-| 2     | North (0°)          | (188.0, 175.3) |
-| 3     | East (90°)          | (188.6, 176.2) |
+| Order | Facing      | Move target    |
+| ----- | ----------- | -------------- |
+| 1     | West (270°) | (186.6, 175.0) |
+| 2     | North (0°)  | (188.0, 175.3) |
+| 3     | East (90°)  | (188.6, 176.2) |
 
 Each preset: turn → short move → wait for the character to stop, then retry dialogue-button search.
 
