@@ -4,37 +4,9 @@
             "AutoEssenceMoveToTriggerPoint": "VFOriginLodespringMoveToTriggerPoint"
         },
         "next": [
-            "[JumpBack]VFOriginLodespringMaybeTeleport",
+            "VFOriginLodespringMaybeTeleport",
             "VFOriginLodespringMoveToTriggerPoint"
         ]
-    },
-    "VFOriginLodespringLocationAssertion": {
-        "recognition": {
-            "type": "Custom",
-            "param": {
-                "custom_recognition": "MapTrackerAssertLocation",
-                "custom_recognition_param": {
-                    "expected": [
-                        {
-                            // 淤积点附近
-                            "map_name": "map01_lv006_tier_109",
-                            "target": [
-                                243.0,
-                                528.0,
-                                32.0,
-                                32.0
-                            ]
-                        }
-                    ]
-                }
-            }
-        },
-        "anchor": {
-            "AutoEssenceMoveToTriggerPoint": "VFOriginLodespringMoveToTriggerPoint"
-        },
-        "focus": {
-            "Node.Action.Starting": "📍附近的能量淤积点：\n<p style=\"text-align: center\"><strong>矿脉源区</strong></p>"
-        }
     },
     "VFOriginLodespringMaybeTeleport": {
         "recognition": {
@@ -69,11 +41,20 @@
         },
         "inverse": true,
         "next": [
-            "SceneEnterWorldValleyIVOriginLodespring3"
+            "[JumpBack]VFOriginLodespringTeleportOnce",
+            "VFOriginLodespringMoveToTriggerPoint"
         ],
         "focus": {
             "Node.Action.Starting": "✈️准备传送到最近锚点"
         }
+    },
+    "VFOriginLodespringTeleportOnce": {
+        "max_hit": 1,
+        "pre_delay": 0,
+        "post_delay": 0,
+        "next": [
+            "SceneEnterWorldValleyIVOriginLodespring3"
+        ]
     },
     "VFOriginLodespringMoveToTriggerPoint": {
         "action": {
@@ -175,13 +156,14 @@
                             262.2,
                             541.2
                         ]
-                    ]
+                    ],
+                    "no_ensure_initial_movement_state": true
                 }
             }
         },
-        "post_delay": 1000, //确保彻底停下,防止停下一瞬间看到了,靠惯性滑过目标点
+        "post_delay": 1500, // 确保彻底停下，规避移动惯性
         "next": [
-            "AutoEssenceAtTriggerState"
+            "AutoEssenceDispatcher"
         ],
         "focus": {
             "Node.Action.Starting": "🚶正在前往激发点"

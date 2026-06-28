@@ -4,37 +4,9 @@
             "AutoEssenceMoveToTriggerPoint": "VFTheHubMoveToTriggerPoint"
         },
         "next": [
-            "[JumpBack]VFTheHubMaybeTeleport",
+            "VFTheHubMaybeTeleport",
             "VFTheHubMoveToTriggerPoint"
         ]
-    },
-    "VFTheHubLocationAssertion": {
-        "recognition": {
-            "type": "Custom",
-            "param": {
-                "custom_recognition": "MapTrackerAssertLocation",
-                "custom_recognition_param": {
-                    "expected": [
-                        {
-                            // 淤积点附近（锚点也在这个区域里）
-                            "map_name": "map01_lv001",
-                            "target": [
-                                385.0,
-                                496.0,
-                                32.0,
-                                42.0
-                            ]
-                        }
-                    ]
-                }
-            }
-        },
-        "anchor": {
-            "AutoEssenceMoveToTriggerPoint": "VFTheHubMoveToTriggerPoint"
-        },
-        "focus": {
-            "Node.Action.Starting": "📍附近的能量淤积点：\n<p style=\"text-align: center\"><strong>枢纽区</strong></p>"
-        }
     },
     "VFTheHubMaybeTeleport": {
         "recognition": {
@@ -59,11 +31,20 @@
         },
         "inverse": true,
         "next": [
-            "SceneEnterWorldValleyIVTheHub1"
+            "[JumpBack]VFTheHubTeleportOnce",
+            "VFTheHubMoveToTriggerPoint"
         ],
         "focus": {
             "Node.Action.Starting": "✈️准备传送到最近锚点"
         }
+    },
+    "VFTheHubTeleportOnce": {
+        "max_hit": 1,
+        "pre_delay": 0,
+        "post_delay": 0,
+        "next": [
+            "SceneEnterWorldValleyIVTheHub1"
+        ]
     },
     "VFTheHubMoveToTriggerPoint": {
         "action": {
@@ -85,9 +66,9 @@
                 }
             }
         },
-        "post_delay": 1000, //确保彻底停下,防止停下一瞬间看到了,靠惯性滑过目标点
+        "post_delay": 1500, // 确保彻底停下，规避移动惯性
         "next": [
-            "AutoEssenceAtTriggerState"
+            "AutoEssenceDispatcher"
         ],
         "focus": {
             "Node.Action.Starting": "🚶正在前往激发点"

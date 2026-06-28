@@ -4,37 +4,9 @@
             "AutoEssenceMoveToTriggerPoint": "VFOriginiumScienceParkMoveToTriggerPoint"
         },
         "next": [
-            "[JumpBack]VFOriginiumScienceParkMaybeTeleport",
+            "VFOriginiumScienceParkMaybeTeleport",
             "VFOriginiumScienceParkMoveToTriggerPoint"
         ]
-    },
-    "VFOriginiumScienceParkLocationAssertion": {
-        "recognition": {
-            "type": "Custom",
-            "param": {
-                "custom_recognition": "MapTrackerAssertLocation",
-                "custom_recognition_param": {
-                    "expected": [
-                        {
-                            // 淤积点附近（锚点也在这个区域里）
-                            "map_name": "map01_lv005",
-                            "target": [
-                                359.0,
-                                207.0,
-                                30.0,
-                                55.0
-                            ]
-                        }
-                    ]
-                }
-            }
-        },
-        "anchor": {
-            "AutoEssenceMoveToTriggerPoint": "VFOriginiumScienceParkMoveToTriggerPoint"
-        },
-        "focus": {
-            "Node.Action.Starting": "📍附近的能量淤积点：\n<p style=\"text-align: center\"><strong>源石研究园</strong></p>"
-        }
     },
     "VFOriginiumScienceParkMaybeTeleport": {
         "recognition": {
@@ -59,11 +31,20 @@
         },
         "inverse": true,
         "next": [
-            "SceneEnterWorldValleyIVOriginiumSciencePark1"
+            "[JumpBack]VFOriginiumScienceParkTeleportOnce",
+            "VFOriginiumScienceParkMoveToTriggerPoint"
         ],
         "focus": {
             "Node.Action.Starting": "✈️准备传送到最近锚点"
         }
+    },
+    "VFOriginiumScienceParkTeleportOnce": {
+        "max_hit": 1,
+        "pre_delay": 0,
+        "post_delay": 0,
+        "next": [
+            "SceneEnterWorldValleyIVOriginiumSciencePark1"
+        ]
     },
     "VFOriginiumScienceParkMoveToTriggerPoint": {
         "action": {
@@ -125,13 +106,14 @@
                             376.9,
                             241.9
                         ]
-                    ]
+                    ],
+                    "no_ensure_initial_movement_state": true
                 }
             }
         },
-        "post_delay": 1000, //确保彻底停下,防止停下一瞬间看到了,靠惯性滑过目标点
+        "post_delay": 1500, // 确保彻底停下，规避移动惯性
         "next": [
-            "AutoEssenceAtTriggerState"
+            "AutoEssenceDispatcher"
         ],
         "focus": {
             "Node.Action.Starting": "🚶正在前往激发点"

@@ -4,37 +4,9 @@
             "AutoEssenceMoveToTriggerPoint": "WLTestAreaMoveToTriggerPoint"
         },
         "next": [
-            "[JumpBack]WLTestAreaMaybeTeleport",
+            "WLTestAreaMaybeTeleport",
             "WLTestAreaMoveToTriggerPoint"
         ]
-    },
-    "WLTestAreaLocationAssertion": {
-        "recognition": {
-            "type": "Custom",
-            "param": {
-                "custom_recognition": "MapTrackerAssertLocation",
-                "custom_recognition_param": {
-                    "expected": [
-                        {
-                            // 淤积点附近
-                            "map_name": "map02_lv005_tier_321",
-                            "target": [
-                                330.9,
-                                347.2,
-                                20.0,
-                                20.0
-                            ]
-                        }
-                    ]
-                }
-            }
-        },
-        "anchor": {
-            "AutoEssenceMoveToTriggerPoint": "WLTestAreaMoveToTriggerPoint"
-        },
-        "focus": {
-            "Node.Action.Starting": "📍附近的能量淤积点：\n<p style=\"text-align: center\"><strong>试验园区</strong></p>"
-        }
     },
     "WLTestAreaMaybeTeleport": {
         "recognition": {
@@ -63,17 +35,27 @@
                                 20.0
                             ]
                         }
-                    ]
+                    ],
+                    "precision": 1.0
                 }
             }
         },
         "inverse": true,
         "next": [
-            "SceneEnterWorldWulingTestArea2"
+            "[JumpBack]WLTestAreaTeleportOnce",
+            "WLTestAreaMoveToTriggerPoint"
         ],
         "focus": {
             "Node.Action.Starting": "✈️准备传送到最近锚点"
         }
+    },
+    "WLTestAreaTeleportOnce": {
+        "max_hit": 1,
+        "pre_delay": 0,
+        "post_delay": 0,
+        "next": [
+            "SceneEnterWorldWulingTestArea2"
+        ]
     },
     "WLTestAreaMoveToTriggerPoint": {
         "action": {
@@ -84,25 +66,50 @@
                     "map_name": "map02_lv005",
                     "path": [
                         [
-                            390.7,
-                            360.3
+                            389.8,
+                            357.0
                         ],
                         [
-                            387.3,
-                            358.0
+                            354.8,
+                            357.8
                         ],
+                        [
+                            345.7,
+                            359.4
+                        ]
+                    ],
+                    "path_trim": true,
+                    "map_name_match_rule": "^%s_tier_(321)|(322)$" // 特殊处理
+                }
+            }
+        },
+        "next": [
+            "WLTestAreaMoveToTriggerPointExact"
+        ],
+        "focus": {
+            "Node.Action.Starting": "🚶正在前往激发点附近"
+        }
+    },
+    "WLTestAreaMoveToTriggerPointExact": {
+        "action": {
+            "type": "Custom",
+            "param": {
+                "custom_action": "MapTrackerMove",
+                "custom_action_param": {
+                    "map_name": "map02_lv005",
+                    "path": [
                         [
                             340.9,
                             357.2
                         ]
                     ],
-                    "path_trim": true
+                    "no_ensure_initial_movement_state": true
                 }
             }
         },
-        "post_delay": 1000, //确保彻底停下,防止停下一瞬间看到了,靠惯性滑过目标点
+        "post_delay": 1500, // 确保彻底停下，规避移动惯性
         "next": [
-            "AutoEssenceAtTriggerState"
+            "AutoEssenceDispatcher"
         ],
         "focus": {
             "Node.Action.Starting": "🚶正在前往激发点"
