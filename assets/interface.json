@@ -143,7 +143,7 @@
     "task": [],
     "import": [
         // pretask
-        "tasks/exectasks/GameSetting.json",
+        "tasks/pretasks/GameSetting.json",
         // group: regional_development
         "tasks/SellProduct.json",
         "tasks/SeizeDeliveryJobs.json",
@@ -162,6 +162,7 @@
         "tasks/AutoCollect.json",
         "tasks/AutoEcoFarm.json",
         "tasks/PuzzleSolver.json",
+        "tasks/SwitchTeam.json",
         "tasks/ImportBluePrints.json",
         // group: sanity_sink
         "tasks/AutoUseSpMedication.json",
