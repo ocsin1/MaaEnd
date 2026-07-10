@@ -157,5 +157,5 @@ jobs:
           gh pr create \
             --base v2 \
             --head "$FIX_BRANCH" \
-            --title "fix: cherry-pick #${PR_NUMBER} from ${RELEASE_BRANCH} to v2" \
+            --title "$PR_TITLE" \
             --body "$PR_BODY"
